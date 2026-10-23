@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Neurological Assessment &amp; NEWS2</title>
+<style>
+:root{--nhs:#005EB8;--nhs-dark:#003087;--nhs-bright:#0072CE;--ink:#212b32;--muted:#4c6272;--line:#d8dde0;--bg:#f0f4f5;--card:#fff;--ok:#00703c;--warn:#ffb81c;--err:#d5281b;--r:8px}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:120px}
+body{margin:0;font:16px/1.5 -apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+a{color:var(--nhs)}
+.skip{position:absolute;left:-999px;top:0;background:#ffeb3b;color:#000;padding:8px 12px;z-index:100}
+.skip:focus{left:8px;top:8px}
+header.top{background:var(--nhs);color:#fff;padding:10px 16px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;justify-content:space-between}
+header.top h1{font-size:1.2rem;margin:0}
+header.top .sub{font-size:.8rem;opacity:.9}
+.actions{display:flex;flex-wrap:wrap;gap:8px}
+button,.btn{font:inherit;min-height:44px;padding:8px 16px;border-radius:var(--r);border:2px solid var(--nhs);background:#fff;color:var(--nhs);cursor:pointer;font-weight:600}
+button:hover,.btn:hover{background:#e8f1fa}
+button.primary{background:var(--nhs);color:#fff}
+button.primary:hover{background:var(--nhs-dark)}
+button.danger{border-color:var(--err);color:var(--err)}
+button.danger:hover{background:#fdecea}
+button.small,.btn.small{min-height:36px;padding:4px 12px;font-size:.9rem}
+header.top button{border-color:#fff}
+header.top button.primary{background:#fff;color:var(--nhs)}
+header.top button:not(.primary){background:transparent;color:#fff}
+header.top button:not(.primary):hover{background:rgba(255,255,255,.15)}
+:focus-visible{outline:3px solid #ffb81c;outline-offset:2px}
+.sticky{position:sticky;top:0;z-index:20;background:#fff;border-bottom:3px solid var(--nhs);box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.banner{display:flex;flex-wrap:wrap;gap:4px 16px;align-items:center;padding:6px 16px;font-size:.9rem}
+.banner b{font-size:1rem}
+.chip{display:inline-block;padding:2px 10px;border-radius:99px;font-weight:700;font-size:.85rem;border:2px solid transparent}
+.pill-low{background:#d9f0e3;color:#005a30;border-color:#00703c}
+.pill-lowmed{background:#fff1c2;color:#5a4300;border-color:#ffb81c}
+.pill-med{background:#ffd9b3;color:#6b2e00;border-color:#ed8b00}
+.pill-high{background:#d5281b;color:#fff;border-color:#a01d13}
+.pill-none{background:#eceff1;color:#4c6272;border-color:#aab4ba}
+nav.sections{display:flex;gap:4px;overflow-x:auto;padding:0 12px;background:#f7f9fa;border-top:1px solid var(--line)}
+nav.sections a{padding:8px 12px;text-decoration:none;white-space:nowrap;font-weight:600;font-size:.9rem;border-bottom:3px solid transparent}
+nav.sections a:hover{border-bottom-color:var(--nhs)}
+main{max-width:1000px;margin:0 auto;padding:12px}
+.notice{border-left:6px solid var(--warn);background:#fff8e1;padding:10px 14px;border-radius:var(--r);margin:10px 0;font-size:.92rem}
+.notice.info{border-left-color:var(--nhs);background:#e8f1fa}
+.notice.err{border-left-color:var(--err);background:#fdecea}
+section.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;margin:14px 0}
+section.card>h2{margin:-16px -16px 14px;padding:10px 16px;background:var(--nhs);color:#fff;border-radius:var(--r) var(--r) 0 0;font-size:1.1rem}
+h3{font-size:1rem;margin:16px 0 6px;color:var(--nhs-dark)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.grid .wide{grid-column:1/-1}
+label,.lbl{display:block;font-weight:600;font-size:.92rem;margin-bottom:2px}
+.hint{font-weight:400;color:var(--muted);font-size:.82rem}
+input[type=text],input[type=number],input[type=date],input[type=datetime-local],select,textarea,input[type=search]{width:100%;font:inherit;min-height:44px;padding:8px 10px;border:2px solid #768692;border-radius:6px;background:#fff;color:var(--ink)}
+textarea{min-height:100px;resize:vertical}
+input:focus,select:focus,textarea:focus{border-color:var(--nhs)}
+.row{display:flex;gap:8px;align-items:flex-end}
+.row>*{flex:1}.row>button{flex:0 0 auto}
+.msg{font-size:.85rem;margin-top:3px;min-height:1.2em}
+.msg.bad{color:var(--err);font-weight:600}.msg.good{color:var(--ok);font-weight:600}.msg.note{color:var(--muted)}
+fieldset{border:1px solid var(--line);border-radius:var(--r);margin:10px 0;padding:8px 12px 12px}
+legend{font-weight:700;padding:0 6px;color:var(--nhs-dark)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:8px}
+.opt{position:relative;margin:0}
+.opt input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.opt span{display:flex;flex-direction:column;justify-content:center;min-height:48px;padding:6px 10px;border:2px solid #768692;border-radius:6px;background:#fff;font-size:.9rem;line-height:1.25;font-weight:400}
+.opt span b{font-size:1rem}
+.opt input:checked+span{background:var(--nhs);color:#fff;border-color:var(--nhs-dark)}
+.opt input:focus-visible+span{outline:3px solid #ffb81c;outline-offset:2px}
+.opt:hover span{border-color:var(--nhs)}
+.avpu .opt span{min-height:56px}
+.result{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;padding:10px 12px;background:#e8f1fa;border-radius:var(--r);margin-top:8px}
+.result .big{font-size:1.4rem;font-weight:800;color:var(--nhs-dark)}
+.check{display:flex;gap:10px;align-items:flex-start;font-weight:600}
+.check input{width:24px;height:24px;margin-top:2px;flex:0 0 auto}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #9aa6ad;padding:6px 8px;text-align:left;font-size:.9rem}
+th{background:#f0f4f5}
+.sc{text-align:center;font-weight:800;min-width:90px}
+.s0{background:#fff;color:#212b32}.s1{background:#fff176;color:#212b32}.s2{background:#ffb74d;color:#212b32}.s3{background:#d5281b;color:#fff}
+.chart td,.chart th{text-align:center;font-size:.8rem;padding:4px}
+.chart td.p{text-align:left;font-weight:700;background:#f0f4f5}
+.chart .h3{background:#d5281b;color:#fff}.chart .h2{background:#ffb74d}.chart .h1{background:#fff176}.chart .h0{background:#fff}
+.chart td.e{background:#fafafa;color:#bbb}
+.tblwrap{overflow-x:auto}
+.guidance{border:3px solid;border-radius:var(--r);padding:10px 14px;margin-top:10px}
+.guidance h4{margin:0 0 4px}
+.guidance ul{margin:4px 0 0 18px;padding:0}
+.g-low{border-color:#00703c;background:#eaf6ef}.g-lowmed{border-color:#ffb81c;background:#fff8e1}.g-med{border-color:#ed8b00;background:#fff0e0}.g-high{border-color:#d5281b;background:#fdecea}.g-none{border-color:#aab4ba;background:#f7f9fa}
+details{margin:10px 0}summary{cursor:pointer;font-weight:700;color:var(--nhs);padding:6px 0}
+.rec{display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between;border:1px solid var(--line);border-radius:var(--r);padding:8px 12px;margin:6px 0;background:#fafcfc}
+.rec .meta{flex:1 1 240px;min-width:0}
+.rec .meta small{color:var(--muted);display:block}
+.rec .btns{display:flex;gap:6px}
+footer.disc{max-width:1000px;margin:0 auto;padding:12px 12px 40px}
+#toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#212b32;color:#fff;padding:10px 18px;border-radius:99px;z-index:200;opacity:0;pointer-events:none;transition:opacity .25s;max-width:92vw;text-align:center}
+#toast.show{opacity:1}
+#printView{display:none}
+@media (max-width:600px){#bDob,#bLoc{display:none}header.top h1{font-size:1.05rem}button,.btn{padding:8px 12px}}
+/* ===== PRINT ===== */
+@page{size:A4;margin:12mm}
+@media print{
+ html,body{background:#fff!important}
+ body>*:not(#printView){display:none!important}
+ #printView{display:block!important;font:9.5pt/1.35 Arial,Helvetica,sans-serif;color:#000}
+ #printView *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+ #printView h1{font-size:15pt;margin:0;color:#005EB8}
+ #printView h2{font-size:10.5pt;margin:8pt 0 3pt;padding:2pt 6pt;background:#005EB8;color:#fff;break-after:avoid}
+ #printView .ph{display:flex;justify-content:space-between;align-items:flex-end;border-bottom:3px solid #005EB8;padding-bottom:4pt;margin-bottom:6pt}
+ #printView .pb{border:2px solid #005EB8;padding:4pt 6pt;margin-bottom:4pt}
+ #printView table{width:100%;border-collapse:collapse;margin:0}
+ #printView th,#printView td{border:1px solid #777;padding:2pt 4pt;font-size:9pt;vertical-align:top;text-align:left}
+ #printView th{background:#e8edee}
+ #printView td.sc{text-align:center}
+ #printView .box{border:1px solid #777;padding:3pt 5pt;min-height:30pt;white-space:pre-wrap;margin-bottom:3pt}
+ #printView .box b{display:block;color:#005EB8}
+ #printView section{break-inside:avoid}
+ #printView .foot{margin-top:8pt;border-top:1px solid #777;padding-top:3pt;font-size:8pt;color:#333}
+ #printView .warnp{border:1px solid #000;padding:2pt 4pt;font-weight:bold;margin:2pt 0}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="top">
+ <div><h1>Neurological Assessment (AVPU / GCS) &amp; NEWS2</h1><div class="sub">Documentation aid for UK clinicians · works offline · data stays on this device</div></div>
+ <div class="actions">
+  <button type="button" id="btnNew">New record</button>
+  <button type="button" id="btnSave" class="primary">Save record</button>
+  <button type="button" id="btnPrint">Print</button>
+ </div>
+</header>
+<div class="sticky" id="sticky">
+ <div class="banner" aria-live="polite">
+  <span><b id="bName">Unnamed patient</b></span>
+  <span id="bDob"></span><span id="bNhs"></span><span id="bLoc"></span>
+  <span>NEWS2: <span id="bNews" class="chip pill-none">–</span></span>
+  <span>GCS: <b id="bGcs">–</b></span>
+  <span>AVPU: <b id="bAvpu">–</b></span>
+  <span class="hint" id="bStatus" style="margin-left:auto"></span>
+ </div>
+ <nav class="sections" aria-label="Sections">
+  <a href="#sec-patient">Patient</a><a href="#sec-assessor">Assessor</a><a href="#sec-neuro">Neuro</a><a href="#sec-news2">NEWS2</a><a href="#sec-sbar">SBAR</a><a href="#sec-records">Saved records</a>
+ </nav>
+</div>
+<main id="main">
+ <div class="notice err" role="note"><strong>Disclaimer:</strong> This tool is a decision-support and documentation aid only. It does <strong>not</strong> replace clinical judgement or local policy, and it is <strong>not a certified medical device</strong>. Always follow your Trust's policy, escalation procedures and the official RCP NEWS2 chart.</div>
+ <div class="notice" role="note"><strong>Privacy:</strong> All data is stored only in this browser on this device (localStorage) – nothing is sent anywhere. <strong>Do not use on shared or public computers</strong> unless you delete saved records afterwards, and follow your Trust's information governance policy for patient-identifiable data. Clearing browser data will erase records – export a JSON backup if you need to keep them.</div>
+
+ <form id="form" autocomplete="off" onsubmit="return false">
+ <section class="card" id="sec-patient"><h2>1. Patient details</h2>
+  <div class="grid">
+   <div class="wide"><label for="ptName">Patient name</label><input type="text" id="ptName" name="ptName" autocomplete="off"></div>
+   <div><label for="ptDob">Date of birth</label><input type="date" id="ptDob" name="ptDob"><div class="msg" id="ageMsg" aria-live="polite"></div></div>
+   <div><label for="ptNhs">NHS number <span class="hint">(10 digits)</span></label><input type="text" id="ptNhs" name="ptNhs" inputmode="numeric" maxlength="14" placeholder="000 000 0000" aria-describedby="nhsMsg"><div class="msg" id="nhsMsg" aria-live="polite"></div></div>
+   <div><label for="ptHospital">Hospital</label><input type="text" id="ptHospital" name="ptHospital"></div>
+   <div><label for="ptWard">Ward</label><input type="text" id="ptWard" name="ptWard"></div>
+   <div><label for="ptBed">Bed</label><input type="text" id="ptBed" name="ptBed"></div>
+   <div class="wide"><label for="ptAllergies">Allergies <span class="hint">(or "No known allergies")</span></label><input type="text" id="ptAllergies" name="ptAllergies"></div>
+   <div class="wide"><label for="ptHistory">Reason for admission / relevant history <span class="hint">(optional – used in SBAR Background)</span></label><textarea id="ptHistory" name="ptHistory" rows="2" style="min-height:64px"></textarea></div>
+   <div class="wide"><label for="asDateTime">Date and time of assessment</label>
+    <div class="row"><input type="datetime-local" id="asDateTime" name="asDateTime"><button type="button" class="small" id="btnNowAs">Now</button></div></div>
+  </div>
+ </section>
+
+ <section class="card" id="sec-assessor"><h2>2. Assessor details</h2>
+  <div class="grid">
+   <div><label for="asName">Assessor name</label><input type="text" id="asName" name="asName"></div>
+   <div><label for="asRole">Role / grade</label><input type="text" id="asRole" name="asRole" placeholder="e.g. Staff Nurse Band 5"></div>
+   <div><label for="asReg">Registration number <span class="hint">(NMC / GMC etc.)</span></label><input type="text" id="asReg" name="asReg" placeholder="e.g. NMC 12A3456E"></div>
+   <div><label for="asSig">Signature / typed name</label><input type="text" id="asSig" name="asSig"></div>
+  </div>
+ </section>
+
+ <section class="card" id="sec-neuro"><h2>3. Neurological assessment</h2>
+  <fieldset class="avpu"><legend>AVPU</legend><div class="opts" id="avpuOpts" role="radiogroup" aria-label="AVPU"></div></fieldset>
+  <h3>Glasgow Coma Scale</h3>
+  <fieldset><legend>Eye opening (E)</legend><div class="opts" id="gcsEOpts"></div></fieldset>
+  <fieldset><legend>Verbal response (V)</legend><div class="opts" id="gcsVOpts"></div></fieldset>
+  <fieldset><legend>Motor response (M)</legend><div class="opts" id="gcsMOpts"></div></fieldset>
+  <div class="result" aria-live="polite"><span>GCS:</span><span class="big" id="gcsText">–</span><span id="gcsBand" class="chip pill-none">Incomplete</span><span id="gcsNote" class="hint"></span></div>
+  <h3>Pupils</h3>
+  <div class="grid">
+   <div><label for="pupLSize">Left size (mm)</label><select id="pupLSize" name="pupLSize"></select></div>
+   <div><label for="pupLReact">Left reaction to light</label><select id="pupLReact" name="pupLReact"></select></div>
+   <div><label for="pupRSize">Right size (mm)</label><select id="pupRSize" name="pupRSize"></select></div>
+   <div><label for="pupRReact">Right reaction to light</label><select id="pupRReact" name="pupRReact"></select></div>
+  </div>
+  <div class="msg note" id="pupMsg" aria-live="polite"></div>
+  <h3>Limb power <span class="hint">(MRC 0–5)</span></h3>
+  <div class="grid">
+   <div><label for="limbRA">Right arm</label><select id="limbRA" name="limbRA" class="limb"></select></div>
+   <div><label for="limbLA">Left arm</label><select id="limbLA" name="limbLA" class="limb"></select></div>
+   <div><label for="limbRL">Right leg</label><select id="limbRL" name="limbRL" class="limb"></select></div>
+   <div><label for="limbLL">Left leg</label><select id="limbLL" name="limbLL" class="limb"></select></div>
+  </div>
+  <h3>Speech &amp; notes</h3>
+  <div class="grid">
+   <div><label for="speech">Speech</label><select id="speech" name="speech"></select></div>
+   <div class="wide"><label for="neuroNotes">Neurological notes <span class="hint">(optional)</span></label><textarea id="neuroNotes" name="neuroNotes" rows="3"></textarea></div>
+  </div>
+ </section>
+
+ <section class="card" id="sec-news2"><h2>4. NEWS2 (National Early Warning Score 2)</h2>
+  <div class="grid">
+   <div><label for="rr">Respiration rate <span class="hint">(breaths/min)</span></label><input type="number" id="rr" name="rr" inputmode="numeric" min="0" max="80" step="1"></div>
+   <div><label for="spo2">SpO₂ <span class="hint">(%)</span></label><input type="number" id="spo2" name="spo2" inputmode="numeric" min="0" max="100" step="1"></div>
+   <div><label for="sbp">Systolic BP <span class="hint">(mmHg)</span></label><input type="number" id="sbp" name="sbp" inputmode="numeric" min="0" max="300" step="1"></div>
+   <div><label for="pulse">Pulse <span class="hint">(beats/min)</span></label><input type="number" id="pulse" name="pulse" inputmode="numeric" min="0" max="250" step="1"></div>
+   <div><label for="temp">Temperature <span class="hint">(°C)</span></label><input type="number" id="temp" name="temp" inputmode="decimal" min="25" max="45" step="0.1"></div>
+  </div>
+  <div class="msg bad" id="obsMsg" aria-live="polite"></div>
+  <fieldset><legend>SpO₂ scale</legend><div class="opts" id="scaleOpts"></div>
+   <div id="scale2Box" hidden>
+    <div class="notice err" style="margin:8px 0"><strong>Scale 2</strong> is ONLY for patients with a target SpO₂ of 88–92% (e.g. confirmed hypercapnic respiratory failure) and must be confirmed by a competent clinical decision-maker and documented. If in doubt use Scale 1.</div>
+    <label class="check"><input type="checkbox" id="scale2Confirm" name="scale2Confirm"><span>A clinician has confirmed a target SpO₂ of 88–92% for this patient (hypercapnic respiratory failure) and Scale 2 should be used.</span></label>
+    <div style="margin-top:8px"><label for="scale2By">Confirmed by <span class="hint">(name / role)</span></label><input type="text" id="scale2By" name="scale2By"></div>
+   </div>
+  </fieldset>
+  <fieldset><legend>Air or oxygen</legend><div class="opts" id="o2Opts"></div></fieldset>
+  <fieldset><legend>Consciousness (linked to AVPU)</legend>
+   <p style="margin:0 0 6px">Level from AVPU: <b id="consText">Not yet selected</b> <span class="hint">– Alert scores 0; new confusion, Voice, Pain or Unresponsive (CVPU) all score 3. Change AVPU in section 3.</span></p>
+   <label class="check"><input type="checkbox" id="newConf" name="newConf"><span>New-onset confusion, disorientation or agitation (scores 3 even if AVPU is Alert)</span></label>
+  </fieldset>
+
+  <h3>Score breakdown</h3>
+  <div class="tblwrap"><table id="scoreTbl"><thead><tr><th>Parameter</th><th>Value</th><th class="sc">Score</th></tr></thead><tbody></tbody>
+   <tfoot><tr><th colspan="2">NEWS2 TOTAL</th><th class="sc" id="totalCell">–</th></tr></tfoot></table></div>
+  <div id="incomplete" class="msg bad" aria-live="polite"></div>
+  <div id="guidance" class="guidance g-none" aria-live="polite"></div>
+
+  <details><summary>Show NEWS2 scoring chart (RCP, 2017) used by this tool</summary><div class="tblwrap"><table class="chart" id="chart"></table></div>
+   <p class="hint">Reproduced from the RCP NEWS2 chart for reference – always check against your Trust's current chart. Scale 2 is for clinician-confirmed 88–92% target only.</p></details>
+ </section>
+
+ <section class="card" id="sec-sbar"><h2>5. SBAR handover</h2>
+  <div class="row" style="margin-bottom:10px"><button type="button" id="btnDraft" class="primary">Auto-draft SBAR from entered data</button><span class="hint">Drafts are fully editable. Check for accuracy before use.</span></div>
+  <div class="grid">
+   <div class="wide"><label for="sbS">S – Situation</label><textarea id="sbS" name="sbS"></textarea></div>
+   <div class="wide"><label for="sbB">B – Background</label><textarea id="sbB" name="sbB"></textarea></div>
+   <div class="wide"><label for="sbA">A – Assessment</label><textarea id="sbA" name="sbA"></textarea></div>
+   <div class="wide"><label for="sbR">R – Recommendation</label><textarea id="sbR" name="sbR"></textarea></div>
+   <div><label for="hoFrom">Handover from</label><input type="text" id="hoFrom" name="hoFrom"></div>
+   <div><label for="hoTo">Handover to</label><input type="text" id="hoTo" name="hoTo"></div>
+   <div><label for="hoTime">Handover date/time</label><div class="row"><input type="datetime-local" id="hoTime" name="hoTime"><button type="button" class="small" id="btnNowHo">Now</button></div></div>
+  </div>
+ </section>
+ </form>
+
+ <section class="card" id="sec-records"><h2>6. Saved records (this device only)</h2>
+  <div class="notice info">Records are stored in this browser's local storage only. Use <b>Export</b> to back up or move records between devices (the file contains patient-identifiable data – store and share it securely per Trust policy).</div>
+  <div style="margin-bottom:8px"><label for="search">Search records</label><input type="search" id="search" placeholder="Name, NHS number, ward, assessor…"></div>
+  <div class="actions" style="margin-bottom:10px">
+   <button type="button" id="btnExport" class="small">Export JSON</button>
+   <label class="btn small" style="display:inline-flex;align-items:center;margin:0" for="importFile">Import JSON</label>
+   <input type="file" id="importFile" accept=".json,application/json" style="position:absolute;left:-9999px">
+   <button type="button" id="btnWipe" class="small danger">Delete ALL saved records &amp; draft</button>
+  </div>
+  <div id="recList" aria-live="polite"></div>
+ </section>
+</main>
+<footer class="disc"><div class="notice err"><strong>Disclaimer:</strong> Decision-support and documentation aid only. Does not replace clinical judgement or local policy. Not a certified medical device. NEWS2 © Royal College of Physicians 2017 – scoring reproduced for convenience; refer to the official chart. Users must follow their Trust's policy.</div></footer>
+<div id="toast" role="status" aria-live="polite"></div>
+<div id="printView" aria-hidden="true"></div>
+<script>
+'use strict';
+/* ==== SCORING START (pure functions; no DOM) ==== */
+function toNum(v){
+  if(v===null||v===undefined||v==='')return null;
+  var n=typeof v==='number'?v:parseFloat(String(v).replace(',','.'));
+  return isFinite(n)?n:null;
+}
+// RCP NEWS2 (2017) - Respiration rate
+function scoreRR(v){
+  v=toNum(v); if(v===null||v<0)return null; v=Math.round(v);
+  if(v<=8)return 3; if(v<=11)return 1; if(v<=20)return 0; if(v<=24)return 2; return 3;
+}
+// SpO2 Scale 1 (default)
+function scoreSpO2Scale1(v){
+  v=toNum(v); if(v===null||v<0||v>100)return null; v=Math.round(v);
+  if(v<=91)return 3; if(v<=93)return 2; if(v<=95)return 1; return 0;
+}
+// SpO2 Scale 2 (clinician-confirmed 88-92% target only). >=93 on air scores 0; on oxygen 93-94=1, 95-96=2, >=97=3
+function scoreSpO2Scale2(v,onOxygen){
+  v=toNum(v); if(v===null||v<0||v>100)return null; v=Math.round(v);
+  if(v<=83)return 3; if(v<=85)return 2; if(v<=87)return 1; if(v<=92)return 0;
+  if(!onOxygen)return 0;
+  if(v<=94)return 1; if(v<=96)return 2; return 3;
+}
+function scoreSpO2(v,scale,onOxygen){ return Number(scale)===2?scoreSpO2Scale2(v,onOxygen):scoreSpO2Scale1(v); }
+// Air or oxygen: oxygen = 2, air = 0
+function scoreAirO2(onOxygen){ if(onOxygen===null||onOxygen===undefined)return null; return onOxygen?2:0; }
+// Systolic BP
+function scoreSBP(v){
+  v=toNum(v); if(v===null||v<0)return null; v=Math.round(v);
+  if(v<=90)return 3; if(v<=100)return 2; if(v<=110)return 1; if(v<=219)return 0; return 3;
+}
+// Pulse
+function scorePulse(v){
+  v=toNum(v); if(v===null||v<0)return null; v=Math.round(v);
+  if(v<=40)return 3; if(v<=50)return 1; if(v<=90)return 0; if(v<=110)return 1; if(v<=130)return 2; return 3;
+}
+// Consciousness: 'A' = Alert 0; 'C' (new confusion), 'V','P','U' = 3
+function scoreConsciousness(c){
+  if(!c)return null; return c==='A'?0:3;
+}
+// Temperature (rounded to 1 decimal place)
+function scoreTemp(v){
+  v=toNum(v); if(v===null||v<=0)return null; v=Math.round(v*10)/10;
+  if(v<=35.0)return 3; if(v<=36.0)return 1; if(v<=38.0)return 0; if(v<=39.0)return 1; return 2;
+}
+// Derive NEWS2 consciousness from AVPU letter ('A','V','P','U' or '') and new-confusion flag
+function deriveConsciousness(avpu,newConf){
+  if(avpu==='V'||avpu==='P'||avpu==='U')return avpu;
+  if(newConf)return 'C';
+  if(avpu==='A')return 'A';
+  return null;
+}
+// Risk band from total and whether any single parameter scored 3
+function riskBand(total,anyThree){
+  if(total===null||total===undefined)return null;
+  if(total>=7)return 'high';
+  if(total>=5)return 'medium';
+  if(anyThree)return 'lowmedium';
+  return 'low';
+}
+function computeNews2(i){
+  var onO2=i.o2==='oxygen'?true:(i.o2==='air'?false:null);
+  var scale=(Number(i.scale)===2&&i.scale2Confirmed)?2:1;
+  var cons=deriveConsciousness(i.avpu,i.newConf);
+  var s={
+    rr:scoreRR(i.rr),
+    spo2:scoreSpO2(i.spo2,scale,onO2===true),
+    o2:scoreAirO2(onO2),
+    sbp:scoreSBP(i.sbp),
+    pulse:scorePulse(i.pulse),
+    cons:scoreConsciousness(cons),
+    temp:scoreTemp(i.temp)
+  };
+  var scaleBlocked=Number(i.scale)===2&&!i.scale2Confirmed;
+  if(scaleBlocked)s.spo2=null; // Scale 2 not confirmed: refuse to score SpO2 until confirmed
+  var keys=Object.keys(s),total=0,missing=[],anyThree=false;
+  keys.forEach(function(k){ if(s[k]===null)missing.push(k); else{ total+=s[k]; if(s[k]===3)anyThree=true; } });
+  var complete=missing.length===0;
+  return {scores:s,total:total,complete:complete,missing:missing,anyThree:anyThree,scale:scale,scaleBlocked:scaleBlocked,
+    band:riskBand(total,anyThree),consciousness:cons};
+}
+// GCS
+function gcsTotal(e,v,m){
+  e=toNum(e);v=toNum(v);m=toNum(m);
+  if(e===null||v===null||m===null)return null; return e+v+m;
+}
+function gcsSeverity(t){
+  if(t===null)return null; if(t>=13)return 'Mild'; if(t>=9)return 'Moderate'; return 'Severe';
+}
+function gcsText(e,v,m){
+  var t=gcsTotal(e,v,m);
+  var s='E'+(e||'–')+' V'+(v||'–')+' M'+(m||'–');
+  return t===null?s+' (incomplete)':s+' = '+t;
+}
+// NHS number modulus 11 check; returns {valid, reason}
+function validateNHS(raw){
+  var s=String(raw==null?'':raw).replace(/[\s-]/g,'');
+  if(s==='')return {valid:null,reason:'empty'};
+  if(!/^\d+$/.test(s))return {valid:false,reason:'Must contain digits only'};
+  if(s.length!==10)return {valid:false,reason:'Must be 10 digits ('+s.length+' entered)'};
+  var sum=0,i; for(i=0;i<9;i++)sum+=Number(s[i])*(10-i);
+  var c=11-(sum%11); if(c===11)c=0;
+  if(c===10)return {valid:false,reason:'Fails modulus 11 check (invalid number)'};
+  if(c!==Number(s[9]))return {valid:false,reason:'Fails modulus 11 check digit'};
+  return {valid:true,reason:''};
+}
+function calcAge(dob,ref){
+  if(!dob)return null;
+  var d=new Date(dob+'T00:00:00'), r=ref?new Date(ref):new Date();
+  if(isNaN(d)||isNaN(r))return null;
+  if(d>r)return {error:'DOB is after assessment date'};
+  var y=r.getFullYear()-d.getFullYear(), m=r.getMonth()-d.getMonth(), day=r.getDate()-d.getDate();
+  if(day<0)m--; if(m<0){y--;m+=12;}
+  return {years:y,months:m};
+}
+/* ==== SCORING END ==== */
+/* ==== APP ==== */
+var AVPU=[{v:'A',l:'Alert',d:'Awake, responds spontaneously'},{v:'V',l:'Voice',d:'Responds to voice'},{v:'P',l:'Pain',d:'Responds to pain only'},{v:'U',l:'Unresponsive',d:'No response'}];
+var AVPU_NAME={A:'Alert',V:'Responds to Voice',P:'Responds to Pain',U:'Unresponsive',C:'New confusion'};
+var GCS_E=[{v:'4',l:'Spontaneous'},{v:'3',l:'To sound (voice)'},{v:'2',l:'To pressure'},{v:'1',l:'None'}];
+var GCS_V=[{v:'5',l:'Orientated'},{v:'4',l:'Confused'},{v:'3',l:'Words (inappropriate)'},{v:'2',l:'Sounds (incomprehensible)'},{v:'1',l:'None'}];
+var GCS_M=[{v:'6',l:'Obeys commands'},{v:'5',l:'Localising'},{v:'4',l:'Normal flexion (withdrawal)'},{v:'3',l:'Abnormal flexion'},{v:'2',l:'Extension'},{v:'1',l:'None'}];
+var LIMB=[['','Not tested'],['5','5 – Normal power'],['4','4 – Reduced vs resistance'],['3','3 – Moves against gravity only'],['2','2 – Moves, not against gravity'],['1','1 – Flicker only'],['0','0 – No movement']];
+var SPEECH=['','Normal / clear','Slurred (dysarthria)','Expressive dysphasia','Receptive dysphasia','Mixed dysphasia','Incomprehensible sounds only','No speech','Intubated / unable to assess','Other (see notes)'];
+var REACT=['','Brisk','Sluggish','Fixed (non-reactive)','Not assessable'];
+var GUIDE={
+ low:{cls:'g-low',pill:'pill-low',name:'Low',title:'Low clinical risk (NEWS2 0–4)',freq:'0: minimum 12-hourly observations. 1–4: minimum 4–6 hourly.',
+  pts:['Score 0: continue routine monitoring – minimum every 12 hours.','Score 1–4: minimum 4–6 hourly. Registered nurse to assess the patient and decide whether a change to frequency of monitoring or escalation of clinical care is required.']},
+ lowmedium:{cls:'g-lowmed',pill:'pill-lowmed',name:'Low–medium',title:'Low–medium clinical risk (single parameter scoring 3)',freq:'Minimum 1-hourly observations.',
+  pts:['A score of 3 in any single parameter (red score): urgent ward-based response.','Registered nurse to inform the medical team caring for the patient, who will review and decide whether escalation of care is necessary.','Minimum 1-hourly observations (or as directed by the clinician).']},
+ medium:{cls:'g-med',pill:'pill-med',name:'Medium',title:'Medium clinical risk (NEWS2 5–6): urgent response threshold',freq:'Minimum 1-hourly observations; consider continuous monitoring.',
+  pts:['Registered nurse to urgently inform the medical team caring for the patient.','Urgent assessment by a clinician with core competencies in the assessment of acute illness (e.g. acute / critical-care outreach if no such clinician available).','Clinical care in an environment with monitoring facilities.','Minimum 1-hourly observations.']},
+ high:{cls:'g-high',pill:'pill-high',name:'High',title:'High clinical risk (NEWS2 ≥7): EMERGENCY response threshold',freq:'Continuous monitoring of vital signs.',
+  pts:['Registered nurse to immediately inform the medical team caring for the patient – at least at specialist registrar level.','EMERGENCY assessment by a clinical team with critical-care competencies, including a practitioner with advanced airway skills (consider 2222 / emergency call per local policy).','Consider transfer of the patient to a higher-dependency care area (level 2 or 3).','Clinical care in an environment with monitoring facilities; continuous monitoring of vital signs.']}
+};
+var CHART=[
+ ['Respiration rate (/min)',['≤8','','9–11','12–20','','21–24','≥25']],
+ ['SpO₂ Scale 1 (%)',['≤91','92–93','94–95','≥96','','','']],
+ ['SpO₂ Scale 2 (%) *',['≤83','84–85','86–87','88–92, or ≥93 on air','93–94 on oxygen','95–96 on oxygen','≥97 on oxygen']],
+ ['Air or oxygen?',['','','','Air','','Oxygen','']],
+ ['Systolic BP (mmHg)',['≤90','91–100','101–110','111–219','','','≥220']],
+ ['Pulse (/min)',['≤40','','41–50','51–90','91–110','111–130','≥131']],
+ ['Consciousness',['','','','Alert','','','CVPU']],
+ ['Temperature (°C)',['≤35.0','','35.1–36.0','36.1–38.0','38.1–39.0','≥39.1','']]
+];
+var KEY_DRAFT='neuroNews2.draft.v1', KEY_RECS='neuroNews2.records.v1';
+var $=function(id){return document.getElementById(id);};
+var form=$('form'), curId=null, savedSnap=null, lastNews=null;
+
+function el(tag,attrs,kids){var e=document.createElement(tag);attrs=attrs||{};Object.keys(attrs).forEach(function(k){if(k==='text')e.textContent=attrs[k];else if(k==='class')e.className=attrs[k];else e.setAttribute(k,attrs[k]);});(kids||[]).forEach(function(c){e.appendChild(c);});return e;}
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c];});}
+function pad(n){return n<10?'0'+n:''+n;}
+function nowLocal(){var d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+'T'+pad(d.getHours())+':'+pad(d.getMinutes());}
+function fmtDT(s){if(!s)return '';var d=new Date(s);if(isNaN(d))return s;return d.toLocaleString('en-GB',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});}
+function fmtD(s){if(!s)return '';var d=new Date(s+'T00:00:00');if(isNaN(d))return s;return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}
+function toast(t){var x=$('toast');x.textContent=t;x.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(function(){x.classList.remove('show');},2800);}
+function uid(){return 'r'+Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
+
+/* storage (guarded) */
+var storageOK=true;
+function lsGet(k){try{return localStorage.getItem(k);}catch(e){storageOK=false;return null;}}
+function lsSet(k,v){try{localStorage.setItem(k,v);return true;}catch(e){storageOK=false;return false;}}
+function lsDel(k){try{localStorage.removeItem(k);}catch(e){}}
+function getRecs(){try{var r=JSON.parse(lsGet(KEY_RECS)||'[]');return Array.isArray(r)?r:[];}catch(e){return [];}}
+function setRecs(r){if(!lsSet(KEY_RECS,JSON.stringify(r))){toast('Could not write to local storage – check browser settings.');return false;}return true;}
+
+/* build option widgets */
+function radios(cid,name,opts,fmt){
+  var c=$(cid);
+  opts.forEach(function(o){
+    var lab=el('label',{class:'opt'});
+    var inp=el('input',{type:'radio',name:name,value:o.v});
+    var sp=el('span'); fmt(sp,o);
+    lab.appendChild(inp);lab.appendChild(sp);c.appendChild(lab);
+  });
+}
+function fmtNum(sp,o){sp.appendChild(el('b',{text:o.v}));sp.appendChild(document.createTextNode(o.l));}
+radios('avpuOpts','avpu',AVPU,function(sp,o){sp.appendChild(el('b',{text:o.l}));sp.appendChild(document.createTextNode(o.d));});
+radios('gcsEOpts','gcsE',GCS_E,fmtNum);radios('gcsVOpts','gcsV',GCS_V,fmtNum);radios('gcsMOpts','gcsM',GCS_M,fmtNum);
+radios('scaleOpts','scale',[{v:'1',l:'SpO₂ Scale 1 (default)'},{v:'2',l:'SpO₂ Scale 2 (88–92% target)'}],function(sp,o){sp.appendChild(el('b',{text:o.l}));});
+radios('o2Opts','o2',[{v:'air',l:'Air'},{v:'oxygen',l:'Supplemental oxygen'}],function(sp,o){sp.appendChild(el('b',{text:o.l}));});
+function fillSel(id,opts,pairs){var s=$(id);opts.forEach(function(o){var v=pairs?o[0]:o,l=pairs?o[1]:o;s.appendChild(el('option',{value:v,text:l||'— select —'}));});}
+(function(){
+  var sizes=[''];for(var i=1;i<=9;i++)sizes.push(String(i));
+  ['pupLSize','pupRSize'].forEach(function(id){fillSel(id,sizes);});
+  ['pupLReact','pupRReact'].forEach(function(id){fillSel(id,REACT);});
+  Array.prototype.forEach.call(document.querySelectorAll('.limb'),function(s){LIMB.forEach(function(o){s.appendChild(el('option',{value:o[0],text:o[1]}));});});
+  fillSel('speech',SPEECH);
+})();
+// chart
+(function(){
+  var t=$('chart'),cols=[3,2,1,0,1,2,3];
+  var h=el('tr'); h.appendChild(el('th',{text:'Physiological parameter'}));
+  cols.forEach(function(c,i){h.appendChild(el('th',{class:'h'+c,text:String(c)}));});
+  var th=el('thead');th.appendChild(h);t.appendChild(th);
+  var tb=el('tbody');
+  CHART.forEach(function(r){var tr=el('tr');tr.appendChild(el('td',{class:'p',text:r[0]}));
+    r[1].forEach(function(x,i){tr.appendChild(el('td',{class:x?'h'+cols[i]:'e',text:x||'–'}));});tb.appendChild(tr);});
+  t.appendChild(tb);
+})();
+
+/* form <-> data */
+function fields(){return Array.prototype.slice.call(form.querySelectorAll('[name]'));}
+function collect(){
+  var d={};
+  fields().forEach(function(f){
+    if(f.type==='radio'){ if(f.checked)d[f.name]=f.value; else if(!(f.name in d))d[f.name]=''; }
+    else if(f.type==='checkbox')d[f.name]=f.checked;
+    else d[f.name]=f.value;
+  });
+  return d;
+}
+function populate(d){
+  d=d||{};
+  fields().forEach(function(f){
+    var v=d[f.name];
+    if(f.type==='radio')f.checked=(v!==undefined&&String(v)===f.value);
+    else if(f.type==='checkbox')f.checked=!!v;
+    else f.value=(v===undefined||v===null)?'':String(v);
+  });
+}
+function blank(){var d={};fields().forEach(function(f){d[f.name]=f.type==='checkbox'?false:'';});d.asDateTime=nowLocal();d.scale='1';d.o2='air';return d;}
+
+/* live computation / render */
+function newsInputs(d){return {rr:d.rr,spo2:d.spo2,o2:d.o2,sbp:d.sbp,pulse:d.pulse,temp:d.temp,avpu:d.avpu,newConf:d.newConf,scale:d.scale,scale2Confirmed:d.scale2Confirm};}
+function paramRows(d,n){
+  var scaleName=n.scale===2?'Scale 2':'Scale 1';
+  return [
+   ['Respiration rate',d.rr!==''?d.rr+' /min':'',n.scores.rr],
+   ['SpO₂ ('+scaleName+')',d.spo2!==''?d.spo2+' %':'',n.scores.spo2],
+   ['Air or oxygen',d.o2==='oxygen'?'Oxygen':(d.o2==='air'?'Air':''),n.scores.o2],
+   ['Systolic BP',d.sbp!==''?d.sbp+' mmHg':'',n.scores.sbp],
+   ['Pulse',d.pulse!==''?d.pulse+' /min':'',n.scores.pulse],
+   ['Consciousness',n.consciousness?(n.consciousness==='C'?'New confusion':AVPU_NAME[n.consciousness]):'',n.scores.cons],
+   ['Temperature',d.temp!==''?d.temp+' °C':'',n.scores.temp]
+  ];
+}
+function scCls(s){return s===null?'':'s'+s;}
+function ageText(d){
+  var a=calcAge(d.ptDob,d.asDateTime||undefined);
+  if(!a)return '';
+  if(a.error)return {err:a.error};
+  if(a.years<2)return {t:(a.years*12+a.months)+' months'};
+  return {t:a.years+' years'};
+}
+var MISS={rr:'respiration rate',spo2:'SpO₂',o2:'air/oxygen',sbp:'systolic BP',pulse:'pulse',cons:'consciousness (AVPU)',temp:'temperature'};
+function anyScored(n){return Object.keys(n.scores).some(function(k){return k!=='o2'&&n.scores[k]!==null;});} // ignore the air/oxygen default so an empty form shows no score
+function refresh(){
+  var d=collect(),n=computeNews2(newsInputs(d));lastNews=n;
+  var a=ageText(d),am=$('ageMsg');
+  if(a&&a.err){am.textContent=a.err;am.className='msg bad';}else if(a){am.textContent='Age: '+a.t;am.className='msg good';}else{am.textContent='';am.className='msg';}
+  var nv=validateNHS(d.ptNhs),nm=$('nhsMsg');
+  if(nv.valid===null){nm.textContent='';nm.className='msg';}
+  else if(nv.valid){nm.textContent='✔ Valid NHS number';nm.className='msg good';}
+  else{nm.textContent='⚠ Warning: '+nv.reason+'. You can still save – please check the number.';nm.className='msg bad';}
+  $('consText').textContent=n.consciousness?(n.consciousness==='C'?'New confusion (scores 3)':AVPU_NAME[n.consciousness]+(n.consciousness==='A'?' (scores 0)':' (scores 3)')):'Not yet selected';
+  $('scale2Box').hidden=d.scale!=='2';
+  var w=[];
+  if(d.rr!==''&&(+d.rr<4||+d.rr>60))w.push('Respiration rate looks unusual – please recheck.');
+  if(d.spo2!==''&&(+d.spo2>100||+d.spo2<50))w.push('SpO₂ looks unusual (valid range 0–100%).');
+  if(d.sbp!==''&&(+d.sbp<40||+d.sbp>300))w.push('Systolic BP looks unusual – please recheck.');
+  if(d.pulse!==''&&(+d.pulse<20||+d.pulse>220))w.push('Pulse looks unusual – please recheck.');
+  if(d.temp!==''&&(+d.temp<30||+d.temp>43))w.push('Temperature looks unusual – please recheck (°C).');
+  if(d.scale==='2'&&!d.scale2Confirm)w.push('SpO₂ Scale 2 selected but not confirmed – SpO₂ is NOT scored until a clinician confirms the 88–92% target. Scale 1 applies otherwise.');
+  $('obsMsg').textContent=w.join(' ');
+  var gt=gcsTotal(d.gcsE,d.gcsV,d.gcsM),sev=gcsSeverity(gt);
+  $('gcsText').textContent=gcsText(d.gcsE,d.gcsV,d.gcsM);
+  var gb=$('gcsBand');
+  gb.textContent=sev?sev+(sev==='Mild'?' (13–15)':sev==='Moderate'?' (9–12)':' (3–8)'):'Incomplete';
+  gb.className='chip '+(sev==='Mild'?'pill-low':sev==='Moderate'?'pill-med':sev==='Severe'?'pill-high':'pill-none');
+  var gn='';
+  if(gt!==null&&gt<=8)gn='GCS ≤8: consider airway at risk – escalate urgently per local policy.';
+  else if(gt!==null&&gt<15&&d.avpu==='A')gn='AVPU Alert but GCS <15 – please check consistency.';
+  else if(gt===15&&d.avpu&&d.avpu!=='A')gn='GCS 15 but AVPU not Alert – please check consistency.';
+  $('gcsNote').textContent=gn;
+  var pm=[];
+  if(d.pupLSize&&d.pupRSize&&Math.abs(+d.pupLSize-+d.pupRSize)>=1)pm.push('Pupils unequal ('+d.pupLSize+' mm L vs '+d.pupRSize+' mm R).');
+  [['Left','pupLReact'],['Right','pupRReact']].forEach(function(p){if(d[p[1]]&&d[p[1]].indexOf('Fixed')===0)pm.push(p[0]+' pupil fixed – urgent medical review.');});
+  $('pupMsg').textContent=pm.join(' ');
+  var tb=$('scoreTbl').tBodies[0];tb.textContent='';
+  paramRows(d,n).forEach(function(r){var tr=el('tr');tr.appendChild(el('td',{text:r[0]}));tr.appendChild(el('td',{text:r[1]||'—'}));tr.appendChild(el('td',{class:'sc '+scCls(r[2]),text:r[2]===null?'–':String(r[2])}));tb.appendChild(tr);});
+  var any=anyScored(n);
+  var tc=$('totalCell');tc.textContent=String(n.total)+(n.complete?'':'*');
+  tc.className='sc '+(any?(n.band==='high'?'s3':n.band==='medium'?'s2':n.band==='lowmedium'?'s1':'s0'):'');
+  $('incomplete').textContent=n.complete?'':'* Incomplete – total is partial; missing: '+n.missing.map(function(k){return MISS[k];}).join(', ')+'. Do not rely on this score until complete.';
+  var g=$('guidance');g.textContent='';
+  if(!any){g.className='guidance g-none';g.appendChild(el('p',{text:'Enter observations to calculate NEWS2.'}));}
+  else{
+    var G=GUIDE[n.band];g.className='guidance '+G.cls;
+    g.appendChild(el('h4',{text:'NEWS2 '+n.total+(n.complete?'':' (incomplete)')+' – '+G.title}));
+    var ul=el('ul');G.pts.forEach(function(p){ul.appendChild(el('li',{text:p}));});g.appendChild(ul);
+    if(n.anyThree&&n.band!=='lowmedium')g.appendChild(el('p',{text:'Note: one or more parameters scored 3 – consider urgent clinical review regardless of the total.'}));
+    g.appendChild(el('p',{class:'hint',text:'Summary of RCP NEWS2 clinical response – follow your Trust\'s escalation policy.'}));
+  }
+  $('bName').textContent=d.ptName||'Unnamed patient';
+  $('bDob').textContent=d.ptDob?'DOB '+fmtD(d.ptDob)+(a&&a.t?' ('+a.t+')':''):'';
+  $('bNhs').textContent=d.ptNhs?'NHS '+fmtNHS(d.ptNhs):'';
+  $('bLoc').textContent=[d.ptWard,d.ptBed?'Bed '+d.ptBed:''].filter(Boolean).join(' · ');
+  var bn=$('bNews');bn.textContent=any?(n.total+(n.complete?'':'*')+' '+GUIDE[n.band].name):'–';bn.className='chip '+(any?GUIDE[n.band].pill:'pill-none');
+  $('bGcs').textContent=gt!==null?gcsText(d.gcsE,d.gcsV,d.gcsM):'–';
+  $('bAvpu').textContent=d.avpu?AVPU_NAME[d.avpu]:'–';
+}
+function fmtNHS(s){var x=String(s).replace(/\s|-/g,'');return x.length===10&&/^\d+$/.test(x)?x.slice(0,3)+' '+x.slice(3,6)+' '+x.slice(6):s;}
+
+/* draft autosave */
+var saveT=null;
+function hasContent(){var b=blank(),d=collect();b.asDateTime=d.asDateTime;return JSON.stringify(b)!==JSON.stringify(d);}
+function isDirty(){return savedSnap===null?hasContent():JSON.stringify(collect())!==savedSnap;}
+function writeDraft(){
+  if(lsSet(KEY_DRAFT,JSON.stringify({id:curId,snap:savedSnap,data:collect(),at:Date.now()}))){
+    $('bStatus').textContent='Draft auto-saved '+new Date().toLocaleTimeString('en-GB')+(isDirty()?' · unsaved changes':' · record saved');
+  } else $('bStatus').textContent='⚠ Auto-save unavailable (storage blocked)';
+}
+function onChange(){refresh();clearTimeout(saveT);saveT=setTimeout(function(){saveT=null;writeDraft();},400);}
+form.addEventListener('input',onChange);form.addEventListener('change',onChange);
+$('btnNowAs').onclick=function(){$('asDateTime').value=nowLocal();onChange();};
+$('btnNowHo').onclick=function(){$('hoTime').value=nowLocal();onChange();};
+$('ptNhs').addEventListener('blur',function(){var v=this.value;if(/^\d{10}$/.test(v.replace(/\s|-/g,''))){this.value=fmtNHS(v);onChange();}});
+
+/* SBAR drafting */
+function sbarDraft(d,n){
+  var age=ageText(d),nm=d.ptName||'the patient';
+  var who=[nm,age&&age.t?age.t+' old':'',d.ptDob?'DOB '+fmtD(d.ptDob):'',d.ptNhs?'NHS '+fmtNHS(d.ptNhs):''].filter(Boolean).join(', ');
+  var loc=[d.ptHospital,d.ptWard?(/^ward\b/i.test(d.ptWard)?d.ptWard:'Ward '+d.ptWard):'',d.ptBed?'Bed '+d.ptBed:''].filter(Boolean).join(', ');
+  var any=anyScored(n),gt=gcsTotal(d.gcsE,d.gcsV,d.gcsM);
+  var S='I am '+(d.hoFrom||d.asName||'[name]')+(d.asRole?' ('+d.asRole+')':'')+', handing over / calling about '+who+(loc?', located in '+loc:'')+'.\n'
+   +'Assessed '+(fmtDT(d.asDateTime)||'[date/time]')+'. '
+   +(any?'NEWS2 is '+n.total+(n.complete?'':' (incomplete)')+' – '+GUIDE[n.band].name.toLowerCase()+' clinical risk'+(n.anyThree?' (includes a single parameter scoring 3)':'')+'. ':'')
+   +(d.avpu?'AVPU: '+AVPU_NAME[d.avpu]+'. ':'')+(gt!==null?'GCS '+gcsText(d.gcsE,d.gcsV,d.gcsM)+' ('+gcsSeverity(gt).toLowerCase()+').':'');
+  var B=(d.ptHistory?'Reason for admission / history: '+d.ptHistory+'\n':'')
+   +'Allergies: '+(d.ptAllergies||'not documented')+'.\n'
+   +'Respiratory support: '+(d.o2==='oxygen'?'on supplemental oxygen':d.o2==='air'?'on air':'not documented')
+   +(n.scale===2?' (SpO₂ Scale 2 in use, clinician-confirmed 88–92% target'+(d.scale2By?' by '+d.scale2By:'')+')':'')+'.';
+  var obs=[d.rr!==''?'RR '+d.rr:'',d.spo2!==''?'SpO₂ '+d.spo2+'% ('+(d.o2==='oxygen'?'oxygen':'air')+')':'',d.sbp!==''?'systolic BP '+d.sbp:'',d.pulse!==''?'HR '+d.pulse:'',d.temp!==''?'Temp '+d.temp+'°C':'',n.consciousness?'Consciousness: '+(n.consciousness==='C'?'new confusion':AVPU_NAME[n.consciousness]):''].filter(Boolean).join(', ');
+  var rows=paramRows(d,n).filter(function(r){return r[2]!==null&&r[2]>0;}).map(function(r){return r[0]+' '+r[2];});
+  var neuro=[];
+  if(d.pupLSize||d.pupLReact||d.pupRSize||d.pupRReact)neuro.push('Pupils: L '+[d.pupLSize?d.pupLSize+'mm':'',d.pupLReact].filter(Boolean).join(' ')+' / R '+[d.pupRSize?d.pupRSize+'mm':'',d.pupRReact].filter(Boolean).join(' '));
+  var lm=[['RA','limbRA'],['LA','limbLA'],['RL','limbRL'],['LL','limbLL']].filter(function(p){return d[p[1]]!=='';}).map(function(p){return p[0]+' '+d[p[1]]+'/5';});
+  if(lm.length)neuro.push('Limb power: '+lm.join(', '));
+  if(d.speech)neuro.push('Speech: '+d.speech);
+  if(d.neuroNotes)neuro.push('Notes: '+d.neuroNotes.replace(/[.\s]+$/,''));
+  var A=(obs?'Observations: '+obs+'.\n':'')+(any&&rows.length?'NEWS2 contributors: '+rows.join(', ')+'.\n':'')+(neuro.length?'Neuro: '+neuro.join('. ')+'.':'');
+  var R;
+  if(!any)R='[Enter observations to generate a recommendation.]';
+  else{var G=GUIDE[n.band];R='Per NEWS2 '+G.name.toLowerCase()+' risk pathway: '+G.pts[0]+(G.pts[1]?' '+G.pts[1]:'')+'\nObservation frequency: '+G.freq+'\nPlease review the patient'+(n.band==='high'?' immediately':n.band==='medium'?' urgently':'')+' and advise on plan/escalation.';}
+  return {S:S.trim(),B:B.trim(),A:A.trim(),R:R.trim()};
+}
+$('btnDraft').onclick=function(){
+  var d=collect();
+  if((d.sbS||d.sbB||d.sbA||d.sbR)&&!confirm('Replace the current SBAR text with an auto-drafted version?'))return;
+  var s=sbarDraft(d,computeNews2(newsInputs(d)));
+  $('sbS').value=s.S;$('sbB').value=s.B;$('sbA').value=s.A;$('sbR').value=s.R;
+  if(!$('hoTime').value)$('hoTime').value=nowLocal();
+  onChange();toast('SBAR drafted – please review and edit');
+};
+
+/* records */
+function renderRecs(){
+  var q=$('search').value.trim().toLowerCase(),box=$('recList');box.textContent='';
+  var recs=getRecs().sort(function(a,b){return (b.updatedAt||0)-(a.updatedAt||0);});
+  var shown=recs.filter(function(r){var d=r.data||{};return !q||[d.ptName,d.ptNhs,String(d.ptNhs||'').replace(/\s|-/g,''),d.ptWard,d.ptBed,d.asName,d.ptHospital].join(' ').toLowerCase().indexOf(q)>-1;});
+  if(!shown.length){box.appendChild(el('p',{class:'hint',text:recs.length?'No records match your search.':'No saved records yet. Complete an assessment and press "Save record".'}));return;}
+  shown.forEach(function(r){
+    var d=r.data||{},n=computeNews2(newsInputs(d)),any=anyScored(n);
+    var meta=el('div',{class:'meta'});
+    meta.appendChild(el('b',{text:(d.ptName||'Unnamed patient')+(d.ptNhs?' · NHS '+fmtNHS(d.ptNhs):'')}));
+    meta.appendChild(el('small',{text:[d.ptWard?'Ward '+d.ptWard:'',d.ptBed?'Bed '+d.ptBed:'','Assessed '+(fmtDT(d.asDateTime)||'–'),d.asName?'by '+d.asName:'','Saved '+fmtDT(r.updatedAt)].filter(Boolean).join(' · ')}));
+    var chip=el('span',{class:'chip '+(any?GUIDE[n.band].pill:'pill-none'),text:'NEWS2 '+(any?n.total+(n.complete?'':'*'):'–')});
+    var gt=gcsTotal(d.gcsE,d.gcsV,d.gcsM);
+    var bt=el('div',{class:'btns'});
+    var lb=el('button',{type:'button',class:'small',text:'Load'});lb.onclick=function(){loadRec(r.id);};
+    var db=el('button',{type:'button',class:'small danger',text:'Delete'});db.onclick=function(){delRec(r.id);};
+    bt.appendChild(lb);bt.appendChild(db);
+    var row=el('div',{class:'rec'});row.appendChild(meta);row.appendChild(chip);if(gt!==null)row.appendChild(el('span',{class:'chip pill-none',text:'GCS '+gt}));row.appendChild(bt);
+    if(r.id===curId)row.style.borderColor='#005EB8';
+    box.appendChild(row);
+  });
+}
+$('search').addEventListener('input',renderRecs);
+function saveRecord(){
+  var d=collect(),nv=validateNHS(d.ptNhs),recs=getRecs(),now=Date.now(),found=null;
+  if(curId)recs.forEach(function(r){if(r.id===curId)found=r;});
+  if(found){found.data=d;found.updatedAt=now;}
+  else{curId=uid();recs.push({id:curId,createdAt:now,updatedAt:now,data:d});}
+  if(!setRecs(recs))return;
+  savedSnap=JSON.stringify(d);writeDraft();renderRecs();
+  toast(nv.valid===false?'Saved – WARNING: NHS number failed validation':'Record saved to this device');
+}
+function loadRec(id){
+  if(isDirty()&&!confirm('You have unsaved changes in the current form. Load this record anyway?'))return;
+  var r=getRecs().filter(function(x){return x.id===id;})[0];if(!r)return;
+  curId=r.id;populate(Object.assign(blank(),r.data));savedSnap=JSON.stringify(collect());
+  refresh();writeDraft();renderRecs();window.scrollTo({top:0});toast('Record loaded');
+}
+function delRec(id){
+  var r=getRecs().filter(function(x){return x.id===id;})[0];if(!r)return;
+  if(!confirm('Permanently delete the saved record for '+((r.data&&r.data.ptName)||'unnamed patient')+'? This cannot be undone.'))return;
+  setRecs(getRecs().filter(function(x){return x.id!==id;}));
+  if(curId===id){curId=null;savedSnap=null;}
+  renderRecs();writeDraft();toast('Record deleted');
+}
+function newRecord(){
+  if(isDirty()&&!confirm('Start a new record? Unsaved changes in the current form will be lost.'))return;
+  curId=null;savedSnap=null;populate(blank());refresh();writeDraft();renderRecs();window.scrollTo({top:0});toast('New record started');
+}
+$('btnNew').onclick=newRecord;$('btnSave').onclick=saveRecord;
+$('btnWipe').onclick=function(){
+  if(!confirm('Delete ALL saved records and the auto-saved draft from this device? This cannot be undone.'))return;
+  if(!confirm('Are you sure? Export first if you need a backup.'))return;
+  lsDel(KEY_RECS);lsDel(KEY_DRAFT);curId=null;savedSnap=null;populate(blank());refresh();renderRecs();toast('All local data deleted');
+};
+$('btnExport').onclick=function(){
+  var recs=getRecs();if(!recs.length){toast('No saved records to export');return;}
+  var blob=new Blob([JSON.stringify({app:'neuro-news2-assessment',version:1,exportedAt:new Date().toISOString(),records:recs},null,2)],{type:'application/json'});
+  var a=el('a',{href:URL.createObjectURL(blob),download:'neuro-news2-records-'+nowLocal().replace(/[:T]/g,'-')+'.json'});
+  document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove();},500);
+  toast('Exported '+recs.length+' record(s) – store the file securely');
+};
+$('importFile').addEventListener('change',function(){
+  var f=this.files[0],inp=this;if(!f)return;
+  var rd=new FileReader();
+  rd.onload=function(){
+    try{
+      var j=JSON.parse(rd.result),list=Array.isArray(j)?j:j.records;
+      if(!Array.isArray(list))throw new Error('No records array');
+      var names=fields().map(function(x){return x.name;}),recs=getRecs(),added=0,upd=0;
+      list.forEach(function(r){
+        if(!r||typeof r!=='object'||!r.data||typeof r.data!=='object')return;
+        var d={};names.forEach(function(k){var v=r.data[k];if(typeof v==='string'||typeof v==='boolean')d[k]=v;});
+        var rec={id:typeof r.id==='string'&&r.id?r.id.slice(0,40):uid(),createdAt:+r.createdAt||Date.now(),updatedAt:+r.updatedAt||Date.now(),data:Object.assign(blank(),d)};
+        var ix=-1;recs.forEach(function(x,i){if(x.id===rec.id)ix=i;});
+        if(ix>-1){if(rec.updatedAt>(recs[ix].updatedAt||0)){recs[ix]=rec;upd++;}}else{recs.push(rec);added++;}
+      });
+      setRecs(recs);renderRecs();toast('Imported: '+added+' new, '+upd+' updated');
+    }catch(e){alert('Import failed: this does not look like a valid export file ('+e.message+').');}
+    inp.value='';
+  };
+  rd.readAsText(f);
+});
+
+/* print */
+function row(l,v){return '<tr><th style="width:22%">'+esc(l)+'</th><td>'+(v?esc(v):'&nbsp;')+'</td></tr>';}
+function buildPrint(){
+  var d=collect(),n=computeNews2(newsInputs(d)),a=ageText(d),nv=validateNHS(d.ptNhs),gt=gcsTotal(d.gcsE,d.gcsV,d.gcsM);
+  var any=anyScored(n);
+  var h='<div class="ph"><div><h1>Neurological Assessment &amp; NEWS2</h1><div>AVPU · Glasgow Coma Scale · NEWS2 · SBAR handover</div></div><div style="text-align:right">Printed: '+esc(new Date().toLocaleString('en-GB'))+'</div></div>';
+  h+='<div class="pb"><table>'
+   +'<tr><th>Patient</th><td><b>'+esc(d.ptName||'—')+'</b></td><th>NHS number</th><td>'+esc(d.ptNhs?fmtNHS(d.ptNhs):'—')+'</td></tr>'
+   +'<tr><th>DOB / Age</th><td>'+esc(d.ptDob?fmtD(d.ptDob)+(a&&a.t?' ('+a.t+')':''):'—')+'</td><th>Hospital / Ward / Bed</th><td>'+esc([d.ptHospital,d.ptWard,d.ptBed?'Bed '+d.ptBed:''].filter(Boolean).join(' / ')||'—')+'</td></tr>'
+   +'<tr><th>Allergies</th><td>'+esc(d.ptAllergies||'—')+'</td><th>Assessment date/time</th><td>'+esc(fmtDT(d.asDateTime)||'—')+'</td></tr></table>'
+   +(nv.valid===false?'<div class="warnp">⚠ NHS number failed validation: '+esc(nv.reason)+' – verify against patient ID band.</div>':'')+'</div>';
+  if(d.ptHistory)h+='<table>'+row('Reason for admission / history',d.ptHistory)+'</table>';
+  h+='<section><h2>Assessor</h2><table><tr><th>Name</th><td>'+esc(d.asName)+'&nbsp;</td><th>Role / grade</th><td>'+esc(d.asRole)+'&nbsp;</td></tr><tr><th>Registration no.</th><td>'+esc(d.asReg)+'&nbsp;</td><th>Signature / typed name</th><td>'+esc(d.asSig)+'&nbsp;</td></tr></table></section>';
+  var pup='L: '+([d.pupLSize?d.pupLSize+' mm':'',d.pupLReact].filter(Boolean).join(', ')||'–')+'   |   R: '+([d.pupRSize?d.pupRSize+' mm':'',d.pupRReact].filter(Boolean).join(', ')||'–');
+  var limb=[['R arm','limbRA'],['L arm','limbLA'],['R leg','limbRL'],['L leg','limbLL']].map(function(p){return p[0]+' '+(d[p[1]]!==''?d[p[1]]+'/5':'–');}).join('   ');
+  h+='<section><h2>Neurological assessment</h2><table>'
+   +row('AVPU',d.avpu?AVPU_NAME[d.avpu]+' ('+d.avpu+')':'')
+   +row('Glasgow Coma Scale',gcsText(d.gcsE,d.gcsV,d.gcsM)+(gt!==null?'  –  '+gcsSeverity(gt)+' ('+(gt>=13?'13–15':gt>=9?'9–12':'3–8')+')':''))
+   +row('Pupils',pup)+row('Limb power (MRC)',limb)+row('Speech',d.speech)+row('Notes',d.neuroNotes)+'</table></section>';
+  h+='<section><h2>NEWS2 (RCP 2017)</h2><table><tr><th style="width:30%">Parameter</th><th>Value</th><th class="sc" style="width:14%">Score</th></tr>';
+  paramRows(d,n).forEach(function(r){var s=r[2];var st=s===null?'':s===3?'background:#d5281b;color:#fff;font-weight:bold':s===2?'background:#ffb74d;font-weight:bold':s===1?'background:#fff176;font-weight:bold':'';h+='<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1]||'—')+'</td><td class="sc" style="'+st+'">'+(s===null?'–':s)+'</td></tr>';});
+  var tst=!any?'':n.band==='high'?'background:#d5281b;color:#fff':n.band==='medium'?'background:#ffb74d':n.band==='lowmedium'?'background:#fff176':'';
+  h+='<tr><th colspan="2">TOTAL'+(n.complete?'':' (INCOMPLETE – missing parameters)')+'</th><td class="sc" style="font-weight:bold;font-size:11pt;'+tst+'">'+(any?n.total:'–')+'</td></tr></table>';
+  if(any){var G=GUIDE[n.band];h+='<div class="box"><b>'+esc(G.title)+'</b>'+esc(G.pts.join('\n'))+'</div>';}
+  if(d.scale==='2')h+='<div class="warnp">SpO₂ Scale 2 '+(d.scale2Confirm?'used – clinician-confirmed 88–92% target'+(d.scale2By?' (confirmed by '+esc(d.scale2By)+')':''):'selected but NOT confirmed – SpO₂ not scored')+'</div>';
+  h+='</section>';
+  h+='<section><h2>SBAR handover</h2><div class="box"><b>S – Situation</b>'+esc(d.sbS)+'</div><div class="box"><b>B – Background</b>'+esc(d.sbB)+'</div><div class="box"><b>A – Assessment</b>'+esc(d.sbA)+'</div><div class="box"><b>R – Recommendation</b>'+esc(d.sbR)+'</div>'
+   +'<table><tr><th>Handover from</th><td>'+esc(d.hoFrom)+'&nbsp;</td><th>Handover to</th><td>'+esc(d.hoTo)+'&nbsp;</td><th>Date/time</th><td>'+esc(fmtDT(d.hoTime))+'&nbsp;</td></tr></table></section>';
+  h+='<div class="foot">Decision-support and documentation aid only – does not replace clinical judgement or local policy; not a certified medical device. Follow Trust policy. NEWS2 © Royal College of Physicians 2017. Record generated '+esc(new Date().toLocaleString('en-GB'))+'.</div>';
+  $('printView').innerHTML=h;
+}
+$('btnPrint').onclick=function(){buildPrint();window.print();};
+window.addEventListener('beforeprint',buildPrint);
+
+/* init */
+(function init(){
+  var dr=null;try{dr=JSON.parse(lsGet(KEY_DRAFT)||'null');}catch(e){}
+  if(dr&&dr.data){populate(Object.assign(blank(),dr.data));curId=dr.id||null;savedSnap=dr.snap||null;
+    if(!$('asDateTime').value)$('asDateTime').value=nowLocal();
+    $('bStatus').textContent='Restored auto-saved draft';}
+  else populate(blank());
+  if(!storageOK)$('bStatus').textContent='⚠ Local storage unavailable – data cannot be saved';
+  refresh();renderRecs();
+})();
+window.addEventListener('beforeunload',function(){try{if(saveT){clearTimeout(saveT);writeDraft();}}catch(x){}});
+</script>
+</body>
+</html>
