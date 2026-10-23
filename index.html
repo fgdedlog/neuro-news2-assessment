@@ -153,9 +153,9 @@ footer.disc{max-width:1000px;margin:0 auto;padding:12px 12px 40px}
    <div class="wide"><label for="ptName">Patient name</label><input type="text" id="ptName" name="ptName" autocomplete="off"></div>
    <div><label for="ptDob">Date of birth</label><input type="date" id="ptDob" name="ptDob"><div class="msg" id="ageMsg" aria-live="polite"></div></div>
    <div><label for="ptNhs">NHS number <span class="hint">(10 digits)</span></label><input type="text" id="ptNhs" name="ptNhs" inputmode="numeric" maxlength="14" placeholder="000 000 0000" aria-describedby="nhsMsg"><div class="msg" id="nhsMsg" aria-live="polite"></div></div>
-   <div><label for="ptHospital">Hospital</label><input type="text" id="ptHospital" name="ptHospital"></div>
-   <div><label for="ptWard">Ward</label><input type="text" id="ptWard" name="ptWard"></div>
-   <div><label for="ptBed">Bed</label><input type="text" id="ptBed" name="ptBed"></div>
+   <div><label for="ptHospital">Setting (care home / hospital / community / facility name)</label><input type="text" id="ptHospital" name="ptHospital"></div>
+   <div><label for="ptWard">Unit / ward</label><input type="text" id="ptWard" name="ptWard"></div>
+   <div><label for="ptBed">Bed / room</label><input type="text" id="ptBed" name="ptBed"></div>
    <div class="wide"><label for="ptAllergies">Allergies <span class="hint">(or "No known allergies")</span></label><input type="text" id="ptAllergies" name="ptAllergies"></div>
    <div class="wide"><label for="ptHistory">Reason for admission / relevant history <span class="hint">(optional – used in SBAR Background)</span></label><textarea id="ptHistory" name="ptHistory" rows="2" style="min-height:64px"></textarea></div>
    <div class="wide"><label for="asDateTime">Date and time of assessment</label>
@@ -249,7 +249,7 @@ footer.disc{max-width:1000px;margin:0 auto;padding:12px 12px 40px}
 
  <section class="card" id="sec-records"><h2>6. Saved records (this device only)</h2>
   <div class="notice info">Records are stored in this browser's local storage only. Use <b>Export</b> to back up or move records between devices (the file contains patient-identifiable data – store and share it securely per Trust policy).</div>
-  <div style="margin-bottom:8px"><label for="search">Search records</label><input type="search" id="search" placeholder="Name, NHS number, ward, assessor…"></div>
+  <div style="margin-bottom:8px"><label for="search">Search records</label><input type="search" id="search" placeholder="Name, NHS number, unit/ward, assessor…"></div>
   <div class="actions" style="margin-bottom:10px">
    <button type="button" id="btnExport" class="small">Export JSON</button>
    <label class="btn small" style="display:inline-flex;align-items:center;margin:0" for="importFile">Import JSON</label>
@@ -561,7 +561,7 @@ function refresh(){
   $('bName').textContent=d.ptName||'Unnamed patient';
   $('bDob').textContent=d.ptDob?'DOB '+fmtD(d.ptDob)+(a&&a.t?' ('+a.t+')':''):'';
   $('bNhs').textContent=d.ptNhs?'NHS '+fmtNHS(d.ptNhs):'';
-  $('bLoc').textContent=[d.ptWard,d.ptBed?'Bed '+d.ptBed:''].filter(Boolean).join(' · ');
+  $('bLoc').textContent=[d.ptWard,d.ptBed].filter(Boolean).join(' · ');
   var bn=$('bNews');bn.textContent=any?(n.total+(n.complete?'':'*')+' '+GUIDE[n.band].name):'–';bn.className='chip '+(any?GUIDE[n.band].pill:'pill-none');
   $('bGcs').textContent=gt!==null?gcsText(d.gcsE,d.gcsV,d.gcsM):'–';
   $('bAvpu').textContent=d.avpu?AVPU_NAME[d.avpu]:'–';
@@ -587,7 +587,7 @@ $('ptNhs').addEventListener('blur',function(){var v=this.value;if(/^\d{10}$/.tes
 function sbarDraft(d,n){
   var age=ageText(d),nm=d.ptName||'the patient';
   var who=[nm,age&&age.t?age.t+' old':'',d.ptDob?'DOB '+fmtD(d.ptDob):'',d.ptNhs?'NHS '+fmtNHS(d.ptNhs):''].filter(Boolean).join(', ');
-  var loc=[d.ptHospital,d.ptWard?(/^ward\b/i.test(d.ptWard)?d.ptWard:'Ward '+d.ptWard):'',d.ptBed?'Bed '+d.ptBed:''].filter(Boolean).join(', ');
+  var loc=[d.ptHospital,d.ptWard||'',d.ptBed||''].filter(Boolean).join(', ');
   var any=anyScored(n),gt=gcsTotal(d.gcsE,d.gcsV,d.gcsM);
   var S='I am '+(d.hoFrom||d.asName||'[name]')+(d.asRole?' ('+d.asRole+')':'')+', handing over / calling about '+who+(loc?', located in '+loc:'')+'.\n'
    +'Assessed '+(fmtDT(d.asDateTime)||'[date/time]')+'. '
@@ -630,7 +630,7 @@ function renderRecs(){
     var d=r.data||{},n=computeNews2(newsInputs(d)),any=anyScored(n);
     var meta=el('div',{class:'meta'});
     meta.appendChild(el('b',{text:(d.ptName||'Unnamed patient')+(d.ptNhs?' · NHS '+fmtNHS(d.ptNhs):'')}));
-    meta.appendChild(el('small',{text:[d.ptWard?'Ward '+d.ptWard:'',d.ptBed?'Bed '+d.ptBed:'','Assessed '+(fmtDT(d.asDateTime)||'–'),d.asName?'by '+d.asName:'','Saved '+fmtDT(r.updatedAt)].filter(Boolean).join(' · ')}));
+    meta.appendChild(el('small',{text:[d.ptWard||'',d.ptBed||'','Assessed '+(fmtDT(d.asDateTime)||'–'),d.asName?'by '+d.asName:'','Saved '+fmtDT(r.updatedAt)].filter(Boolean).join(' · ')}));
     var chip=el('span',{class:'chip '+(any?GUIDE[n.band].pill:'pill-none'),text:'NEWS2 '+(any?n.total+(n.complete?'':'*'):'–')});
     var gt=gcsTotal(d.gcsE,d.gcsV,d.gcsM);
     var bt=el('div',{class:'btns'});
@@ -712,7 +712,7 @@ function buildPrint(){
   var h='<div class="ph"><div><h1>Neurological Assessment &amp; NEWS2</h1><div>AVPU · Glasgow Coma Scale · NEWS2 · SBAR handover</div></div><div style="text-align:right">Printed: '+esc(new Date().toLocaleString('en-GB'))+'</div></div>';
   h+='<div class="pb"><table>'
    +'<tr><th>Patient</th><td><b>'+esc(d.ptName||'—')+'</b></td><th>NHS number</th><td>'+esc(d.ptNhs?fmtNHS(d.ptNhs):'—')+'</td></tr>'
-   +'<tr><th>DOB / Age</th><td>'+esc(d.ptDob?fmtD(d.ptDob)+(a&&a.t?' ('+a.t+')':''):'—')+'</td><th>Hospital / Ward / Bed</th><td>'+esc([d.ptHospital,d.ptWard,d.ptBed?'Bed '+d.ptBed:''].filter(Boolean).join(' / ')||'—')+'</td></tr>'
+   +'<tr><th>DOB / Age</th><td>'+esc(d.ptDob?fmtD(d.ptDob)+(a&&a.t?' ('+a.t+')':''):'—')+'</td><th>Setting / Unit or ward / Bed or room</th><td>'+esc([d.ptHospital,d.ptWard,d.ptBed].filter(Boolean).join(' / ')||'—')+'</td></tr>'
    +'<tr><th>Allergies</th><td>'+esc(d.ptAllergies||'—')+'</td><th>Assessment date/time</th><td>'+esc(fmtDT(d.asDateTime)||'—')+'</td></tr></table>'
    +(nv.valid===false?'<div class="warnp">⚠ NHS number failed validation: '+esc(nv.reason)+' – verify against patient ID band.</div>':'')+'</div>';
   if(d.ptHistory)h+='<table>'+row('Reason for admission / history',d.ptHistory)+'</table>';
