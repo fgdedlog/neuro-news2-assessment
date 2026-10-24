@@ -55,8 +55,8 @@ textarea{min-height:110px;resize:vertical;line-height:1.35}
 .flagchip.info{background:var(--nhs);color:#fff}
 /* table (desktop) */
 .tablewrap{overflow:auto;max-height:86vh;min-height:360px;border:1px solid #9aa6ad;border-radius:var(--r);background:#fff}
-table.ho{border-collapse:separate;border-spacing:0;table-layout:fixed;width:2560px}
-.ho col.c-room{width:74px}.ho col.c-sum{width:230px}.ho col.c-speak{width:150px}.ho col.c-dnr{width:170px}.ho col.c-food{width:215px}.ho col.c-fluid{width:230px}
+table.ho{border-collapse:separate;border-spacing:0;table-layout:fixed;width:2600px}
+.ho col.c-room{width:74px}.ho col.c-sum{width:230px}.ho col.c-speak{width:150px}.ho col.c-dnr{width:210px}.ho col.c-food{width:215px}.ho col.c-fluid{width:230px}
 .ho col.c-mob{width:200px}.ho col.c-repos{width:230px}.ho col.c-welf{width:200px}.ho col.c-care{width:290px}.ho col.c-con{width:260px}.ho col.c-act{width:260px}.ho col.c-done{width:84px}
 .ho th,.ho td{border-right:1px solid #c5cdd2;border-bottom:1px solid #c5cdd2;padding:6px;vertical-align:top;text-align:left;font-size:.9rem;background:#fff}
 .ho thead th{position:sticky;top:0;z-index:5;background:var(--nhs);color:#fff;font-size:.82rem;vertical-align:bottom}
@@ -103,6 +103,13 @@ select[data-k=dnr][data-v=respect]{background:#e9dff5;border-color:var(--purple)
 .msg .interim{font-style:italic;color:#003087}
 tr.speaking td.room{background:#ffeb3b!important}
 .nodata{padding:16px;text-align:center;color:var(--muted)}
+.ho tbody tr.empty td:not(.sum){opacity:.45;background:#e3e7e9}
+.ho tbody tr.empty td.sum{background:#e3e7e9}
+.ho tbody tr.empty .room{background:#cfd6da;color:#52626e}
+.ho tbody tr.empty td:not(.sum) *{pointer-events:auto}
+.bd.bd-empty{background:#52626e;border-color:#52626e;color:#fff}
+.mini{min-height:34px!important;padding:2px 10px!important;font-size:.8rem!important;margin-top:6px}
+.sumtools{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;margin-top:4px}
 .printarea{display:none}
 footer.disc{padding:0 16px 24px;font-size:.85rem;color:var(--muted)}
 #toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#212b32;color:#fff;padding:10px 18px;border-radius:99px;z-index:200;opacity:0;pointer-events:none;transition:opacity .25s;max-width:92vw;text-align:center}
@@ -132,6 +139,7 @@ footer.disc{padding:0 16px 24px;font-size:.85rem;color:var(--muted)}
  .f select,.f input[type=text],.f input[type=number],.f input[type=time]{min-height:44px}
  .chk{min-height:44px}
  .nowrow button,.seg button{min-height:44px}
+ .mini{min-height:44px!important}
  .toolbar .sm{width:100%}
  .toolbar>button,.toolbar .row-actions button{flex:1 1 140px}
 }
@@ -156,6 +164,7 @@ footer.disc{padding:0 16px 24px;font-size:.85rem;color:var(--muted)}
  .pt tr.f-alert th.room{box-shadow:inset 4px 0 0 var(--err)}
  .pt tr.f-info td{background:#eaf2fb}
  .pt tr.skipprint{display:none}
+ .pt tr.emptyrow td,.pt tr.emptyrow th.room{background:#e6eaec;color:#444}
  .pt .flg{font-weight:700}
  .pt .dn{font-weight:800;color:var(--purple)}
  .printdisc{font-size:6.3pt;color:#333;margin-top:3px;border-top:1px solid #999;padding-top:2px}
@@ -200,12 +209,19 @@ footer.disc{padding:0 16px 24px;font-size:.85rem;color:var(--muted)}
    <div class="row-actions">
     <button type="button" id="btnMarkAll">✔ Mark all handed over</button>
     <button type="button" id="btnReset" class="primary">↻ Reset checklist for new shift</button>
-    <button type="button" id="btnExport">⬇ Export JSON</button>
-    <button type="button" id="btnImport">⬆ Import JSON</button><input type="file" id="fileImport" accept="application/json,.json" hidden>
+    <button type="button" id="btnExport">⬇ Export whole handover</button>
+    <button type="button" id="btnImport">⬆ Import whole handover</button><input type="file" id="fileImport" accept="application/json,.json" hidden>
     <button type="button" class="danger" id="btnClear">Clear all</button>
     <label class="chk" for="printData"><input type="checkbox" id="printData"> Print only rooms with entries</label>
    </div>
   </div>
+  <div class="toolbar setupbar" style="margin-top:10px" role="group" aria-label="Setup file">
+   <div class="row-actions">
+    <button type="button" id="btnImportSetup" class="primary">⬆ Import setup file</button><input type="file" id="fileSetup" accept="application/json,.json" hidden>
+    <button type="button" id="btnExportSetup">⬇ Export setup file</button>
+   </div>
+  </div>
+  <div class="hint" id="setupHint"><b>Setup file</b> = the standing details for rooms 39–61 only (names/initials, resuscitation status, IDDSI food/drink levels, mobility, repositioning, empty rooms and so on – no intake, concerns or ticks). <b>To load a setup:</b> tap <b>Import setup file</b>, choose your <i>handover-setup.json</i> file, then confirm. It stays in this browser, and “Reset checklist for new shift” keeps it. <b>To back up or move to another device:</b> tap <b>Export setup file</b> and open that file on the other device with <b>Import setup file</b>. Setup files contain resident information – store and send them securely, never post them publicly. This page itself holds no resident details.</div>
   <div class="stat" id="stat" role="status" aria-live="polite"></div>
   <div class="prog" role="progressbar" aria-label="Rooms handed over" aria-valuemin="0" aria-valuemax="23" aria-valuenow="0" id="progWrap"><div id="progBar"></div></div>
   <div class="stat" id="saveState" aria-live="polite"></div>
@@ -255,33 +271,40 @@ footer.disc{padding:0 16px 24px;font-size:.85rem;color:var(--muted)}
 <script>
 /* ==PURE-START== (functions below are unit-tested in node; no DOM access) */
 var ROOM_FIRST=39, ROOM_LAST=61;
+// IDDSI levels (International Dysphagia Diet Standardisation Initiative): [label, spoken]
+var IDDSI_FOOD={'3':['Liquidised','liquidised'],'4':['Pureed','pureed'],'5':['Minced & moist','minced and moist'],'6':['Soft & bite-sized','soft and bite-sized'],'7':['Regular / Easy to chew','regular']};
+var IDDSI_DRINK={'0':['Thin','thin'],'1':['Slightly thick','slightly thick'],'2':['Mildly thick','mildly thick'],'3':['Moderately thick','moderately thick'],'4':['Extremely thick','extremely thick']};
 // option lists: [value, label, spoken]
 var OPT={
- dnr:[['','–'],['full','Full resuscitation','Full resuscitation'],['dnacpr','DNACPR in place','D N A C P R in place'],['respect','ReSPECT form in place','Re-SPECT form in place'],['unknown','Not known','Resuscitation status not known']],
+ dnr:[['','–'],['full','Full resuscitation (CPR)','Full resuscitation (CPR)'],['dnacpr','DNACPR in place','D N A C P R in place'],['respect','ReSPECT form in place','Re-SPECT form in place'],['unknown','Not known','Resuscitation status not known']],
  level:[['','–'],['none','None'],['poor','Poor'],['fair','Fair'],['good','Good']],
  diet:[['','–'],['normal','Normal','normal diet'],['soft','Soft','soft diet'],['pureed','Pureed','pureed diet'],['fork','Fork-mashable','fork-mashable diet'],['thick','Thickened (IDDSI)','thickened diet'],['nbm','NBM','nil by mouth']],
  assist:[['','–'],['indep','Independent','independent'],['prompt','Prompt','needs prompt'],['one','1:1 assistance','needs one to one assistance'],['fed','Fed','needs feeding']],
  thickened:[['','–'],['yes','Yes','thickened fluids'],['no','No','fluids not thickened']],
- mobility:[['','–'],['indep','Independent','independent'],['aid','Stick / frame','stick or frame'],['one','1 staff','1 staff'],['two','2 staff','2 staff'],['hoist','Hoist','hoist'],['bed','Bed-bound','bed-bound']],
+ mobility:[['','–'],['indep','Independent','independent'],['aid','Stick / frame','stick or frame'],['transfer','Transfer only / frame / stick','transfer only, frame or stick'],['one','1 staff','1 staff'],['two','2 staff','2 staff'],['hoist','Hoist','hoist'],['bed','Bed-bound','bed-bound']],
  falls:[['','–'],['low','Low','low'],['med','Medium','medium'],['high','High','high']],
- repos:[['','–'],['none','None needed','no repositioning needed'],['h2','2-hourly','2-hourly'],['h3','3-hourly','3-hourly'],['h4','4-hourly','4-hourly'],['other','Other','other frequency']],
+ repos:[['','–'],['none','None needed','no repositioning needed'],['h2','2-hourly','2-hourly'],['h3','3-hourly','3-hourly'],['h4','4-hourly','4-hourly'],['self','Self-repositions','self repositions'],['other','Other','other frequency']],
  welfare:[['','–'],['routine','Routine','routine'],['h1','Hourly','hourly'],['m30','30-minutely','30-minutely'],['m15','15-minutely','15-minutely'],['cont','Continuous 1:1','continuous one to one']],
  continence:[['','–'],['indep','Independent','independent'],['assisted','Assisted','assisted'],['pad','Pad','pad'],['catheter','Catheter','catheter']],
- pain:[['','–'],['none','None'],['mild','Mild'],['moderate','Moderate'],['severe','Severe']]
+ pain:[['','–'],['none','None'],['mild','Mild'],['moderate','Moderate'],['severe','Severe']],
+ foodIddsi:[['','Not set']].concat(Object.keys(IDDSI_FOOD).map(function(k){return [k,'Level '+k+' – '+IDDSI_FOOD[k][0],IDDSI_FOOD[k][1]];})).concat([['other','Other – see detail','other, see diet detail']]),
+ drinkIddsi:[['','Not set']].concat(Object.keys(IDDSI_DRINK).map(function(k){return [k,'Level '+k+' – '+IDDSI_DRINK[k][0],IDDSI_DRINK[k][1]];}))
 };
 var OPT_FOR={foodLevel:'level',fluidLevel:'level'};
 // key -> [type,max]   types: sel,text,num,time,bool,area
 var KT={
- name:['text',60],dnr:['sel'],diet:['sel'],dietNote:['text',40],assist:['sel'],thickened:['sel'],fluidTarget:['num'],fluidChart:['bool'],
+ name:['text',60],empty:['bool'],foodIddsi:['sel'],drinkIddsi:['sel'],mobNote:['text',60],dnr:['sel'],diet:['sel'],dietNote:['text',40],assist:['sel'],thickened:['sel'],fluidTarget:['num'],fluidChart:['bool'],
  mobility:['sel'],falls:['sel'],rails:['bool'],sensor:['bool'],repos:['sel'],reposOther:['text',40],skin:['bool'],mattress:['bool'],
  welfare:['sel'],continence:['sel'],infection:['bool'],
  foodLevel:['sel'],fluidLevel:['sel'],fluidMl:['num'],reposLast:['time'],welfareLast:['time'],bowels:['bool'],pain:['sel'],
  washed:['bool'],meds:['bool'],charts:['bool'],newToday:['bool'],concerns:['area',2000],actions:['area',2000],done:['bool']
 };
 // standing info persists between shifts; shift items are cleared by "Reset checklist for new shift"
-var STAND_KEYS=['name','dnr','diet','dietNote','assist','thickened','fluidTarget','fluidChart','mobility','falls','rails','sensor','repos','reposOther','skin','mattress','welfare','continence','infection'];
+var STAND_KEYS=['name','empty','foodIddsi','drinkIddsi','mobNote','dnr','diet','dietNote','assist','thickened','fluidTarget','fluidChart','mobility','falls','rails','sensor','repos','reposOther','skin','mattress','welfare','continence','infection'];
 var SHIFT_KEYS=['foodLevel','fluidLevel','fluidMl','reposLast','welfareLast','bowels','pain','washed','meds','charts','newToday','concerns','actions','done'];
 var ALL_KEYS=STAND_KEYS.concat(SHIFT_KEYS);
+// suggested "thickened fluids" for a drink level: '' when no level
+function suggestThickened(level){return level===''||level===undefined||level===null?'':(level==='0'?'no':'yes');}
 var SHIFTS=['','Early','Late','Night','Day'];
 var HDR_KEYS=['date','shift','time','fromName','fromRole','toName','toRole'];
 function optsFor(k){return OPT[OPT_FOR[k]||k]||[];}
@@ -317,7 +340,7 @@ function sanitizeState(o){
   if(['0.75','0.9','1','1.15','1.3'].indexOf(String(s.rate))>=0)out.settings.rate=String(s.rate);
   out.settings.printData=s.printData===true;
   var rows=o.rows&&typeof o.rows==='object'?o.rows:{};
-  for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++)out.rows[rm]=cleanRow(rows[rm]||rows[String(rm)]);
+  for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++){out.rows[rm]=cleanRow(rows[rm]||rows[String(rm)]);}
   return out;
 }
 // storage split: per-shift data in "handover_v2", standing info in "handover_v2_standing"
@@ -327,6 +350,7 @@ function splitForStorage(st){
   for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++){shift.rows[rm]=pickKeys(st.rows[rm],SHIFT_KEYS);stand.rows[rm]=pickKeys(st.rows[rm],STAND_KEYS);}
   return {shift:shift,stand:stand};
 }
+// Rebuild state from the two storage blobs (per-shift data and standing info).
 function joinFromStorage(shift,stand){
   var o={v:2,header:(shift&&shift.header)||{},settings:(shift&&shift.settings)||{},rows:{}};
   var sr=(shift&&shift.v===2&&shift.rows)||{},tr=(stand&&stand.v===2&&stand.rows)||{};
@@ -336,6 +360,35 @@ function joinFromStorage(shift,stand){
     o.rows[rm]=row;
   }
   return sanitizeState(o);
+}
+// Fully blank state (Clear all). Keeps settings.
+function blankState(settings){
+  var st=sanitizeState(null);
+  if(settings){st.settings.rate=settings.rate;st.settings.printData=settings.printData;}
+  return st;
+}
+// ---- Setup file: STANDING info only (no per-shift items, no header). Used to back up / move a setup between devices.
+var SETUP_APP='handover-setup';
+function buildSetup(st){
+  var o={app:SETUP_APP,v:2,kind:'standing-info',note:'Contains resident information. Store securely.',rows:{}};
+  for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++)o.rows[rm]=pickKeys(st.rows[rm],STAND_KEYS);
+  return o;
+}
+// Validate a parsed setup file. Returns {rows:{room:standingRow},count} or null. Unknown keys / bad values are dropped.
+function parseSetup(obj){
+  if(!obj||typeof obj!=='object'||obj.app!==SETUP_APP||obj.v!==2||!obj.rows||typeof obj.rows!=='object')return null;
+  var rows={},n=0;
+  for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++){
+    var src=obj.rows[rm]||obj.rows[String(rm)];
+    if(src&&typeof src==='object'){var c=cleanRow(src),r={};STAND_KEYS.forEach(function(k){r[k]=c[k];});rows[rm]=r;n++;}
+  }
+  return n?{rows:rows,count:n}:null;
+}
+// Apply a parsed setup: replaces standing info for the rooms in the file; per-shift items and the header are untouched. Returns a new state.
+function applySetup(st,parsed){
+  var out=sanitizeState(JSON.parse(JSON.stringify(st)));
+  Object.keys(parsed.rows).forEach(function(rm){STAND_KEYS.forEach(function(k){out.rows[rm][k]=parsed.rows[rm][k];});});
+  return out;
 }
 // Reset checklist for new shift: clears per-shift items, keeps standing info. Returns a new state.
 function resetShift(st){
@@ -352,20 +405,33 @@ function fluidText(r){
   if(t!=='')return 'Target '+t+' ml';
   return '';
 }
-function reposText(r){return r.repos==='other'?('Other'+(txt(r.reposOther)?' – '+txt(r.reposOther):'')):optLabel('repos',r.repos);}
+// mobility: combine the dropdown with the free-text detail without repeating ("Hoist" + "Full body hoist" -> "Full body hoist")
+function mobCombine(opt,note){
+  note=txt(note);if(!opt)return note;if(!note)return opt;
+  var nl=note.toLowerCase(),ws=opt.toLowerCase().split(/[^a-z]+/).filter(function(w){return w.length>=4;});
+  return ws.some(function(w){return nl.indexOf(w)>=0;})?note:opt+' – '+note;
+}
+function mobLabel(r){return mobCombine(optLabel('mobility',r.mobility),r.mobNote);}
+function mobSpoken(r){return mobCombine(optSpeech('mobility',r.mobility),String(r.mobNote||'').replace(/\bAO1\b/g,'A O 1'));}
+function dietRedundant(r){return (r.foodIddsi==='7'&&r.diet==='normal')||(r.foodIddsi==='4'&&r.diet==='pureed');}
+function thickRedundant(r){return (r.drinkIddsi==='0'&&r.thickened==='no')||(r.drinkIddsi!==''&&r.drinkIddsi!=='0'&&r.thickened==='yes');}
+function reposText(r){if(r.repos==='self')return 'Self repositions';return r.repos==='other'?('Other'+(txt(r.reposOther)?' – '+txt(r.reposOther):'')):optLabel('repos',r.repos);}
 // Badges: k = alert (red) | warn (amber) | dnacpr / respect (purple, informational) | plain
 function buildBadges(r){
   var b=[];function add(t,k){b.push({t:t,k:k||'plain'});}
-  if(r.dnr==='dnacpr')add('DNACPR','dnacpr');else if(r.dnr==='respect')add('ReSPECT','respect');else if(r.dnr==='unknown')add('Resus status not known','warn');
-  if(r.foodLevel==='none'||r.foodLevel==='poor')add('Food: '+r.foodLevel,'alert');
-  if(r.fluidLevel==='none'||r.fluidLevel==='poor')add('Fluids: '+r.fluidLevel,'alert');
-  if(r.diet&&r.diet!=='normal')add(optLabel('diet',r.diet)+(r.diet==='nbm'?'':' diet'),r.diet==='nbm'?'warn':'plain');
+  if(r.empty){add('Room empty','empty');return b;}
+  if(r.dnr==='full')add('Full resuscitation (CPR)');else if(r.dnr==='dnacpr')add('DNACPR','dnacpr');else if(r.dnr==='respect')add('ReSPECT','respect');else if(r.dnr==='unknown')add('Resus status not known','warn');
+  if(r.foodIddsi)add('Food level '+(r.foodIddsi==='other'?'other':r.foodIddsi+' – '+IDDSI_FOOD[r.foodIddsi][0]));
+  if(r.drinkIddsi)add('Drink level '+r.drinkIddsi+' – '+IDDSI_DRINK[r.drinkIddsi][0]);
+  if(r.foodLevel==='none'||r.foodLevel==='poor')add('Food intake: '+r.foodLevel,'alert');
+  if(r.fluidLevel==='none'||r.fluidLevel==='poor')add('Fluid intake: '+r.fluidLevel,'alert');
+  if(r.diet&&r.diet!=='normal'&&(!dietRedundant(r)||r.diet==='nbm'))add(optLabel('diet',r.diet)+(r.diet==='nbm'?'':' diet'),r.diet==='nbm'?'warn':'plain');
   if(r.assist&&r.assist!=='indep')add(r.assist==='fed'?'Fed':optLabel('assist',r.assist).replace('Prompt','Prompt at meals'),'plain');
-  if(r.thickened==='yes')add('Thickened fluids');
-  if(r.mobility)add(optLabel('mobility',r.mobility));
+  if(r.thickened==='yes'&&!thickRedundant(r))add('Thickened fluids');
+  if(r.mobility||txt(r.mobNote))add(mobLabel(r));
   if(r.falls==='high')add('High falls risk','alert');else if(r.falls==='med')add('Medium falls risk','warn');
   if(r.rails)add('Bed rails');if(r.sensor)add('Sensor mat');
-  if(r.repos&&r.repos!=='none')add('Repos '+(r.repos==='other'?'other':optLabel('repos',r.repos)));
+  if(r.repos==='self')add('Self repositions');else if(r.repos&&r.repos!=='none')add('Repos '+(r.repos==='other'?'other':optLabel('repos',r.repos)));
   if(r.skin)add('Pressure area concern','alert');
   if(r.mattress)add('Pressure mattress');
   if(r.welfare&&r.welfare!=='routine')add('Welfare '+optLabel('welfare',r.welfare),r.welfare==='cont'?'warn':'plain');
@@ -378,6 +444,7 @@ function buildBadges(r){
 }
 // '' | 'info' (DNACPR/ReSPECT only) | 'alert'
 function flagLevel(r){
+  if(r.empty)return '';
   var b=buildBadges(r),lvl='';
   b.forEach(function(x){if(x.k==='alert')lvl='alert';else if((x.k==='dnacpr'||x.k==='respect')&&lvl==='')lvl='info';});
   return lvl;
@@ -395,23 +462,26 @@ function spokenText(t){ // turn free text into a clean sentence for speech
 }
 // Ordered list of short sentences to read aloud; unset fields are skipped
 function buildSpeechParts(room,r){
+  if(r.empty)return ['Room '+room+' is empty.'];
   var p=['Room '+room+'.'],n0=p.length;
   var nm=spokenText(r.name);if(nm)p.push(nm);
   if(r.dnr)p.push(optSpeech('dnr',r.dnr)+'.');
+  if(r.foodIddsi)p.push(r.foodIddsi==='other'?'Food level other, see diet detail.':'Food level '+r.foodIddsi+', '+IDDSI_FOOD[r.foodIddsi][1]+'.');
   var f=[];
   if(r.foodLevel)f.push(optSpeech('level',r.foodLevel).toLowerCase());
-  if(r.diet)f.push(optSpeech('diet',r.diet));
+  if(r.diet&&(!dietRedundant(r)||r.diet==='nbm'))f.push(optSpeech('diet',r.diet));
   if(txt(r.dietNote))f.push(txt(r.dietNote));
   if(r.assist)f.push(optSpeech('assist',r.assist));
   if(f.length)p.push('Food: '+f.join(', ')+'.');
+  if(r.drinkIddsi)p.push('Fluids level '+r.drinkIddsi+', '+IDDSI_DRINK[r.drinkIddsi][1]+'.');
   var w=[],m=cleanNum(r.fluidMl),t=cleanNum(r.fluidTarget);
   if(r.fluidLevel)w.push(optSpeech('level',r.fluidLevel).toLowerCase());
   if(m!==''&&t!=='')w.push(m+' of '+t+' millilitres');else if(m!=='')w.push(m+' millilitres so far');else if(t!=='')w.push('target '+t+' millilitres');
-  if(r.thickened)w.push(optSpeech('thickened',r.thickened));
+  if(r.thickened&&!thickRedundant(r))w.push(optSpeech('thickened',r.thickened));
   if(r.fluidChart)w.push('fluid chart in place');
   if(w.length)p.push('Fluids: '+w.join(', ')+'.');
   var mo=[];
-  if(r.mobility)mo.push(optSpeech('mobility',r.mobility));
+  if(r.mobility||txt(r.mobNote))mo.push(mobSpoken(r));
   if(r.falls)mo.push(optSpeech('falls',r.falls)+' falls risk');
   if(r.rails)mo.push('bed rails');if(r.sensor)mo.push('sensor mat');
   if(mo.length)p.push('Mobility: '+mo.join(', ')+'.');
@@ -419,6 +489,7 @@ function buildSpeechParts(room,r){
     var s='';
     if(r.repos==='none')s='No repositioning needed';
     else if(r.repos==='other')s='Reposition '+(txt(r.reposOther)?txt(r.reposOther):'other frequency');
+    else if(r.repos==='self')s='Self repositions';
     else if(r.repos)s='Reposition '+optSpeech('repos',r.repos);
     if(r.reposLast)s+=(s?', last at ':'Last repositioned at ')+r.reposLast;
     p.push(s+'.');
@@ -448,14 +519,15 @@ function buildSpeechParts(room,r){
 // Text lines for the printable table (one row per room)
 function printCells(r){
   function L(a){return a.filter(function(x){return x}).join('\n');}
+  if(r.empty)return {dnr:'',food:'',fluids:'',mob:'',repos:'',welfare:'',care:'',concerns:'',actions:'',done:''};
   var ft=fluidText(r);
   var rp=[];if(r.repos)rp.push('Freq: '+reposText(r));if(r.reposLast)rp.push('Last: '+r.reposLast);if(r.skin)rp.push('Pressure area concern');if(r.mattress)rp.push('Pressure mattress');
   var wf=[];if(r.welfare)wf.push('Freq: '+optLabel('welfare',r.welfare));if(r.welfareLast)wf.push('Last: '+r.welfareLast);
   return {
    dnr:optLabel('dnr',r.dnr),
-   food:L([r.foodLevel&&'Intake: '+optLabel('level',r.foodLevel),r.diet&&'Diet: '+optLabel('diet',r.diet),txt(r.dietNote)&&'Detail: '+txt(r.dietNote),r.assist&&'Help: '+optLabel('assist',r.assist)]),
-   fluids:L([r.fluidLevel&&'Intake: '+optLabel('level',r.fluidLevel),ft,r.thickened&&'Thickened: '+optLabel('thickened',r.thickened),r.fluidChart&&'Fluid chart in place']),
-   mob:L([r.mobility&&'Mobility: '+optLabel('mobility',r.mobility),r.falls&&'Falls risk: '+optLabel('falls',r.falls),r.rails&&'Bed rails',r.sensor&&'Sensor mat']),
+   food:L([r.foodIddsi&&'IDDSI food: '+optLabel('foodIddsi',r.foodIddsi),r.foodLevel&&'Intake: '+optLabel('level',r.foodLevel),r.diet&&'Diet: '+optLabel('diet',r.diet),txt(r.dietNote)&&'Detail: '+txt(r.dietNote),r.assist&&'Help: '+optLabel('assist',r.assist)]),
+   fluids:L([r.drinkIddsi&&'IDDSI drink: '+optLabel('drinkIddsi',r.drinkIddsi),r.fluidLevel&&'Intake: '+optLabel('level',r.fluidLevel),ft,r.thickened&&'Thickened: '+optLabel('thickened',r.thickened),r.fluidChart&&'Fluid chart in place']),
+   mob:L([(r.mobility||txt(r.mobNote))&&'Mobility: '+mobLabel(r),r.falls&&'Falls risk: '+optLabel('falls',r.falls),r.rails&&'Bed rails',r.sensor&&'Sensor mat']),
    repos:L(rp),welfare:L(wf),
    care:L([r.continence&&'Continence: '+optLabel('continence',r.continence),r.bowels&&'Bowels opened',r.pain&&'Pain: '+optLabel('pain',r.pain),r.washed&&'Personal care done',r.meds&&'Medication round done',r.charts&&'Charts completed',r.infection&&'Infection precautions',r.newToday&&'New today']),
    concerns:txt(r.concerns),actions:txt(r.actions),done:r.done?'Yes':''
@@ -492,9 +564,9 @@ function load(){
 /* --- build rows --- */
 var GROUPS=[
  {id:'dnr',label:'DNACPR status',cls:'dnr',f:[['dnr','select','Resuscitation status','full']]},
- {id:'food',label:'Food',cls:'food',f:[['foodLevel','select','Intake','wide'],['diet','select','Diet / texture','wide'],['dietNote','text','IDDSI level / detail','wide','e.g. IDDSI 4'],['assist','select','Assistance needed','wide']]},
- {id:'fluid',label:'Fluids',cls:'fluid',f:[['fluidLevel','select','Intake','wide'],['fluidMl','num','So far (ml)',''],['fluidTarget','num','Target (ml)',''],['thickened','select','Thickened fluids','wide'],['fluidChart','check','Fluid chart in place']],extra:'meter'},
- {id:'mob',label:'Mobility & falls',cls:'mob',f:[['mobility','select','Mobility','wide'],['falls','select','Falls risk','wide'],['rails','check','Bed rails'],['sensor','check','Sensor mat']]},
+ {id:'food',label:'Food',cls:'food',f:[['foodIddsi','select','IDDSI food level','full'],['foodLevel','select','Intake','wide'],['diet','select','Diet / texture','wide'],['dietNote','text','Other diet detail','wide','e.g. fortified, allergies'],['assist','select','Assistance needed','wide']]},
+ {id:'fluid',label:'Fluids',cls:'fluid',f:[['drinkIddsi','select','IDDSI drink level','full'],['fluidLevel','select','Intake','wide'],['fluidMl','num','So far (ml)',''],['fluidTarget','num','Target (ml)',''],['thickened','select','Thickened fluids','wide'],['fluidChart','check','Fluid chart in place']],extra:'meter'},
+ {id:'mob',label:'Mobility & falls',cls:'mob',f:[['mobility','select','Mobility','wide'],['mobNote','text','Mobility detail','wide','e.g. Full body hoist'],['falls','select','Falls risk','wide'],['rails','check','Bed rails'],['sensor','check','Sensor mat']]},
  {id:'repos',label:'Repositioning & skin',cls:'repos',f:[['repos','select','Repositioning frequency','wide'],['reposOther','text','Other – details','wide'],['reposLast','time','Last repositioned','full'],['skin','check','Pressure area concern'],['mattress','check','Pressure mattress']]},
  {id:'welf',label:'Welfare checks',cls:'welf',f:[['welfare','select','Welfare check frequency','wide'],['welfareLast','time','Last checked','full']]},
  {id:'care',label:'Continence, pain & care',cls:'care',f:[['continence','select','Continence / toileting','wide'],['pain','select','Pain','wide'],['bowels','check','Bowels opened'],['washed','check','Personal care / washed'],['meds','check','Medication round done'],['charts','check','Fluid / food charts completed'],['infection','check','Infection / isolation precautions'],['newToday','check','Anything new today (concern, fall, GP/111)']]}
@@ -525,6 +597,9 @@ function buildRow(room){
   var c=cell('Summary','sum');
   c.appendChild(el('label',{class:'fl','for':'f_name_'+room,text:'Resident (initials or first name)'}));
   c.appendChild(el('input',{type:'text',id:'f_name_'+room,'data-k':'name',class:'ctl',maxlength:60,autocomplete:'off',placeholder:'Name / initials','aria-label':'Resident initials or first name, optional, room '+room}));
+  var st=el('div',{class:'sumtools'});
+  var el1=el('label',{class:'chk ctl','for':'f_empty_'+room});el1.appendChild(el('input',{type:'checkbox',id:'f_empty_'+room,'data-k':'empty','aria-label':'Room empty, room '+room}));el1.appendChild(el('span',{text:'Room empty'}));st.appendChild(el1);
+  c.appendChild(st);
   c.appendChild(el('div',{'data-flag':'1'}));
   c.appendChild(el('div',{class:'badges','data-badges':'1','aria-label':'Summary for room '+room}));
   // speak
@@ -574,30 +649,33 @@ function refreshRow(room){
   var p=fluidPct(r),mt=tr.querySelector('[data-mtext]');mt.textContent=fluidText(r);
   tr.querySelector('.meter>i').style.width=(p===null?0:Math.min(100,p))+'%';
   tr.classList.toggle('f-alert',lvl==='alert');tr.classList.toggle('f-info',lvl==='info');
-  tr.classList.toggle('done',r.done);
+  tr.classList.toggle('done',r.done&&!r.empty);tr.classList.toggle('empty',!!r.empty);
+  F(tr,'done').disabled=!!r.empty;
   // print row
   var pr=prEls[room],pc=printCells(r),empty=!rowHasData(r);
-  pr.className=(lvl?'f-'+lvl:'')+(empty&&state.settings.printData?' skipprint':'');
+  pr.className=(r.empty?'emptyrow':(lvl?'f-'+lvl:''))+(empty&&state.settings.printData?' skipprint':'');
   var sum=pr.querySelector('[data-p=sum]');sum.textContent='';
   if(txt(r.name))sum.appendChild(el('div',{text:txt(r.name),class:'flg'}));
-  if(lvl)sum.appendChild(el('div',{text:'⚑ '+printFlags(r)}));
+  if(r.empty)sum.appendChild(el('div',{text:'Room empty',class:'flg'}));
+  else if(lvl)sum.appendChild(el('div',{text:'⚑ '+printFlags(r)}));
   pr.querySelector('[data-p=dnr]').textContent=pc.dnr;
   pr.querySelector('[data-p=dnr]').className=r.dnr==='dnacpr'||r.dnr==='respect'?'dn':'';
   ['food','fluids','mob','repos','welfare','care','concerns','actions','done'].forEach(function(k){pr.querySelector('[data-p='+k+']').textContent=pc[k];});
 }
 function onFieldInput(e){
   var t=e.target,k=t.getAttribute&&t.getAttribute('data-k');if(!k||!KT[k])return;
-  var tr=t.closest('tr'),room=+tr.getAttribute('data-room'),r=state.rows[room],ty=KT[k][0],wasDone=r.done;
+  var tr=t.closest('tr'),room=+tr.getAttribute('data-room'),r=state.rows[room],ty=KT[k][0],wasDone=r.done,prevDrink=r.drinkIddsi;
   if(ty==='bool')r[k]=t.checked;
   else if(ty==='num'){r[k]=cleanNum(t.value);if(e.type==='change'&&t.value!==r[k])t.value=r[k];}
   else if(ty==='time')r[k]=cleanTime(t.value);
   else r[k]=t.value;
+  if(k==='drinkIddsi'&&(r.thickened===''||r.thickened===suggestThickened(prevDrink))){r.thickened=suggestThickened(r.drinkIddsi);F(tr,'thickened').value=r.thickened;} // auto-suggest, still editable
   refreshRow(room);applyFilter();updateStats();scheduleSave();
   if(k==='done'&&r.done&&!wasDone&&$('hideDone').checked)toast('Room '+room+' handed over and hidden.');
 }
 
 /* --- filter / stats --- */
-function rowText(room){var r=state.rows[room],a=[room,r.name,r.dietNote,r.reposOther,r.concerns,r.actions];buildBadges(r).forEach(function(b){a.push(b.t)});ALL_KEYS.forEach(function(k){if(KT[k][0]==='sel'&&r[k])a.push(optLabel(k,r[k]))});return a.join(' ').toLowerCase();}
+function rowText(room){var r=state.rows[room],a=[room,r.name,r.dietNote,r.mobNote,r.reposOther,r.concerns,r.actions];buildBadges(r).forEach(function(b){a.push(b.t)});ALL_KEYS.forEach(function(k){if(KT[k][0]==='sel'&&r[k])a.push(optLabel(k,r[k]))});return a.join(' ').toLowerCase();}
 function applyFilter(){
   var q=$('q').value.trim().toLowerCase(),only=$('onlyFlag').checked,hd=$('hideDone').checked,shown=0;
   for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++){
@@ -611,11 +689,12 @@ function applyFilter(){
   applyFilter.shown=shown;
 }
 function updateStats(){
-  var fl=0,al=0,dn=0,total=ROOM_LAST-ROOM_FIRST+1;
-  for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++){var l=flagLevel(state.rows[rm]);if(l)fl++;if(l==='alert')al++;if(state.rows[rm].done)dn++;}
-  $('stat').textContent='Rooms shown: '+applyFilter.shown+' of '+total+' · Flagged: '+fl+' ('+al+' need attention) · Handed over: '+dn+' of '+total;
-  $('progBar').style.width=Math.round(dn*100/total)+'%';
-  var pw=$('progWrap');pw.setAttribute('aria-valuenow',dn);pw.setAttribute('aria-valuetext',dn+' of '+total+' rooms handed over');
+  var fl=0,al=0,dn=0,em=0,all=ROOM_LAST-ROOM_FIRST+1;
+  for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++){var q=state.rows[rm];if(q.empty){em++;continue;}var l=flagLevel(q);if(l)fl++;if(l==='alert')al++;if(q.done)dn++;}
+  var total=all-em;
+  $('stat').textContent='Rooms shown: '+applyFilter.shown+' of '+all+' · Empty: '+em+' · Flagged: '+fl+' ('+al+' need attention) · Handed over: '+dn+' of '+total;
+  $('progBar').style.width=(total?Math.round(dn*100/total):0)+'%';
+  var pw=$('progWrap');pw.setAttribute('aria-valuemax',total);pw.setAttribute('aria-valuenow',dn);pw.setAttribute('aria-valuetext',dn+' of '+total+' occupied rooms handed over');
   $('btnAll').disabled=!hasSynth;
 }
 
@@ -785,12 +864,12 @@ function setNow(room,k){
   refreshRow(room);scheduleSave();
 }
 function markAll(){
-  if(!confirm('Mark ALL rooms 39–61 as handed over?'))return;
-  for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++){state.rows[rm].done=true;F(rowEls[rm],'done').checked=true;refreshRow(rm);}
+  if(!confirm('Mark ALL occupied rooms (39–61, not counting rooms marked empty) as handed over?'))return;
+  for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++){if(state.rows[rm].empty)continue;state.rows[rm].done=true;F(rowEls[rm],'done').checked=true;refreshRow(rm);}
   applyFilter();updateStats();saveNow();toast('All rooms marked as handed over.');
 }
 function resetForNewShift(){
-  if(!confirm('Reset checklist for a new shift?\n\nThis clears for every room: food and fluid intake, ml totals, last-times, pain, bowels/personal care/medication/chart ticks, "new today", concerns, actions and handed-over ticks.\n\nIt KEEPS standing information: name/initials, DNACPR status, diet, assistance, mobility, falls risk, rails/sensor mat, repositioning and welfare frequency, pressure mattress, pressure area concern, infection precautions, continence and fluid target.\n\nTip: Export JSON first if you need a copy of this handover.'))return;
+  if(!confirm('Reset checklist for a new shift?\n\nThis clears for every room: food and fluid intake, ml totals, last-times, pain, bowels/personal care/medication/chart ticks, "new today", concerns, actions and handed-over ticks.\n\nIt KEEPS standing information: name/initials, room empty, DNACPR status, IDDSI food and drink levels, diet, assistance, mobility, falls risk, rails/sensor mat, repositioning and welfare frequency, pressure mattress, pressure area concern, infection precautions, continence and fluid target.\n\nTip: Export JSON first if you need a copy of this handover.'))return;
   stopSpeech();stopDictation();
   state=resetShift(state);applyAll();saveNow();
   toast('Checklist reset for the new shift. Update the date, shift and staff details at the top.');
@@ -808,24 +887,46 @@ function importJSON(file){
   var fr=new FileReader();
   fr.onload=function(){
     var obj;try{obj=JSON.parse(fr.result);}catch(e){toast('That file is not valid JSON.');return;}
-    if(!obj||typeof obj!=='object'||!obj.rows||typeof obj.rows!=='object'){toast('That file doesn’t look like a handover export.');return;}
+    if(!obj||typeof obj!=='object'||!obj.rows||typeof obj.rows!=='object'){toast('That file doesn’t look like a whole-handover export.');return;}
+    if(obj.app===SETUP_APP){toast('That is a setup file. Use “Import setup file” instead.');return;}
     if(obj.v!==2){toast('That file is from an older version and can’t be imported.');return;}
     if(!confirm('Replace everything on this page with the imported handover? Current entries will be overwritten.'))return;
     stopSpeech();stopDictation();
-    state=sanitizeState(obj);applyAll();saveNow();toast('Imported.');
+    state=sanitizeState(obj);
+    applyAll();saveNow();toast('Imported.');
   };
   fr.onerror=function(){toast('Could not read that file.')};
   fr.readAsText(file);
 }
 function clearAll(){
-  if(!confirm('Clear ALL handover entries for rooms 39–61, including standing information (DNACPR, diet, mobility etc.) and the header details?\n\nTip: use Export JSON first if you need a copy.'))return;
+  if(!confirm('Clear ALL handover entries for rooms 39–61 to completely BLANK? This includes standing information (names, resuscitation status, IDDSI levels, diet, mobility etc.) and the header details.\n\nTip: use Export setup file and Export whole handover first if you need a copy.'))return;
   if(!confirm('Are you sure? This permanently deletes everything on this page from this device and cannot be undone.'))return;
   stopSpeech();stopDictation();
-  var rt=state.settings.rate,pd=state.settings.printData;
-  state=sanitizeState(null);state.settings.rate=rt;state.settings.printData=pd;
+  state=blankState(state.settings);
   state.header.date=todayISO();
   $('q').value='';$('onlyFlag').checked=false;$('hideDone').checked=false;
   applyAll();saveNow();toast('All entries cleared.');
+}
+function exportSetup(){
+  saveNow();
+  var blob=new Blob([JSON.stringify(buildSetup(state),null,1)],{type:'application/json'});
+  var a=el('a',{href:URL.createObjectURL(blob),download:'handover-setup.json'});
+  document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500);
+  toast('Setup file exported (standing info only). It contains resident information – store it securely.');
+}
+function importSetup(file){
+  var fr=new FileReader();
+  fr.onload=function(){
+    var obj;try{obj=JSON.parse(fr.result);}catch(e){toast('That file is not valid JSON.');return;}
+    if(obj&&typeof obj==='object'&&obj.app==='handover'){toast('That is a whole-handover export. Use “Import whole handover” instead.');return;}
+    var parsed=parseSetup(obj);
+    if(!parsed){toast('That doesn’t look like a handover setup file (handover-setup.json).');return;}
+    if(!confirm('Load this setup file?\n\nThis replaces the standing information (names/initials, resuscitation status, diet, IDDSI levels, mobility, repositioning, room empty etc.) for '+parsed.count+' room(s) in this browser. Shift items (intake, concerns, ticks) and the header are not changed.'))return;
+    stopSpeech();stopDictation();
+    state=applySetup(state,parsed);applyAll();saveNow();toast('Setup loaded for '+parsed.count+' room(s).');
+  };
+  fr.onerror=function(){toast('Could not read that file.')};
+  fr.readAsText(file);
 }
 function setPrinted(){$('pPrinted').textContent=new Date().toLocaleString('en-GB');}
 function applyAll(){
@@ -863,6 +964,9 @@ function init(){
   $('btnImport').addEventListener('click',function(){$('fileImport').click()});
   $('fileImport').addEventListener('change',function(e){var f=e.target.files[0];if(f)importJSON(f);e.target.value='';});
   $('btnClear').addEventListener('click',clearAll);
+  $('btnExportSetup').addEventListener('click',exportSetup);
+  $('btnImportSetup').addEventListener('click',function(){$('fileSetup').click()});
+  $('fileSetup').addEventListener('change',function(e){var f=e.target.files[0];if(f)importSetup(f);e.target.value='';});
   $('btnPrint').addEventListener('click',function(){saveNow();setPrinted();window.print();});
   window.addEventListener('beforeprint',function(){setPrinted();syncHeader2();});
   window.addEventListener('pagehide',function(){if(saveTimer)saveNow();});
