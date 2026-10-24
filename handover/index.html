@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Shift Handover (Taking Over) – Rooms 39 to 61</title>
+<title>Shift Handover Checklist – Rooms 39 to 61</title>
 <style>
-:root{--nhs:#005EB8;--nhs-dark:#003087;--nhs-bright:#0072CE;--ink:#212b32;--muted:#4c6272;--line:#d8dde0;--bg:#f0f4f5;--card:#fff;--ok:#00703c;--warn:#ffb81c;--err:#d5281b;--r:8px}
+:root{--nhs:#005EB8;--nhs-dark:#003087;--nhs-bright:#0072CE;--ink:#212b32;--muted:#4c6272;--line:#d8dde0;--bg:#f0f4f5;--card:#fff;--ok:#00703c;--warn:#ffb81c;--err:#d5281b;--purple:#330072;--r:8px}
 *{box-sizing:border-box}
 [hidden]{display:none!important}
 html{scroll-behavior:smooth}
@@ -25,172 +25,181 @@ button.danger{border-color:var(--err);color:var(--err)}
 button.danger:hover{background:#fdecea}
 button:disabled{opacity:.5;cursor:not-allowed}
 :focus-visible{outline:3px solid #ffb81c;outline-offset:2px}
-.notice{border-left:6px solid var(--warn);background:#fff8e1;padding:10px 14px;border-radius:var(--r);margin:10px 0;font-size:.92rem}
+.notice{border-left:6px solid var(--warn);background:#fff8e1;padding:8px 14px;border-radius:var(--r);margin:10px 0;font-size:.9rem}
 .notice.info{border-left-color:var(--nhs);background:#e8f1fa}
 .notice.err{border-left-color:var(--err);background:#fdecea}
-label{font-weight:600;font-size:.88rem;display:block;margin-bottom:2px}
+label{font-weight:600;font-size:.85rem;display:block;margin-bottom:2px}
 input[type=text],input[type=number],input[type=date],input[type=time],input[type=search],select,textarea{width:100%;font:inherit;min-height:44px;padding:8px 10px;border:2px solid #768692;border-radius:6px;background:#fff;color:var(--ink)}
-textarea{min-height:72px;resize:vertical;line-height:1.35}
+textarea{min-height:110px;resize:vertical;line-height:1.35}
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:12px;margin:10px 0}
-.hdrgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.hdrgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.hint{font-size:.8rem;color:var(--muted);margin-top:6px}
 .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:flex-end}
 .toolbar .grow{flex:1 1 220px;min-width:180px}
 .toolbar .sm{width:150px}
-.chk{display:inline-flex;align-items:center;gap:8px;min-height:44px;font-weight:600;font-size:.92rem;margin:0;cursor:pointer}
-.chk input{width:22px;height:22px;accent-color:var(--nhs)}
+.chk{display:inline-flex;align-items:center;gap:8px;min-height:36px;font-weight:600;font-size:.85rem;margin:0;cursor:pointer;line-height:1.2}
+.chk input{width:22px;height:22px;flex:none;accent-color:var(--nhs)}
 .row-actions{display:flex;flex-wrap:wrap;gap:8px}
-.stat{font-size:.9rem;color:var(--muted);margin-top:6px}
-.legend{display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:.85rem;margin-top:8px}
-.chip{display:inline-block;padding:2px 10px;border-radius:99px;font-weight:700;font-size:.85rem;border:2px solid transparent;white-space:nowrap}
-/* NEWS2 colours reused from the assessment app */
-.b-none{background:#eceff1;color:#4c6272;border-color:#aab4ba}
-.b-low0{background:#d9f0e3;color:#005a30;border-color:#00703c}
-.b-low14{background:#fff1c2;color:#5a4300;border-color:#ffb81c}
-.b-medium{background:#ffd9b3;color:#6b2e00;border-color:#ed8b00}
-.b-high{background:#d5281b;color:#fff;border-color:#a01d13}
-.b-invalid{background:#fdecea;color:#a01d13;border-color:#d5281b}
-td.news.b-none{background:#fff}
+.stat{font-size:.9rem;color:var(--muted);margin-top:8px}
+.prog{height:12px;background:#d8dde0;border-radius:99px;overflow:hidden;margin-top:6px;max-width:520px}
+.prog>div{height:100%;width:0;background:var(--ok);transition:width .25s}
+/* badges */
+.badges{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.bd{display:inline-block;padding:1px 8px;border-radius:99px;font-weight:700;font-size:.76rem;border:2px solid #aab4ba;background:#eceff1;color:#33444f;line-height:1.35}
+.bd.bd-alert{background:#fdecea;border-color:var(--err);color:#8f1b11}
+.bd.bd-warn{background:#fff1c2;border-color:#ffb81c;color:#5a4300}
+.bd.bd-dnacpr{background:var(--purple);border-color:var(--purple);color:#fff}
+.bd.bd-respect{background:#e9dff5;border-color:var(--purple);color:var(--purple)}
+.flagchip{display:inline-block;margin-top:6px;font-size:.78rem;font-weight:800;padding:1px 8px;border-radius:4px}
+.flagchip.alert{background:var(--err);color:#fff}
+.flagchip.info{background:var(--nhs);color:#fff}
 /* table (desktop) */
-.tablewrap{overflow:auto;max-height:84vh;min-height:360px;border:1px solid #9aa6ad;border-radius:var(--r);background:#fff}
-table.ho{border-collapse:separate;border-spacing:0;table-layout:fixed;width:1960px}
-.ho col.c-room{width:74px}.ho col.c-speak{width:150px}.ho col.c-name{width:130px}.ho col.c-age{width:100px}.ho col.c-nhs{width:130px}
-.ho col.c-bg{width:200px}.ho col.c-news{width:112px}.ho col.c-avpu{width:90px}.ho col.c-gcs{width:150px}.ho col.c-sit{width:220px}
-.ho col.c-act{width:220px}.ho col.c-esc{width:190px}.ho col.c-done{width:84px}.ho col.c-notes{width:260px}
+.tablewrap{overflow:auto;max-height:86vh;min-height:360px;border:1px solid #9aa6ad;border-radius:var(--r);background:#fff}
+table.ho{border-collapse:separate;border-spacing:0;table-layout:fixed;width:2560px}
+.ho col.c-room{width:74px}.ho col.c-sum{width:230px}.ho col.c-speak{width:150px}.ho col.c-dnr{width:170px}.ho col.c-food{width:215px}.ho col.c-fluid{width:230px}
+.ho col.c-mob{width:200px}.ho col.c-repos{width:230px}.ho col.c-welf{width:200px}.ho col.c-care{width:290px}.ho col.c-con{width:260px}.ho col.c-act{width:260px}.ho col.c-done{width:84px}
 .ho th,.ho td{border-right:1px solid #c5cdd2;border-bottom:1px solid #c5cdd2;padding:6px;vertical-align:top;text-align:left;font-size:.9rem;background:#fff}
 .ho thead th{position:sticky;top:0;z-index:5;background:var(--nhs);color:#fff;font-size:.82rem;vertical-align:bottom}
 .ho thead th small{font-weight:400;display:block;opacity:.9}
 .ho .room{position:sticky;left:0;z-index:4;background:#e8f1fa;font-size:1.25rem;font-weight:800;color:var(--nhs-dark);text-align:center;border-right:2px solid var(--nhs)}
 .ho thead th.room{z-index:8;background:var(--nhs-dark);color:#fff;font-size:.82rem}
 .ho tbody tr:nth-child(even) td{background:#fafcfc}
-.ho tbody tr.flagged .room{box-shadow:inset 6px 0 0 var(--err)}
-.ho tbody tr.done td:not(.news):not(.speak){background:#f1f8f4}
-.ho td.news.b-low0{background:#d9f0e3}.ho td.news.b-low14{background:#fff1c2}.ho td.news.b-medium{background:#ffd9b3}.ho td.news.b-high{background:#d5281b;color:#fff}.ho td.news.b-invalid{background:#fdecea}
-.ho td.news .chip{margin-top:4px;white-space:normal;text-align:center;display:block}
-.ho td.news.b-high .chip{border-color:#fff}
-.ho .evm{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
-.ho .evm label{font-size:.75rem;margin:0;text-align:center}
-.ho .evm select{padding:4px 2px;min-height:40px}
-.ho .gtot{margin-top:4px}
+.ho tbody tr.f-alert .room{box-shadow:inset 6px 0 0 var(--err)}
+.ho tbody tr.f-info .room{box-shadow:inset 6px 0 0 var(--nhs)}
+.ho tbody tr.done td{background:#f1f8f4}
+.ho tbody tr.done .room{background:#d4ecdc}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.fg>*,.cks>*{min-width:0}
+.f.wide,.f.full{grid-column:1/-1}
+.fl{font-size:.74rem;color:var(--muted);margin:0 0 1px;font-weight:700}
+.f select,.f input[type=text],.f input[type=number],.f input[type=time]{min-height:40px;padding:5px 8px;font-size:.9rem}
+.cks{display:grid;grid-template-columns:1fr 1fr;gap:0 6px;margin-top:4px}
+.cks .chk{font-size:.8rem}
+.nowrow{display:flex;gap:6px}.nowrow input{flex:1 1 auto}.nowrow button{min-height:40px;padding:4px 12px;flex:none}
+.grp-gap{margin-top:8px}
+/* risk colouring of selects (text is also shown) */
+select[data-v=poor],select[data-v=none][data-k=foodLevel],select[data-v=none][data-k=fluidLevel],select[data-v=moderate],select[data-v=severe],select[data-v=high]{background:#fdecea;border-color:var(--err);font-weight:700}
+select[data-k=falls][data-v=med],select[data-k=welfare][data-v=cont],select[data-k=diet][data-v=nbm],select[data-k=dnr][data-v=unknown]{background:#fff1c2;border-color:#ed8b00;font-weight:700}
+select[data-k=dnr][data-v=dnacpr]{background:var(--purple);border-color:var(--purple);color:#fff;font-weight:800}
+select[data-k=dnr][data-v=respect]{background:#e9dff5;border-color:var(--purple);color:var(--purple);font-weight:800}
+.meter{height:10px;background:#d8dde0;border-radius:99px;overflow:hidden;margin-top:6px}
+.meter>i{display:block;height:100%;width:0;background:var(--nhs-bright)}
+.mtext{font-size:.82rem;font-weight:700;color:var(--nhs-dark);min-height:1.2em}
 .ho td.donec{text-align:center}
 .ho td.donec input{width:30px;height:30px;accent-color:var(--ok)}
-.ho td.speak{background:#f7f9fa}
 .sbtn{display:flex;align-items:center;justify-content:center;gap:6px;width:100%;min-height:52px;padding:6px 8px;font-size:1rem;margin-bottom:6px}
 .sbtn .ic{font-size:1.25rem;line-height:1}
 .sbtn[aria-pressed=true]{background:var(--nhs);color:#fff}
 .sbtn.dict[aria-pressed=true]{background:var(--err);border-color:var(--err);color:#fff}
 .sbtn.dict[aria-pressed=true] .ic{animation:pulse 1s infinite}
 @keyframes pulse{50%{opacity:.25}}
-.rec-state{display:none;font-size:.8rem;font-weight:700;color:var(--err);margin-bottom:4px}
+.seg{display:flex;align-items:center;gap:4px;font-size:.75rem;font-weight:700;color:var(--muted);flex-wrap:wrap}
+.seg button{min-height:34px;padding:2px 10px;font-size:.8rem;border-width:2px;border-radius:6px}
+.seg button[aria-pressed=true]{background:var(--nhs);color:#fff}
+.rec-state{display:none;font-size:.8rem;font-weight:700;color:var(--err);margin:4px 0}
 .recording .rec-state{display:block}
-.msg{font-size:.82rem;color:var(--muted);min-height:1.2em;overflow-wrap:anywhere}
+.msg{font-size:.82rem;color:var(--muted);min-height:1.2em;overflow-wrap:anywhere;margin-top:4px}
 .msg.warn{color:#8a5a00}.msg.bad{color:#a01d13}
 .msg .interim{font-style:italic;color:#003087}
-tr.speaking td.room{background:#ffeb3b}
-.pv{display:none}
+tr.speaking td.room{background:#ffeb3b!important}
 .nodata{padding:16px;text-align:center;color:var(--muted)}
-.printhead{display:none}
-footer.disc{padding:0 16px 24px}
+.printarea{display:none}
+footer.disc{padding:0 16px 24px;font-size:.85rem;color:var(--muted)}
 #toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#212b32;color:#fff;padding:10px 18px;border-radius:99px;z-index:200;opacity:0;pointer-events:none;transition:opacity .25s;max-width:92vw;text-align:center}
 #toast.show{opacity:1}
 /* phone: rows become cards */
 @media (max-width:860px){
+ .wrap{padding:8px 10px}
  .tablewrap{overflow:visible;max-height:none;border:0;background:transparent;min-height:0}
  table.ho,.ho tbody,.ho tr,.ho td,.ho th{display:block;width:100%}
  table.ho{width:100%}
  .ho colgroup{display:none}
  .ho thead{position:absolute;left:-9999px;top:auto}
  .ho tbody tr{background:#fff;border:1px solid #9aa6ad;border-radius:var(--r);margin:0 0 14px;overflow:hidden}
- .ho tbody tr.flagged{border-left:8px solid var(--err)}
+ .ho tbody tr.f-alert{border-left:8px solid var(--err)}
+ .ho tbody tr.f-info{border-left:8px solid var(--nhs)}
  .ho th,.ho td{border:0;border-bottom:1px solid #e3e8ea;padding:8px 12px;position:static;font-size:1rem}
- .ho .room{position:static;text-align:left;font-size:1.4rem;background:var(--nhs);color:#fff;border:0}
- .ho td[data-label]::before{content:attr(data-label);display:block;font-weight:700;font-size:.82rem;color:var(--muted);margin-bottom:3px}
- .ho td.news[data-label]::before{color:inherit}
- .ho td.speak::before{display:none}
+ .ho .room,.ho tbody tr.f-alert .room,.ho tbody tr.f-info .room{position:static;text-align:left;font-size:1.4rem;background:var(--nhs);color:#fff;border:0;box-shadow:none}
+ .ho tbody tr.done .room{background:var(--ok)}
+ .ho td[data-label]::before{content:attr(data-label);display:block;font-weight:800;font-size:.8rem;color:var(--nhs-dark);margin-bottom:4px;text-transform:uppercase;letter-spacing:.03em}
+ .ho td.sum::before,.ho td.speak::before{display:none}
  .ho td.speak{display:grid;grid-template-columns:1fr 1fr;gap:8px}
  .ho td.speak .sbtn{margin:0}
- .ho td.speak .rec-state,.ho td.speak .msg{grid-column:1/-1}
+ .ho td.speak .seg,.ho td.speak .rec-state,.ho td.speak .msg{grid-column:1/-1}
  .ho td.donec{text-align:left;display:flex;align-items:center;gap:12px}
  .ho td.donec::before{margin:0!important}
- .ho td.news .chip{display:inline-block}
+ .f.wide{grid-column:auto}
+ .f select,.f input[type=text],.f input[type=number],.f input[type=time]{min-height:44px}
+ .chk{min-height:44px}
+ .nowrow button,.seg button{min-height:44px}
  .toolbar .sm{width:100%}
+ .toolbar>button,.toolbar .row-actions button{flex:1 1 140px}
 }
 /* print */
 @media print{
- @page{size:A4 landscape;margin:8mm}
+ @page{size:A4 landscape;margin:7mm}
  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
- body{background:#fff;font-size:8pt;line-height:1.25}
- header.top,.skip,.noprint,.notice,footer.disc .notice.info,#toast,.card.controls,.stat,.legend.noprint,.rec-state,.msg{display:none!important}
+ body{background:#fff;font-size:7.5pt;line-height:1.2}
+ header.top,.skip,.noprint,.notice,footer.disc,#toast,.controls,.stat,.tablewrap{display:none!important}
  .wrap{padding:0}
- .printhead{display:block;border-bottom:2px solid var(--nhs);margin-bottom:4px;padding-bottom:3px}
- .printhead h1{font-size:12pt;margin:0;color:var(--nhs)}
- .printhead .meta{display:flex;flex-wrap:wrap;gap:2px 16px;font-size:8.5pt}
- .printdisc{display:block!important;font-size:6.5pt;color:#333;margin-top:3px;border-top:1px solid #999;padding-top:2px}
- .tablewrap{overflow:visible;max-height:none;border:0;min-height:0}
- table.ho{width:100%;table-layout:fixed;display:table}
- .ho thead{display:table-header-group}
- .ho tbody{display:table-row-group}
- .ho tr{display:table-row;break-inside:avoid;page-break-inside:avoid}
- .ho th,.ho td{display:table-cell;position:static!important;padding:2px 3px;font-size:7.5pt;border-right:1px solid #777;border-bottom:1px solid #777;background:#fff!important;width:auto;box-shadow:none!important;overflow-wrap:anywhere}
- .ho thead th{background:var(--nhs)!important;color:#fff!important;font-size:7pt}
- .ho th:first-child,.ho td:first-child{border-left:1px solid #777}
- .ho thead th{border-top:1px solid #777}
- .ho .room{font-size:11pt;background:#e8f1fa!important;color:#000}
- .ho thead th.room{background:var(--nhs)!important;color:#fff;font-size:7pt}
- .ho td.news.b-low0{background:#d9f0e3!important}.ho td.news.b-low14{background:#fff1c2!important}.ho td.news.b-medium{background:#ffb74d!important}.ho td.news.b-high{background:#d5281b!important;color:#fff!important}
- .ho col.c-room{width:10mm}.ho col.c-name{width:20mm}.ho col.c-age{width:15mm}.ho col.c-nhs{width:20mm}.ho col.c-bg{width:30mm}
- .ho col.c-news{width:17mm}.ho col.c-avpu{width:11mm}.ho col.c-gcs{width:15mm}.ho col.c-sit{width:36mm}.ho col.c-act{width:36mm}
- .ho col.c-esc{width:25mm}.ho col.c-done{width:13mm}.ho col.c-notes{width:29mm}
- .ho col.c-speak{width:0}
- .ho th.nop,.ho td.nop{width:0;padding:0!important;border:0!important;overflow:hidden;font-size:0}
- .nop *{display:none!important}
- .ctl{display:none!important}
- .pv{display:block;white-space:pre-wrap;min-height:1em}
- .ho td[data-label]::before{content:none}
- .ho td.news .chip{border:0;padding:0;font-size:6.5pt;white-space:normal;display:block}
- .ho td.news .pv{font-weight:700;font-size:10pt}
- tr.empty.skipprint{display:none!important}
- .ho td.donec{text-align:center}
- .nodata{display:none}
- footer.disc{padding:0}
+ .printarea{display:block}
+ .printhead{border-bottom:2px solid var(--nhs);margin-bottom:3px;padding-bottom:2px}
+ .printhead h1{font-size:11pt;margin:0;color:var(--nhs)}
+ .printhead .meta{display:flex;flex-wrap:wrap;gap:1px 14px;font-size:8pt}
+ table.pt{width:100%;border-collapse:collapse;table-layout:fixed}
+ .pt thead{display:table-header-group}
+ .pt tr{break-inside:avoid;page-break-inside:avoid}
+ .pt th,.pt td{border:1px solid #777;padding:1.5px 3px;vertical-align:top;text-align:left;font-size:7pt;overflow-wrap:anywhere;white-space:pre-line;background:#fff}
+ .pt thead th{background:var(--nhs);color:#fff;font-size:6.8pt}
+ .pt th.room{font-size:10pt;text-align:center;background:#e8f1fa;color:#000}
+ .pt tr.f-alert td,.pt tr.f-alert th.room{background:#fde3e0}
+ .pt tr.f-alert th.room{box-shadow:inset 4px 0 0 var(--err)}
+ .pt tr.f-info td{background:#eaf2fb}
+ .pt tr.skipprint{display:none}
+ .pt .flg{font-weight:700}
+ .pt .dn{font-weight:800;color:var(--purple)}
+ .printdisc{font-size:6.3pt;color:#333;margin-top:3px;border-top:1px solid #999;padding-top:2px}
 }
 </style>
 </head>
 <body>
 <a class="skip" href="#table">Skip to handover table</a>
 <header class="top">
- <div><h1>Shift Handover – Taking Over (Rooms 39–61)</h1><div class="sub">Documentation aid for UK care staff · works offline · data stays on this device</div></div>
- <div class="row-actions noprint"><button class="primary" id="btnPrint" type="button" style="background:#fff;color:var(--nhs);border-color:#fff">🖨 Print</button></div>
+ <div><h1>Shift Handover Checklist – Rooms 39–61</h1><div class="sub">Documentation aid for care staff · works offline · data stays on this device</div></div>
+ <div class="row-actions noprint"><button type="button" id="btnPrint" style="background:#fff;color:var(--nhs);border-color:#fff">🖨 Print</button></div>
 </header>
 
 <main class="wrap">
- <div class="notice err" role="note" id="disclaimer"><strong>Disclaimer:</strong> This is a documentation aid only. It does <strong>not</strong> replace clinical judgement or local policy, and it is <strong>not a certified medical device</strong>. Data is saved <strong>only in this browser on this device</strong> – do not use on shared computers. Avoid unnecessary identifiable information (use initials where possible; NHS number is optional).</div>
- <div class="notice" role="note" id="voiceNotice"><strong>Voice features:</strong> “Dictate” uses your browser’s speech recognition. In Chrome and Edge, audio is sent to the browser vendor’s cloud service to be transcribed – so avoid dictating identifiable details unless your Trust’s policy allows it. “Listen” reads the row aloud on this device using the browser’s voices.</div>
+ <div class="notice err" role="note" id="disclaimer"><strong>Documentation aid only</strong> – it does not replace clinical judgement or your local policy, and it is not a medical device. Data stays <strong>only in this browser</strong> – don’t use on shared devices, and keep identifiable details to a minimum (initials or first name). <strong>Dictate:</strong> Chrome and Edge send the audio to the vendor’s cloud (Google in Chrome) to transcribe it – avoid dictating identifiable details unless your organisation allows it.</div>
  <div class="notice info noprint" role="note" id="supportNotice" hidden></div>
-
- <div class="printhead" id="printHead">
-  <h1>Shift Handover (Taking Over) – Rooms 39–61</h1>
-  <div class="meta"><span><b>Date:</b> <span id="pDate"></span></span><span><b>Shift:</b> <span id="pShift"></span></span><span><b>Handover from:</b> <span id="pFrom"></span></span><span><b>Handover to:</b> <span id="pTo"></span></span><span><b>Time:</b> <span id="pTime"></span></span><span><b>Printed:</b> <span id="pPrinted"></span></span></div>
- </div>
+ <div class="notice noprint" role="note" id="v1Notice" hidden>Older handover data (which may include NHS numbers or dates of birth) is still stored in this browser from a previous version. It is not used here. <button type="button" id="btnDelV1" class="danger" style="min-height:36px;padding:2px 12px;margin-left:6px">Delete old data</button></div>
 
  <section class="card controls" aria-label="Handover details">
   <div class="hdrgrid">
    <div><label for="hDate">Date</label><input type="date" id="hDate" data-h="date"></div>
-   <div><label for="hShift">Shift</label><select id="hShift" data-h="shift"><option value="">Select…</option><option>Early</option><option>Late</option><option>Night</option></select></div>
-   <div><label for="hFrom">Handover from</label><input type="text" id="hFrom" data-h="from" maxlength="80" autocomplete="off" placeholder="Name / role"></div>
-   <div><label for="hTo">Handover to</label><input type="text" id="hTo" data-h="to" maxlength="80" autocomplete="off" placeholder="Name / role"></div>
-   <div><label for="hTime">Time</label><input type="time" id="hTime" data-h="time"></div>
+   <div><label for="hShift">Shift</label><select id="hShift" data-h="shift"><option value="">Select…</option><option>Early</option><option>Late</option><option>Night</option><option>Day</option></select></div>
+   <div><label for="hTime">Time of handover</label><input type="time" id="hTime" data-h="time"></div>
+   <div><label for="hFromName">Handing over from – name</label><input type="text" id="hFromName" data-h="fromName" maxlength="60" autocomplete="off"></div>
+   <div><label for="hFromRole">Handing over from – position</label><input type="text" id="hFromRole" data-h="fromRole" maxlength="60" autocomplete="off" list="roles" placeholder="e.g. Senior carer"></div>
+   <div><label for="hToName">Taking over – name</label><input type="text" id="hToName" data-h="toName" maxlength="60" autocomplete="off"></div>
+   <div><label for="hToRole">Taking over – position</label><input type="text" id="hToRole" data-h="toRole" maxlength="60" autocomplete="off" list="roles" placeholder="e.g. Nurse"></div>
   </div>
+  <datalist id="roles"><option value="Nurse"><option value="Registered nurse"><option value="Nursing associate"><option value="Senior carer"><option value="Carer"><option value="Care assistant"><option value="Team leader"><option value="Deputy manager"><option value="Manager"><option value="Agency staff"></datalist>
+  <div class="hint">One set of details for the whole handover. Name and position only – never enter PINs or passwords.</div>
  </section>
 
  <section class="card controls" aria-label="Filter and tools">
   <div class="toolbar">
-   <div class="grow"><label for="q">Search rooms / text</label><input type="search" id="q" placeholder="e.g. 45, AB, falls, catheter…" autocomplete="off"></div>
-   <label class="chk" for="onlyFlag"><input type="checkbox" id="onlyFlag"> Show only flagged (NEWS2 5+ or concerns entered)</label>
+   <div class="grow"><label for="q">Search rooms / text</label><input type="search" id="q" placeholder="e.g. 45, AB, hoist, catheter…" autocomplete="off"></div>
+   <label class="chk" for="onlyFlag"><input type="checkbox" id="onlyFlag"> Show flagged only</label>
+   <label class="chk" for="hideDone"><input type="checkbox" id="hideDone"> Hide completed rows</label>
    <div class="sm"><label for="rate">Listening speed</label><select id="rate"><option value="0.75">Slow</option><option value="0.9">Slightly slow</option><option value="1" selected>Normal</option><option value="1.15">Slightly fast</option><option value="1.3">Fast</option></select></div>
    <button type="button" id="btnAll" aria-pressed="false" aria-label="Listen to all flagged rooms in turn">🔊 Listen to all flagged rooms</button>
   </div>
   <div class="toolbar" style="margin-top:10px">
    <div class="row-actions">
+    <button type="button" id="btnMarkAll">✔ Mark all handed over</button>
+    <button type="button" id="btnReset" class="primary">↻ Reset checklist for new shift</button>
     <button type="button" id="btnExport">⬇ Export JSON</button>
     <button type="button" id="btnImport">⬆ Import JSON</button><input type="file" id="fileImport" accept="application/json,.json" hidden>
     <button type="button" class="danger" id="btnClear">Clear all</button>
@@ -198,81 +207,185 @@ footer.disc{padding:0 16px 24px}
    </div>
   </div>
   <div class="stat" id="stat" role="status" aria-live="polite"></div>
+  <div class="prog" role="progressbar" aria-label="Rooms handed over" aria-valuemin="0" aria-valuemax="23" aria-valuenow="0" id="progWrap"><div id="progBar"></div></div>
   <div class="stat" id="saveState" aria-live="polite"></div>
+  <div class="hint"><b>Flagged</b> = DNACPR/ReSPECT in place (shown in purple, information only), or food/fluid none or poor, moderate/severe pain, high falls risk, pressure area concern, infection precautions, new today, or concerns entered (shown in red).</div>
  </section>
 
- <div class="legend noprint" aria-label="NEWS2 colour key"><b>NEWS2 total:</b>
-  <span class="chip b-low0">0 Low</span><span class="chip b-low14">1–4 Low (1–4)</span><span class="chip b-medium">5–6 Medium</span><span class="chip b-high">7+ High</span>
- </div>
- <div class="notice noprint" role="note"><strong>Check:</strong> only the NEWS2 <em>total</em> is recorded here. A single parameter scoring 3 (“red score”) is not captured – escalate per local policy even if the total is 0–4. Follow the official RCP NEWS2 chart and your Trust’s policy.</div>
-
  <div class="tablewrap" id="table" tabindex="-1">
-  <table class="ho" aria-label="Handover table, rooms 39 to 61">
-   <colgroup><col class="c-room"><col class="c-speak"><col class="c-name"><col class="c-age"><col class="c-nhs"><col class="c-bg"><col class="c-news"><col class="c-avpu"><col class="c-gcs"><col class="c-sit"><col class="c-act"><col class="c-esc"><col class="c-done"><col class="c-notes"></colgroup>
+  <table class="ho" aria-label="Handover checklist, rooms 39 to 61">
+   <colgroup><col class="c-room"><col class="c-sum"><col class="c-speak"><col class="c-dnr"><col class="c-food"><col class="c-fluid"><col class="c-mob"><col class="c-repos"><col class="c-welf"><col class="c-care"><col class="c-con"><col class="c-act"><col class="c-done"></colgroup>
    <thead><tr>
     <th class="room" scope="col">Room</th>
-    <th class="nop" scope="col">Listen / Dictate</th>
-    <th scope="col">Resident / patient<small>name or initials</small></th>
-    <th scope="col">Age / DOB<small>optional</small></th>
-    <th scope="col">NHS no.<small>optional – avoid if possible</small></th>
-    <th scope="col">Key diagnosis / background</th>
-    <th scope="col">Latest NEWS2 total<small>0–20</small></th>
-    <th scope="col">AVPU</th>
-    <th scope="col">GCS<small>E / V / M or total</small></th>
-    <th scope="col">Concerns / Situation<small>SBAR S/A</small></th>
-    <th scope="col">Actions / To do<small>SBAR R</small></th>
-    <th scope="col">Escalation plan &amp; obs due</th>
+    <th scope="col">Resident &amp; summary<small>initials / first name</small></th>
+    <th scope="col">Listen / Dictate</th>
+    <th scope="col">DNACPR status</th>
+    <th scope="col">Food</th>
+    <th scope="col">Fluids</th>
+    <th scope="col">Mobility &amp; falls</th>
+    <th scope="col">Repositioning &amp; skin</th>
+    <th scope="col">Welfare checks</th>
+    <th scope="col">Continence, pain &amp; care</th>
+    <th scope="col">Concerns</th>
+    <th scope="col">Actions / to do next shift</th>
     <th scope="col">Handed over</th>
-    <th scope="col">Notes</th>
    </tr></thead>
    <tbody id="tbody"></tbody>
   </table>
-  <div class="nodata" id="nodata" hidden>No rooms match the current search / filter.</div>
+  <div class="nodata" id="nodata" hidden>No rooms match the current search / filters.</div>
  </div>
+
+ <section class="printarea" aria-hidden="true">
+  <div class="printhead">
+   <h1>Shift Handover Checklist – Rooms 39–61</h1>
+   <div class="meta"><span><b>Date:</b> <span id="pDate"></span></span><span><b>Shift:</b> <span id="pShift"></span></span><span><b>Time:</b> <span id="pTime"></span></span><span><b>From:</b> <span id="pFrom"></span></span><span><b>To:</b> <span id="pTo"></span></span><span><b>Printed:</b> <span id="pPrinted"></span></span></div>
+  </div>
+  <table class="pt">
+   <colgroup><col style="width:9mm"><col style="width:36mm"><col style="width:17mm"><col style="width:25mm"><col style="width:25mm"><col style="width:26mm"><col style="width:27mm"><col style="width:22mm"><col style="width:30mm"><col style="width:30mm"><col style="width:30mm"><col style="width:8mm"></colgroup>
+   <thead><tr><th>Room</th><th>Resident &amp; flags</th><th>DNACPR</th><th>Food</th><th>Fluids</th><th>Mobility &amp; falls</th><th>Repositioning &amp; skin</th><th>Welfare</th><th>Continence, pain &amp; care</th><th>Concerns</th><th>Actions</th><th>Done</th></tr></thead>
+   <tbody id="ptbody"></tbody>
+  </table>
+  <div class="printdisc">Documentation aid only – does not replace clinical judgement or local policy. Contains resident information: store and dispose of securely per local policy.</div>
+ </section>
 </main>
 
-<footer class="disc">
- <div class="notice err"><strong>Disclaimer:</strong> Documentation aid only. Does not replace clinical judgement or local policy. Not a certified medical device. NEWS2 © Royal College of Physicians 2017 – bands shown for convenience; refer to the official chart. Users must follow their Trust's policy. Data stays only in this browser/device – do not use on shared computers; avoid unnecessary identifiable information.</div>
- <div class="printdisc" style="display:none">Documentation aid only – does not replace clinical judgement or local policy. Contains patient information: store and dispose of securely per Trust policy. NEWS2 © Royal College of Physicians 2017.</div>
-</footer>
+<footer class="disc">Documentation aid only. Does not replace clinical judgement or local policy. Not a medical device. Follow your organisation’s policy for resident information.</footer>
 <div id="toast" role="status" aria-live="polite"></div>
 
 <script>
 /* ==PURE-START== (functions below are unit-tested in node; no DOM access) */
 var ROOM_FIRST=39, ROOM_LAST=61;
-var AVPU_NAMES={A:'Alert',V:'Voice',P:'Pain',U:'Unresponsive'};
-var ESC_OPTS=[['','Not recorded'],['full','Full escalation'],['respect','ReSPECT in place'],['dnacpr','DNACPR in place'],['respect_dnacpr','ReSPECT + DNACPR in place'],['limits','Treatment limits – see plan'],['review','Needs review / discuss']];
-var ESC_SPEECH={full:'Full escalation',respect:'Re-SPECT plan in place',dnacpr:'D N A C P R in place',respect_dnacpr:'Re-SPECT plan and D N A C P R in place',limits:'Treatment limits in place, see plan',review:'Escalation plan needs review'};
-var TEXT_KEYS=['name','age','nhs','bg','sit','act','obs','notes'];
-var FIELD_MAX={name:80,age:30,nhs:20,bg:2000,sit:2000,act:2000,obs:1000,notes:8000};
-function emptyRow(){return {name:'',age:'',nhs:'',bg:'',news:'',avpu:'',gE:'',gV:'',gM:'',gT:'',sit:'',act:'',esc:'',obs:'',done:false,notes:''};}
-function emptyHeader(){return {date:'',shift:'',from:'',to:'',time:''};}
-// NEWS2 total -> band (RCP totals only: 0-4 low, 5-6 medium, 7+ high)
-function newsBand(v){
-  if(v===''||v===null||v===undefined)return {key:'none',name:'',speech:'',total:null,valid:true};
-  var s=String(v).trim();
-  if(s==='')return {key:'none',name:'',speech:'',total:null,valid:true};
-  if(!/^\d{1,2}$/.test(s)||parseInt(s,10)>20)return {key:'invalid',name:'Enter 0–20',speech:'',total:null,valid:false};
-  var n=parseInt(s,10);
-  if(n>=7)return {key:'high',name:'High',speech:'high',total:n,valid:true};
-  if(n>=5)return {key:'medium',name:'Medium',speech:'medium',total:n,valid:true};
-  if(n>=1)return {key:'low14',name:'Low (1–4)',speech:'low',total:n,valid:true};
-  return {key:'low0',name:'Low',speech:'low',total:n,valid:true};
+// option lists: [value, label, spoken]
+var OPT={
+ dnr:[['','–'],['full','Full resuscitation','Full resuscitation'],['dnacpr','DNACPR in place','D N A C P R in place'],['respect','ReSPECT form in place','Re-SPECT form in place'],['unknown','Not known','Resuscitation status not known']],
+ level:[['','–'],['none','None'],['poor','Poor'],['fair','Fair'],['good','Good']],
+ diet:[['','–'],['normal','Normal','normal diet'],['soft','Soft','soft diet'],['pureed','Pureed','pureed diet'],['fork','Fork-mashable','fork-mashable diet'],['thick','Thickened (IDDSI)','thickened diet'],['nbm','NBM','nil by mouth']],
+ assist:[['','–'],['indep','Independent','independent'],['prompt','Prompt','needs prompt'],['one','1:1 assistance','needs one to one assistance'],['fed','Fed','needs feeding']],
+ thickened:[['','–'],['yes','Yes','thickened fluids'],['no','No','fluids not thickened']],
+ mobility:[['','–'],['indep','Independent','independent'],['aid','Stick / frame','stick or frame'],['one','1 staff','1 staff'],['two','2 staff','2 staff'],['hoist','Hoist','hoist'],['bed','Bed-bound','bed-bound']],
+ falls:[['','–'],['low','Low','low'],['med','Medium','medium'],['high','High','high']],
+ repos:[['','–'],['none','None needed','no repositioning needed'],['h2','2-hourly','2-hourly'],['h3','3-hourly','3-hourly'],['h4','4-hourly','4-hourly'],['other','Other','other frequency']],
+ welfare:[['','–'],['routine','Routine','routine'],['h1','Hourly','hourly'],['m30','30-minutely','30-minutely'],['m15','15-minutely','15-minutely'],['cont','Continuous 1:1','continuous one to one']],
+ continence:[['','–'],['indep','Independent','independent'],['assisted','Assisted','assisted'],['pad','Pad','pad'],['catheter','Catheter','catheter']],
+ pain:[['','–'],['none','None'],['mild','Mild'],['moderate','Moderate'],['severe','Severe']]
+};
+var OPT_FOR={foodLevel:'level',fluidLevel:'level'};
+// key -> [type,max]   types: sel,text,num,time,bool,area
+var KT={
+ name:['text',60],dnr:['sel'],diet:['sel'],dietNote:['text',40],assist:['sel'],thickened:['sel'],fluidTarget:['num'],fluidChart:['bool'],
+ mobility:['sel'],falls:['sel'],rails:['bool'],sensor:['bool'],repos:['sel'],reposOther:['text',40],skin:['bool'],mattress:['bool'],
+ welfare:['sel'],continence:['sel'],infection:['bool'],
+ foodLevel:['sel'],fluidLevel:['sel'],fluidMl:['num'],reposLast:['time'],welfareLast:['time'],bowels:['bool'],pain:['sel'],
+ washed:['bool'],meds:['bool'],charts:['bool'],newToday:['bool'],concerns:['area',2000],actions:['area',2000],done:['bool']
+};
+// standing info persists between shifts; shift items are cleared by "Reset checklist for new shift"
+var STAND_KEYS=['name','dnr','diet','dietNote','assist','thickened','fluidTarget','fluidChart','mobility','falls','rails','sensor','repos','reposOther','skin','mattress','welfare','continence','infection'];
+var SHIFT_KEYS=['foodLevel','fluidLevel','fluidMl','reposLast','welfareLast','bowels','pain','washed','meds','charts','newToday','concerns','actions','done'];
+var ALL_KEYS=STAND_KEYS.concat(SHIFT_KEYS);
+var SHIFTS=['','Early','Late','Night','Day'];
+var HDR_KEYS=['date','shift','time','fromName','fromRole','toName','toRole'];
+function optsFor(k){return OPT[OPT_FOR[k]||k]||[];}
+function optLabel(k,v){var o=optsFor(k).filter(function(x){return x[0]===v&&v!==''})[0];return o?o[1]:'';}
+function optSpeech(k,v){var o=optsFor(k).filter(function(x){return x[0]===v&&v!==''})[0];return o?(o[2]||o[1].toLowerCase()):'';}
+function emptyRow(){var r={};ALL_KEYS.forEach(function(k){r[k]=KT[k][0]==='bool'?false:'';});return r;}
+function emptyHeader(){var h={};HDR_KEYS.forEach(function(k){h[k]='';});return h;}
+function cleanNum(v){var s=String(v===undefined||v===null?'':v).trim();if(!/^\d{1,5}$/.test(s))return '';var n=parseInt(s,10);return n>10000?'':String(n);}
+function cleanTime(v){var s=String(v||'').trim(),m=/^(\d{2}):(\d{2})$/.exec(s);return m&&+m[1]<24&&+m[2]<60?s:'';}
+function nowHHMM(d){d=d||new Date();return String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0');}
+function cleanRow(src){
+  var d=emptyRow();if(!src||typeof src!=='object')return d;
+  ALL_KEYS.forEach(function(k){
+    var t=KT[k][0],v=src[k];
+    if(t==='bool')d[k]=v===true;
+    else if(t==='sel')d[k]=(typeof v==='string'&&v!==''&&optsFor(k).some(function(o){return o[0]===v}))?v:'';
+    else if(t==='num')d[k]=cleanNum(v);
+    else if(t==='time')d[k]=cleanTime(v);
+    else d[k]=typeof v==='string'?v.slice(0,KT[k][1]):'';
+  });
+  return d;
 }
-function gcsInfo(r){
-  var E=parseInt(r.gE,10),V=parseInt(r.gV,10),M=parseInt(r.gM,10);
-  if(E>=1&&E<=4&&V>=1&&V<=5&&M>=1&&M<=6)return {total:E+V+M,e:E,v:V,m:M,complete:true};
-  var t=parseInt(r.gT,10);
-  if(/^\d{1,2}$/.test(String(r.gT||'').trim())&&t>=3&&t<=15)return {total:t,complete:false};
-  return {total:null,complete:false};
+// Validate / clean an imported or restored state object. Never trusts input shape; only v2 is accepted.
+function sanitizeState(o){
+  var out={v:2,header:emptyHeader(),rows:{},settings:{rate:'1',printData:false}};
+  if(!o||typeof o!=='object'||o.v!==2)o={};
+  var h=o.header&&typeof o.header==='object'?o.header:{};
+  HDR_KEYS.forEach(function(k){out.header[k]=typeof h[k]==='string'?h[k].slice(0,60):'';});
+  if(SHIFTS.indexOf(out.header.shift)<0)out.header.shift='';
+  if(!/^\d{4}-\d{2}-\d{2}$/.test(out.header.date))out.header.date='';
+  out.header.time=cleanTime(out.header.time);
+  var s=o.settings&&typeof o.settings==='object'?o.settings:{};
+  if(['0.75','0.9','1','1.15','1.3'].indexOf(String(s.rate))>=0)out.settings.rate=String(s.rate);
+  out.settings.printData=s.printData===true;
+  var rows=o.rows&&typeof o.rows==='object'?o.rows:{};
+  for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++)out.rows[rm]=cleanRow(rows[rm]||rows[String(rm)]);
+  return out;
 }
-function isFlagged(r){
-  var b=newsBand(r.news);
-  return (b.valid&&b.total!==null&&b.total>=5)||String(r.sit||'').trim()!=='';
+// storage split: per-shift data in "handover_v2", standing info in "handover_v2_standing"
+function pickKeys(row,keys){var o={};keys.forEach(function(k){o[k]=row[k];});return o;}
+function splitForStorage(st){
+  var shift={v:2,header:st.header,settings:st.settings,rows:{}},stand={v:2,rows:{}};
+  for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++){shift.rows[rm]=pickKeys(st.rows[rm],SHIFT_KEYS);stand.rows[rm]=pickKeys(st.rows[rm],STAND_KEYS);}
+  return {shift:shift,stand:stand};
 }
+function joinFromStorage(shift,stand){
+  var o={v:2,header:(shift&&shift.header)||{},settings:(shift&&shift.settings)||{},rows:{}};
+  var sr=(shift&&shift.v===2&&shift.rows)||{},tr=(stand&&stand.v===2&&stand.rows)||{};
+  for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++){
+    var a=sr[rm]||{},b=tr[rm]||{},row={};
+    SHIFT_KEYS.forEach(function(k){row[k]=a[k];});STAND_KEYS.forEach(function(k){row[k]=b[k];});
+    o.rows[rm]=row;
+  }
+  return sanitizeState(o);
+}
+// Reset checklist for new shift: clears per-shift items, keeps standing info. Returns a new state.
+function resetShift(st){
+  var out=sanitizeState(JSON.parse(JSON.stringify(st)));
+  for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++){var e=emptyRow();SHIFT_KEYS.forEach(function(k){out.rows[rm][k]=e[k];});}
+  return out;
+}
+function txt(v){return String(v||'').trim();}
+function fluidPct(r){var m=cleanNum(r.fluidMl),t=cleanNum(r.fluidTarget);if(m===''||t===''||+t===0)return null;return Math.round(+m*100/+t);}
+function fluidText(r){
+  var m=cleanNum(r.fluidMl),t=cleanNum(r.fluidTarget),p=fluidPct(r);
+  if(m!==''&&t!=='')return m+' of '+t+' ml'+(p!==null?' ('+p+'%)':'');
+  if(m!=='')return m+' ml so far';
+  if(t!=='')return 'Target '+t+' ml';
+  return '';
+}
+function reposText(r){return r.repos==='other'?('Other'+(txt(r.reposOther)?' – '+txt(r.reposOther):'')):optLabel('repos',r.repos);}
+// Badges: k = alert (red) | warn (amber) | dnacpr / respect (purple, informational) | plain
+function buildBadges(r){
+  var b=[];function add(t,k){b.push({t:t,k:k||'plain'});}
+  if(r.dnr==='dnacpr')add('DNACPR','dnacpr');else if(r.dnr==='respect')add('ReSPECT','respect');else if(r.dnr==='unknown')add('Resus status not known','warn');
+  if(r.foodLevel==='none'||r.foodLevel==='poor')add('Food: '+r.foodLevel,'alert');
+  if(r.fluidLevel==='none'||r.fluidLevel==='poor')add('Fluids: '+r.fluidLevel,'alert');
+  if(r.diet&&r.diet!=='normal')add(optLabel('diet',r.diet)+(r.diet==='nbm'?'':' diet'),r.diet==='nbm'?'warn':'plain');
+  if(r.assist&&r.assist!=='indep')add(r.assist==='fed'?'Fed':optLabel('assist',r.assist).replace('Prompt','Prompt at meals'),'plain');
+  if(r.thickened==='yes')add('Thickened fluids');
+  if(r.mobility)add(optLabel('mobility',r.mobility));
+  if(r.falls==='high')add('High falls risk','alert');else if(r.falls==='med')add('Medium falls risk','warn');
+  if(r.rails)add('Bed rails');if(r.sensor)add('Sensor mat');
+  if(r.repos&&r.repos!=='none')add('Repos '+(r.repos==='other'?'other':optLabel('repos',r.repos)));
+  if(r.skin)add('Pressure area concern','alert');
+  if(r.mattress)add('Pressure mattress');
+  if(r.welfare&&r.welfare!=='routine')add('Welfare '+optLabel('welfare',r.welfare),r.welfare==='cont'?'warn':'plain');
+  if(r.continence==='pad'||r.continence==='catheter')add(optLabel('continence',r.continence));
+  if(r.pain==='moderate'||r.pain==='severe')add('Pain: '+r.pain,'alert');else if(r.pain==='mild')add('Pain: mild');
+  if(r.infection)add('Infection precautions','alert');
+  if(r.newToday)add('New today','alert');
+  if(txt(r.concerns))add('Concerns','alert');
+  return b;
+}
+// '' | 'info' (DNACPR/ReSPECT only) | 'alert'
+function flagLevel(r){
+  var b=buildBadges(r),lvl='';
+  b.forEach(function(x){if(x.k==='alert')lvl='alert';else if((x.k==='dnacpr'||x.k==='respect')&&lvl==='')lvl='info';});
+  return lvl;
+}
+function isFlagged(r){return flagLevel(r)!=='';}
 function rowHasData(r){
-  for(var i=0;i<TEXT_KEYS.length;i++)if(String(r[TEXT_KEYS[i]]||'').trim()!=='')return true;
-  return !!(String(r.news).trim()!==''||r.avpu||r.gE||r.gV||r.gM||String(r.gT||'').trim()!==''||r.esc||r.done);
+  for(var i=0;i<ALL_KEYS.length;i++){var k=ALL_KEYS[i],v=r[k];if(KT[k][0]==='bool'?v===true:txt(v)!=='')return true;}
+  return false;
 }
 function spokenText(t){ // turn free text into a clean sentence for speech
   var s=String(t||'').replace(/\s*[\r\n]+\s*/g,'. ').replace(/\s+/g,' ').trim();
@@ -280,64 +393,84 @@ function spokenText(t){ // turn free text into a clean sentence for speech
   s=s.replace(/(\.\s*){2,}/g,'. ').replace(/\.\s+\./g,'.');
   return s?s+'.':'';
 }
-// Builds an ordered list of short sentences to read aloud; empty fields skipped
+// Ordered list of short sentences to read aloud; unset fields are skipped
 function buildSpeechParts(room,r){
   var p=['Room '+room+'.'],n0=p.length;
-  var nm=spokenText(r.name); if(nm)p.push('Resident '+nm);
-  var age=String(r.age||'').trim(); if(/^\d{1,3}$/.test(age))p.push('Age '+age+'.');
-  var b=newsBand(r.news); if(b.valid&&b.total!==null)p.push('NEWS2 score '+b.total+', '+b.speech+' risk.');
-  if(r.avpu&&AVPU_NAMES[r.avpu])p.push('A V P U: '+AVPU_NAMES[r.avpu]+'.');
-  var g=gcsInfo(r); if(g.total!==null)p.push('G C S '+g.total+(g.complete?', eye '+g.e+', verbal '+g.v+', motor '+g.m:'')+'.');
-  var bg=spokenText(r.bg); if(bg)p.push('Background: '+bg);
-  var sit=spokenText(r.sit); if(sit)p.push('Concerns: '+sit);
-  var act=spokenText(r.act); if(act)p.push('Actions: '+act);
-  if(r.esc&&ESC_SPEECH[r.esc])p.push('Escalation plan: '+ESC_SPEECH[r.esc]+'.');
-  var obs=spokenText(r.obs); if(obs)p.push('Observations due or escalation details: '+obs);
-  var nt=spokenText(r.notes); if(nt)p.push('Notes: '+nt);
+  var nm=spokenText(r.name);if(nm)p.push(nm);
+  if(r.dnr)p.push(optSpeech('dnr',r.dnr)+'.');
+  var f=[];
+  if(r.foodLevel)f.push(optSpeech('level',r.foodLevel).toLowerCase());
+  if(r.diet)f.push(optSpeech('diet',r.diet));
+  if(txt(r.dietNote))f.push(txt(r.dietNote));
+  if(r.assist)f.push(optSpeech('assist',r.assist));
+  if(f.length)p.push('Food: '+f.join(', ')+'.');
+  var w=[],m=cleanNum(r.fluidMl),t=cleanNum(r.fluidTarget);
+  if(r.fluidLevel)w.push(optSpeech('level',r.fluidLevel).toLowerCase());
+  if(m!==''&&t!=='')w.push(m+' of '+t+' millilitres');else if(m!=='')w.push(m+' millilitres so far');else if(t!=='')w.push('target '+t+' millilitres');
+  if(r.thickened)w.push(optSpeech('thickened',r.thickened));
+  if(r.fluidChart)w.push('fluid chart in place');
+  if(w.length)p.push('Fluids: '+w.join(', ')+'.');
+  var mo=[];
+  if(r.mobility)mo.push(optSpeech('mobility',r.mobility));
+  if(r.falls)mo.push(optSpeech('falls',r.falls)+' falls risk');
+  if(r.rails)mo.push('bed rails');if(r.sensor)mo.push('sensor mat');
+  if(mo.length)p.push('Mobility: '+mo.join(', ')+'.');
+  if(r.repos||r.reposLast){
+    var s='';
+    if(r.repos==='none')s='No repositioning needed';
+    else if(r.repos==='other')s='Reposition '+(txt(r.reposOther)?txt(r.reposOther):'other frequency');
+    else if(r.repos)s='Reposition '+optSpeech('repos',r.repos);
+    if(r.reposLast)s+=(s?', last at ':'Last repositioned at ')+r.reposLast;
+    p.push(s+'.');
+  }
+  if(r.skin)p.push('Pressure area or skin concern.');
+  if(r.mattress)p.push('Pressure mattress in place.');
+  if(r.welfare||r.welfareLast){
+    var wl='';
+    if(r.welfare)wl='Welfare checks '+optSpeech('welfare',r.welfare);
+    if(r.welfareLast)wl+=(wl?', last checked at ':'Last welfare check at ')+r.welfareLast;
+    p.push(wl+'.');
+  }
+  var c=[];
+  if(r.continence)c.push(optSpeech('continence',r.continence));
+  if(r.bowels)c.push('bowels opened');
+  if(c.length)p.push('Continence: '+c.join(', ')+'.');
+  if(r.pain)p.push('Pain: '+optSpeech('pain',r.pain).toLowerCase()+'.');
+  var d=[];if(r.washed)d.push('personal care');if(r.meds)d.push('medication round');if(r.charts)d.push('food and fluid charts');
+  if(d.length)p.push('Done this shift: '+d.join(', ')+'.');
+  if(r.infection)p.push('Infection or isolation precautions in place.');
+  if(r.newToday)p.push('Something new today, see concerns.');
+  var cn=spokenText(r.concerns);if(cn)p.push('Concerns: '+cn);
+  var ac=spokenText(r.actions);if(ac)p.push('Actions: '+ac);
   if(p.length===n0)p.push('No information entered.');
   return p;
 }
-// Validate / clean an imported or restored state object. Never trusts input shape.
-function sanitizeState(o){
-  var out={v:1,header:emptyHeader(),rows:{},settings:{rate:'1',printData:false}};
-  if(!o||typeof o!=='object')o={};
-  var h=o.header||{};
-  ['date','shift','from','to','time'].forEach(function(k){out.header[k]=typeof h[k]==='string'?h[k].slice(0,80):'';});
-  if(['','Early','Late','Night'].indexOf(out.header.shift)<0)out.header.shift='';
-  if(!/^\d{4}-\d{2}-\d{2}$/.test(out.header.date))out.header.date='';
-  if(!/^\d{2}:\d{2}$/.test(out.header.time))out.header.time='';
-  var s=o.settings||{};
-  if(['0.75','0.9','1','1.15','1.3'].indexOf(String(s.rate))>=0)out.settings.rate=String(s.rate);
-  out.settings.printData=s.printData===true;
-  var rows=o.rows&&typeof o.rows==='object'?o.rows:{};
-  for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++){
-    var src=rows[rm]||rows[String(rm)]||{},d=emptyRow();
-    TEXT_KEYS.forEach(function(k){d[k]=typeof src[k]==='string'?src[k].slice(0,FIELD_MAX[k]):'';});
-    var nb=newsBand(src.news===undefined||src.news===null?'':src.news);
-    d.news=nb.valid&&nb.total!==null?String(nb.total):'';
-    d.avpu=['A','V','P','U'].indexOf(src.avpu)>=0?src.avpu:'';
-    d.gE=/^[1-4]$/.test(String(src.gE))?String(src.gE):'';
-    d.gV=/^[1-5]$/.test(String(src.gV))?String(src.gV):'';
-    d.gM=/^[1-6]$/.test(String(src.gM))?String(src.gM):'';
-    var gt=String(src.gT===undefined||src.gT===null?'':src.gT);
-    d.gT=/^\d{1,2}$/.test(gt)&&+gt>=3&&+gt<=15?gt:'';
-    var gi=gcsInfo(d); if(gi.complete)d.gT=String(gi.total);
-    d.esc=ESC_OPTS.some(function(x){return x[0]===src.esc&&x[0]!==''})?src.esc:'';
-    d.done=src.done===true;
-    out.rows[rm]=d;
-  }
-  return out;
+// Text lines for the printable table (one row per room)
+function printCells(r){
+  function L(a){return a.filter(function(x){return x}).join('\n');}
+  var ft=fluidText(r);
+  var rp=[];if(r.repos)rp.push('Freq: '+reposText(r));if(r.reposLast)rp.push('Last: '+r.reposLast);if(r.skin)rp.push('Pressure area concern');if(r.mattress)rp.push('Pressure mattress');
+  var wf=[];if(r.welfare)wf.push('Freq: '+optLabel('welfare',r.welfare));if(r.welfareLast)wf.push('Last: '+r.welfareLast);
+  return {
+   dnr:optLabel('dnr',r.dnr),
+   food:L([r.foodLevel&&'Intake: '+optLabel('level',r.foodLevel),r.diet&&'Diet: '+optLabel('diet',r.diet),txt(r.dietNote)&&'Detail: '+txt(r.dietNote),r.assist&&'Help: '+optLabel('assist',r.assist)]),
+   fluids:L([r.fluidLevel&&'Intake: '+optLabel('level',r.fluidLevel),ft,r.thickened&&'Thickened: '+optLabel('thickened',r.thickened),r.fluidChart&&'Fluid chart in place']),
+   mob:L([r.mobility&&'Mobility: '+optLabel('mobility',r.mobility),r.falls&&'Falls risk: '+optLabel('falls',r.falls),r.rails&&'Bed rails',r.sensor&&'Sensor mat']),
+   repos:L(rp),welfare:L(wf),
+   care:L([r.continence&&'Continence: '+optLabel('continence',r.continence),r.bowels&&'Bowels opened',r.pain&&'Pain: '+optLabel('pain',r.pain),r.washed&&'Personal care done',r.meds&&'Medication round done',r.charts&&'Charts completed',r.infection&&'Infection precautions',r.newToday&&'New today']),
+   concerns:txt(r.concerns),actions:txt(r.actions),done:r.done?'Yes':''
+  };
 }
+function printFlags(r){return buildBadges(r).map(function(b){return b.t;}).join(' · ');}
 /* ==PURE-END== */
 
 /* ===== App ===== */
-var KEY='handover_v1';
+var KEY='handover_v2',KEY_STAND='handover_v2_standing',KEY_V1='handover_v1';
 var $=function(id){return document.getElementById(id)};
 function el(tag,attrs,kids){var e=document.createElement(tag);if(attrs)for(var k in attrs){if(k==='text')e.textContent=attrs[k];else if(k==='class')e.className=attrs[k];else e.setAttribute(k,attrs[k]);}(kids||[]).forEach(function(c){if(c)e.appendChild(c)});return e;}
 var state=sanitizeState(null);
-var rowEls={};
+var rowEls={},prEls={},dictTarget={};
 var storageOK=true;
-
 function toast(t){var x=$('toast');x.textContent=t;x.classList.add('show');clearTimeout(toast._t);toast._t=setTimeout(function(){x.classList.remove('show')},3200);}
 function todayISO(){var d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');}
 
@@ -346,133 +479,158 @@ var saveTimer=null;
 function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(saveNow,250);$('saveState').textContent='Saving…';}
 function saveNow(){
   clearTimeout(saveTimer);saveTimer=null;
-  try{localStorage.setItem(KEY,JSON.stringify(state));storageOK=true;$('saveState').textContent='Saved on this device at '+new Date().toLocaleTimeString('en-GB');}
+  try{var sp=splitForStorage(state);localStorage.setItem(KEY,JSON.stringify(sp.shift));localStorage.setItem(KEY_STAND,JSON.stringify(sp.stand));storageOK=true;$('saveState').textContent='Saved on this device at '+new Date().toLocaleTimeString('en-GB');}
   catch(e){storageOK=false;$('saveState').textContent='⚠ Could not save in this browser (storage blocked or full). Use Export JSON to keep your data.';}
 }
 function load(){
-  try{var raw=localStorage.getItem(KEY);if(raw)state=sanitizeState(JSON.parse(raw));}
-  catch(e){state=sanitizeState(null);}
+  try{
+    var a=localStorage.getItem(KEY),b=localStorage.getItem(KEY_STAND);
+    state=joinFromStorage(a?JSON.parse(a):null,b?JSON.parse(b):null);
+  }catch(e){state=sanitizeState(null);}
 }
 
-/* --- build table --- */
-var LABELS={name:'Resident / patient',age:'Age / DOB',nhs:'NHS no.',bg:'Key diagnosis / background',news:'Latest NEWS2 total',avpu:'AVPU',gcs:'GCS',sit:'Concerns / Situation (SBAR S/A)',act:'Actions / To do (SBAR R)',esc:'Escalation plan & obs due',done:'Handed over',notes:'Notes'};
-function mkSelect(opts,k,room,label){
-  var s=el('select',{'data-k':k,'aria-label':label+', room '+room,class:'ctl'});
-  opts.forEach(function(o){s.appendChild(el('option',{value:o[0],text:o[1]}))});return s;
+/* --- build rows --- */
+var GROUPS=[
+ {id:'dnr',label:'DNACPR status',cls:'dnr',f:[['dnr','select','Resuscitation status','full']]},
+ {id:'food',label:'Food',cls:'food',f:[['foodLevel','select','Intake','wide'],['diet','select','Diet / texture','wide'],['dietNote','text','IDDSI level / detail','wide','e.g. IDDSI 4'],['assist','select','Assistance needed','wide']]},
+ {id:'fluid',label:'Fluids',cls:'fluid',f:[['fluidLevel','select','Intake','wide'],['fluidMl','num','So far (ml)',''],['fluidTarget','num','Target (ml)',''],['thickened','select','Thickened fluids','wide'],['fluidChart','check','Fluid chart in place']],extra:'meter'},
+ {id:'mob',label:'Mobility & falls',cls:'mob',f:[['mobility','select','Mobility','wide'],['falls','select','Falls risk','wide'],['rails','check','Bed rails'],['sensor','check','Sensor mat']]},
+ {id:'repos',label:'Repositioning & skin',cls:'repos',f:[['repos','select','Repositioning frequency','wide'],['reposOther','text','Other – details','wide'],['reposLast','time','Last repositioned','full'],['skin','check','Pressure area concern'],['mattress','check','Pressure mattress']]},
+ {id:'welf',label:'Welfare checks',cls:'welf',f:[['welfare','select','Welfare check frequency','wide'],['welfareLast','time','Last checked','full']]},
+ {id:'care',label:'Continence, pain & care',cls:'care',f:[['continence','select','Continence / toileting','wide'],['pain','select','Pain','wide'],['bowels','check','Bowels opened'],['washed','check','Personal care / washed'],['meds','check','Medication round done'],['charts','check','Fluid / food charts completed'],['infection','check','Infection / isolation precautions'],['newToday','check','Anything new today (concern, fall, GP/111)']]}
+];
+function buildField(f,room){
+  var k=f[0],t=f[1],lab=f[2],id='f_'+k+'_'+room,al=lab+', room '+room;
+  var w=el('div',{class:'f f-'+t+' '+(f[3]||'')});
+  if(t==='check'){
+    var l=el('label',{class:'chk ctl','for':id});
+    l.appendChild(el('input',{type:'checkbox',id:id,'data-k':k,'aria-label':al}));l.appendChild(el('span',{text:lab}));w.appendChild(l);return w;
+  }
+  w.appendChild(el('label',{class:'fl','for':id,text:lab}));
+  var c;
+  if(t==='select'){c=el('select',{id:id,'data-k':k,'aria-label':al,class:'ctl'});optsFor(k).forEach(function(o){c.appendChild(el('option',{value:o[0],text:o[1]}))});w.appendChild(c);}
+  else if(t==='text'){w.appendChild(el('input',{type:'text',id:id,'data-k':k,'aria-label':al,class:'ctl',maxlength:KT[k][1],autocomplete:'off',placeholder:f[4]||''}));}
+  else if(t==='num'){w.appendChild(el('input',{type:'number',id:id,'data-k':k,'aria-label':al,class:'ctl',min:0,max:10000,step:1,inputmode:'numeric'}));}
+  else if(t==='time'){
+    var nr=el('div',{class:'nowrow'});nr.appendChild(el('input',{type:'time',id:id,'data-k':k,'aria-label':al,class:'ctl'}));
+    nr.appendChild(el('button',{type:'button','data-act':'now','data-for':k,'aria-label':'Set '+lab.toLowerCase()+' to now, room '+room,text:'Now'}));w.appendChild(nr);
+  }
+  return w;
 }
 function buildRow(room){
   var tr=el('tr',{'data-room':room,id:'row'+room});
   tr.appendChild(el('th',{scope:'row',class:'room',text:String(room),'aria-label':'Room '+room}));
-  // speak cell
-  var sp=el('td',{class:'speak nop'});
-  var bl=el('button',{type:'button',class:'sbtn listen','data-act':'listen','aria-pressed':'false','aria-label':'Listen to handover for room '+room}),
-      ic=el('span',{class:'ic','aria-hidden':'true',text:'🔊'}),tx=el('span',{class:'t',text:'Listen'});bl.appendChild(ic);bl.appendChild(tx);
-  var bd=el('button',{type:'button',class:'sbtn dict','data-act':'dict','aria-pressed':'false','aria-label':'Dictate notes for room '+room}),
-      ic2=el('span',{class:'ic','aria-hidden':'true',text:'🎤'}),tx2=el('span',{class:'t',text:'Dictate'});bd.appendChild(ic2);bd.appendChild(tx2);
+  function cell(label,cls){var td=el('td',{'data-label':label,class:cls||''});tr.appendChild(td);return td;}
+  // summary
+  var c=cell('Summary','sum');
+  c.appendChild(el('label',{class:'fl','for':'f_name_'+room,text:'Resident (initials or first name)'}));
+  c.appendChild(el('input',{type:'text',id:'f_name_'+room,'data-k':'name',class:'ctl',maxlength:60,autocomplete:'off',placeholder:'Name / initials','aria-label':'Resident initials or first name, optional, room '+room}));
+  c.appendChild(el('div',{'data-flag':'1'}));
+  c.appendChild(el('div',{class:'badges','data-badges':'1','aria-label':'Summary for room '+room}));
+  // speak
+  var sp=cell('Listen / Dictate','speak');
+  var bl=el('button',{type:'button',class:'sbtn listen','data-act':'listen','aria-pressed':'false','aria-label':'Listen to handover for room '+room});
+  bl.appendChild(el('span',{class:'ic','aria-hidden':'true',text:'🔊'}));bl.appendChild(el('span',{class:'t',text:'Listen'}));
+  var bd=el('button',{type:'button',class:'sbtn dict','data-act':'dict','aria-pressed':'false','aria-label':'Dictate for room '+room});
+  bd.appendChild(el('span',{class:'ic','aria-hidden':'true',text:'🎤'}));bd.appendChild(el('span',{class:'t',text:'Dictate'}));
   sp.appendChild(bl);sp.appendChild(bd);
+  var seg=el('div',{class:'seg',role:'group','aria-label':'Dictate into, room '+room});seg.appendChild(el('span',{text:'Into:'}));
+  [['concerns','Concerns'],['actions','Actions']].forEach(function(x){seg.appendChild(el('button',{type:'button','data-act':'target','data-t':x[0],'aria-pressed':x[0]==='concerns'?'true':'false','aria-label':'Dictate into '+x[1]+', room '+room,text:x[1]}));});
+  sp.appendChild(seg);
   sp.appendChild(el('div',{class:'rec-state',text:'● Recording – speak now'}));
   sp.appendChild(el('div',{class:'msg',role:'status','aria-live':'polite'}));
-  tr.appendChild(sp);
-  function cell(label,cls){var td=el('td',{'data-label':label,class:cls||''});tr.appendChild(td);return td;}
-  function pv(key){return el('div',{class:'pv','data-pv':key})}
-  // text inputs
-  var c;
-  c=cell(LABELS.name);c.appendChild(el('input',{type:'text','data-k':'name',class:'ctl',maxlength:80,autocomplete:'off',placeholder:'Initials / name','aria-label':'Resident name or initials, room '+room}));c.appendChild(pv('name'));
-  c=cell(LABELS.age);c.appendChild(el('input',{type:'text','data-k':'age',class:'ctl',maxlength:30,autocomplete:'off',placeholder:'e.g. 84','aria-label':'Age or date of birth, optional, room '+room}));c.appendChild(pv('age'));
-  c=cell(LABELS.nhs+' (optional – avoid if possible)');c.appendChild(el('input',{type:'text','data-k':'nhs',class:'ctl',maxlength:20,inputmode:'numeric',autocomplete:'off',placeholder:'Optional','aria-label':'NHS number, optional, room '+room}));c.appendChild(pv('nhs'));
-  c=cell(LABELS.bg);c.appendChild(el('textarea',{'data-k':'bg',class:'ctl',maxlength:2000,'aria-label':'Key diagnosis and background, room '+room}));c.appendChild(pv('bg'));
-  // NEWS2
-  c=cell(LABELS.news+' (0–20)','news b-none');c.appendChild(el('input',{type:'number','data-k':'news',class:'ctl',min:0,max:20,step:1,inputmode:'numeric','aria-label':'Latest NEWS2 total 0 to 20, room '+room}));
-  c.appendChild(el('span',{class:'chip b-none ctl','data-chip':'1'}));c.appendChild(pv('news'));
-  c=cell(LABELS.avpu);c.appendChild(mkSelect([['','–'],['A','A – Alert'],['V','V – Voice'],['P','P – Pain'],['U','U – Unresponsive']],'avpu',room,'AVPU'));c.appendChild(pv('avpu'));
-  // GCS
-  c=cell(LABELS.gcs+' (E / V / M or total 3–15)');
-  var evm=el('div',{class:'evm ctl'});
-  [['gE','E',4],['gV','V',5],['gM','M',6]].forEach(function(g){
-    var opts=[['','–']];for(var i=1;i<=g[2];i++)opts.push([String(i),String(i)]);
-    var w=el('div');w.appendChild(el('label',{text:g[1],'for':'g'+g[0]+room}));
-    var s=mkSelect(opts,g[0],room,'GCS '+({E:'eye',V:'verbal',M:'motor'})[g[1]]);s.id='g'+g[0]+room;s.className='';w.appendChild(s);evm.appendChild(w);
+  // groups
+  GROUPS.forEach(function(g){
+    var td=cell(g.label,'g-'+g.cls),fg=el('div',{class:'fg'}),cks=el('div',{class:'cks'});
+    g.f.forEach(function(f){(f[1]==='check'?cks:fg).appendChild(buildField(f,room));});
+    td.appendChild(fg);if(cks.childNodes.length)td.appendChild(cks);
+    if(g.extra==='meter'){td.appendChild(el('div',{class:'meter','aria-hidden':'true'},[el('i')]));td.appendChild(el('div',{class:'mtext','data-mtext':'1'}));}
   });
-  c.appendChild(evm);
-  var gt=el('div',{class:'gtot ctl'});gt.appendChild(el('input',{type:'number','data-k':'gT',min:3,max:15,step:1,placeholder:'Total 3–15','aria-label':'GCS total 3 to 15, room '+room}));c.appendChild(gt);
-  c.appendChild(pv('gcs'));
-  c=cell(LABELS.sit);c.appendChild(el('textarea',{'data-k':'sit',class:'ctl',maxlength:2000,'aria-label':'Concerns and situation, room '+room}));c.appendChild(pv('sit'));
-  c=cell(LABELS.act);c.appendChild(el('textarea',{'data-k':'act',class:'ctl',maxlength:2000,'aria-label':'Actions, recommendation and to do, room '+room}));c.appendChild(pv('act'));
-  c=cell(LABELS.esc);c.appendChild(mkSelect(ESC_OPTS,'esc',room,'Escalation plan status'));c.appendChild(pv('esc'));
-  c.appendChild(el('textarea',{'data-k':'obs',class:'ctl',maxlength:1000,placeholder:'Obs due / escalation details',style:'min-height:56px;margin-top:4px','aria-label':'Observations due or escalation details, room '+room}));c.appendChild(pv('obs'));
-  c=cell(LABELS.done,'donec');var lab=el('label',{class:'chk ctl',style:'margin:0'});lab.appendChild(el('input',{type:'checkbox','data-k':'done','aria-label':'Handed over, room '+room}));lab.appendChild(el('span',{class:'dl',text:'Yes'}));c.appendChild(lab);c.appendChild(pv('done'));
-  c=cell(LABELS.notes);c.appendChild(el('textarea',{'data-k':'notes',class:'ctl',maxlength:8000,style:'min-height:96px','aria-label':'Notes, room '+room}));c.appendChild(pv('notes'));
+  c=cell('Concerns','g-con');c.appendChild(el('textarea',{'data-k':'concerns',class:'ctl',maxlength:2000,'aria-label':'Concerns, room '+room}));
+  c=cell('Actions / to do next shift','g-act');c.appendChild(el('textarea',{'data-k':'actions',class:'ctl',maxlength:2000,'aria-label':'Actions to do for next shift, room '+room}));
+  c=cell('Handed over','donec');var lab=el('label',{class:'chk ctl',style:'margin:0'});lab.appendChild(el('input',{type:'checkbox','data-k':'done','aria-label':'Handover done, room '+room}));lab.appendChild(el('span',{text:'Done'}));c.appendChild(lab);
+  return tr;
+}
+function buildPrintRow(room){
+  var tr=el('tr',{'data-room':room});
+  tr.appendChild(el('th',{class:'room',scope:'row',text:String(room)}));
+  ['sum','dnr','food','fluids','mob','repos','welfare','care','concerns','actions','done'].forEach(function(k){tr.appendChild(el('td',{'data-p':k}));});
   return tr;
 }
 function F(tr,k){return tr.querySelector('[data-k="'+k+'"]')}
 function fillRow(room){
   var tr=rowEls[room],r=state.rows[room];
-  TEXT_KEYS.forEach(function(k){F(tr,k).value=r[k]});
-  ['news','avpu','gE','gV','gM','gT','esc'].forEach(function(k){F(tr,k).value=r[k]});
-  F(tr,'done').checked=r.done;
+  ALL_KEYS.forEach(function(k){var c=F(tr,k);if(KT[k][0]==='bool')c.checked=r[k];else c.value=r[k];});
   refreshRow(room);
 }
 function refreshRow(room){
-  var tr=rowEls[room],r=state.rows[room];
-  var b=newsBand(r.news);
-  var td=tr.querySelector('td.news');td.className='news b-'+b.key;td.setAttribute('data-label',LABELS.news+' (0–20)');
-  var chip=td.querySelector('[data-chip]');chip.className='chip ctl b-'+b.key;chip.textContent=b.name?(b.total!==null?b.total+' · ':'')+b.name:'';chip.hidden=!b.name;
-  var gi=gcsInfo(r);F(tr,'gT').readOnly=gi.complete;
-  if(gi.complete&&F(tr,'gT').value!==String(gi.total)){F(tr,'gT').value=String(gi.total);r.gT=String(gi.total);}
-  var pvs={
-   news:b.valid?(b.total!==null?b.total+' '+b.name:''):'?',
-   avpu:r.avpu?r.avpu+' – '+AVPU_NAMES[r.avpu]:'',
-   gcs:gi.total===null?'':(gi.complete?'E'+gi.e+' V'+gi.v+' M'+gi.m+' = '+gi.total:'Total '+gi.total),
-   esc:(ESC_OPTS.filter(function(x){return x[0]===r.esc&&x[0]})[0]||['',''])[1],
-   done:r.done?'☑ Yes':'☐'
-  };
-  tr.querySelectorAll('[data-pv]').forEach(function(p){var k=p.getAttribute('data-pv');p.textContent=pvs[k]!==undefined?pvs[k]:r[k];});
-  tr.classList.toggle('flagged',isFlagged(r));
+  var tr=rowEls[room],r=state.rows[room],lvl=flagLevel(r),bd=buildBadges(r);
+  // coloured selects
+  tr.querySelectorAll('select[data-k]').forEach(function(s){s.setAttribute('data-v',s.value);});
+  var box=tr.querySelector('[data-badges]');box.textContent='';
+  bd.forEach(function(b){box.appendChild(el('span',{class:'bd'+(b.k!=='plain'?' bd-'+b.k:''),text:b.t}));});
+  var fc=tr.querySelector('[data-flag]');fc.textContent='';
+  if(lvl)fc.appendChild(el('span',{class:'flagchip '+lvl,text:lvl==='alert'?'⚑ Flagged':'⚑ Flagged (information only)'}));
+  var p=fluidPct(r),mt=tr.querySelector('[data-mtext]');mt.textContent=fluidText(r);
+  tr.querySelector('.meter>i').style.width=(p===null?0:Math.min(100,p))+'%';
+  tr.classList.toggle('f-alert',lvl==='alert');tr.classList.toggle('f-info',lvl==='info');
   tr.classList.toggle('done',r.done);
-  var empty=!rowHasData(r);tr.classList.toggle('empty',empty);
-  tr.classList.toggle('skipprint',empty&&state.settings.printData);
+  // print row
+  var pr=prEls[room],pc=printCells(r),empty=!rowHasData(r);
+  pr.className=(lvl?'f-'+lvl:'')+(empty&&state.settings.printData?' skipprint':'');
+  var sum=pr.querySelector('[data-p=sum]');sum.textContent='';
+  if(txt(r.name))sum.appendChild(el('div',{text:txt(r.name),class:'flg'}));
+  if(lvl)sum.appendChild(el('div',{text:'⚑ '+printFlags(r)}));
+  pr.querySelector('[data-p=dnr]').textContent=pc.dnr;
+  pr.querySelector('[data-p=dnr]').className=r.dnr==='dnacpr'||r.dnr==='respect'?'dn':'';
+  ['food','fluids','mob','repos','welfare','care','concerns','actions','done'].forEach(function(k){pr.querySelector('[data-p='+k+']').textContent=pc[k];});
 }
 function onFieldInput(e){
-  var t=e.target,k=t.getAttribute&&t.getAttribute('data-k');if(!k)return;
-  var tr=t.closest('tr'),room=+tr.getAttribute('data-room'),r=state.rows[room];
-  if(k==='done')r.done=t.checked;else r[k]=t.value;
-  if(k==='gE'||k==='gV'||k==='gM'){
-    var was=F(tr,'gT').readOnly,gi=gcsInfo(r);
-    if(gi.complete){r.gT=String(gi.total);F(tr,'gT').value=r.gT;}
-    else if(was){r.gT='';F(tr,'gT').value='';}
-  }
-  if(k==='news'){var nb=newsBand(t.value);if(!nb.valid&&e.type==='change'){toast('NEWS2 total must be a whole number from 0 to 20');}}
+  var t=e.target,k=t.getAttribute&&t.getAttribute('data-k');if(!k||!KT[k])return;
+  var tr=t.closest('tr'),room=+tr.getAttribute('data-room'),r=state.rows[room],ty=KT[k][0],wasDone=r.done;
+  if(ty==='bool')r[k]=t.checked;
+  else if(ty==='num'){r[k]=cleanNum(t.value);if(e.type==='change'&&t.value!==r[k])t.value=r[k];}
+  else if(ty==='time')r[k]=cleanTime(t.value);
+  else r[k]=t.value;
   refreshRow(room);applyFilter();updateStats();scheduleSave();
+  if(k==='done'&&r.done&&!wasDone&&$('hideDone').checked)toast('Room '+room+' handed over and hidden.');
 }
 
 /* --- filter / stats --- */
-function rowText(room){var r=state.rows[room];return (room+' '+TEXT_KEYS.map(function(k){return r[k]}).join(' ')+' '+r.news+' '+(r.avpu||'')+' '+(AVPU_NAMES[r.avpu]||'')).toLowerCase();}
+function rowText(room){var r=state.rows[room],a=[room,r.name,r.dietNote,r.reposOther,r.concerns,r.actions];buildBadges(r).forEach(function(b){a.push(b.t)});ALL_KEYS.forEach(function(k){if(KT[k][0]==='sel'&&r[k])a.push(optLabel(k,r[k]))});return a.join(' ').toLowerCase();}
 function applyFilter(){
-  var q=$('q').value.trim().toLowerCase(),only=$('onlyFlag').checked,shown=0;
+  var q=$('q').value.trim().toLowerCase(),only=$('onlyFlag').checked,hd=$('hideDone').checked,shown=0;
   for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++){
     var r=state.rows[rm],vis=true;
     if(q&&rowText(rm).indexOf(q)<0)vis=false;
     if(only&&!isFlagged(r))vis=false;
+    if(hd&&r.done)vis=false;
     rowEls[rm].hidden=!vis;if(vis)shown++;
   }
   $('nodata').hidden=shown>0;
   applyFilter.shown=shown;
 }
 function updateStats(){
-  var fl=0,dn=0;for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++){if(isFlagged(state.rows[rm]))fl++;if(state.rows[rm].done)dn++;}
-  var total=ROOM_LAST-ROOM_FIRST+1;
-  $('stat').textContent='Showing '+applyFilter.shown+' of '+total+' rooms · Flagged: '+fl+' · Handed over: '+dn+' of '+total;
+  var fl=0,al=0,dn=0,total=ROOM_LAST-ROOM_FIRST+1;
+  for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++){var l=flagLevel(state.rows[rm]);if(l)fl++;if(l==='alert')al++;if(state.rows[rm].done)dn++;}
+  $('stat').textContent='Rooms shown: '+applyFilter.shown+' of '+total+' · Flagged: '+fl+' ('+al+' need attention) · Handed over: '+dn+' of '+total;
+  $('progBar').style.width=Math.round(dn*100/total)+'%';
+  var pw=$('progWrap');pw.setAttribute('aria-valuenow',dn);pw.setAttribute('aria-valuetext',dn+' of '+total+' rooms handed over');
   $('btnAll').disabled=!hasSynth;
 }
 
 /* --- header --- */
 function fmtDate(s){return s?s.split('-').reverse().join('/'):'';}
+function who(n,r){n=txt(n);r=txt(r);return (n&&r)?n+' ('+r+')':(n||r||'—');}
+var HID={date:'hDate',shift:'hShift',time:'hTime',fromName:'hFromName',fromRole:'hFromRole',toName:'hToName',toRole:'hToRole'};
 function syncHeader(){
   var h=state.header;
-  $('hDate').value=h.date;$('hShift').value=h.shift;$('hFrom').value=h.from;$('hTo').value=h.to;$('hTime').value=h.time;
-  $('pDate').textContent=fmtDate(h.date)||'—';$('pShift').textContent=h.shift||'—';$('pFrom').textContent=h.from||'—';$('pTo').textContent=h.to||'—';$('pTime').textContent=h.time||'—';
+  HDR_KEYS.forEach(function(k){$(HID[k]).value=h[k];});
+  $('pDate').textContent=fmtDate(h.date)||'—';$('pShift').textContent=h.shift||'—';$('pTime').textContent=h.time||'—';
+  $('pFrom').textContent=who(h.fromName,h.fromRole);$('pTo').textContent=who(h.toName,h.toRole);
 }
-function onHeader(e){var k=e.target.getAttribute('data-h');if(!k)return;state.header[k]=e.target.value;syncHeader();scheduleSave();}
+function onHeader(e){var k=e.target.getAttribute('data-h');if(!k)return;state.header[k]=e.target.value;if(k==='time')state.header.time=cleanTime(e.target.value);syncHeader2();scheduleSave();}
+function syncHeader2(){var h=state.header;$('pDate').textContent=fmtDate(h.date)||'—';$('pShift').textContent=h.shift||'—';$('pTime').textContent=h.time||'—';$('pFrom').textContent=who(h.fromName,h.fromRole);$('pTo').textContent=who(h.toName,h.toRole);}
 
 /* --- Listen (SpeechSynthesis) --- */
 var synth=window.speechSynthesis||null,hasSynth=!!(synth&&window.SpeechSynthesisUtterance);
@@ -502,7 +660,6 @@ function stopSpeech(){
 }
 function clearReadMsgs(){for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++){var m=rowEls[rm].querySelector('.msg');if(m.getAttribute('data-kind')==='read'){m.textContent='';m.removeAttribute('data-kind');}}}
 function rate(){return parseFloat($('rate').value)||1;}
-// items: [{room, parts}]
 function startSpeech(key,items){
   if(!hasSynth){toast('Listening is not supported in this browser.');return;}
   if(!items.length){toast('Nothing to read.');return;}
@@ -536,7 +693,6 @@ function startSpeech(key,items){
     });
     TTS.cur=items[0].room;setListenUI();
   }
-  // Chrome can drop speak() immediately after cancel(); wait a tick when something was playing
   if(wasActive)setTimeout(go,120);else go();
 }
 function onListen(room){
@@ -550,30 +706,29 @@ function listenAll(){
     var r=state.rows[rm];
     if(isFlagged(r)&&!rowEls[rm].hidden)items.push({room:rm,parts:buildSpeechParts(rm,r)});
   }
-  if(!items.length){toast('No flagged rooms to read (NEWS2 5+ or concerns entered).');return;}
+  if(!items.length){toast('No flagged rooms to read.');return;}
   startSpeech('all',items);
 }
 
 /* --- Dictate (SpeechRecognition) --- */
 var SR=window.SpeechRecognition||window.webkitSpeechRecognition||null;
-var DICT={rec:null,room:null,gotAudio:false};
+var DICT={rec:null,room:null,token:null};
+function tgt(room){return dictTarget[room]||'concerns';}
+function tgtName(room){return tgt(room)==='actions'?'Actions':'Concerns';}
 function rowMsg(room,text,cls){var m=rowEls[room].querySelector('.msg');m.removeAttribute('data-kind');m.className='msg'+(cls?' '+cls:'');m.textContent=text;return m;}
 function setDictUI(room,on){
   var tr=rowEls[room],b=tr.querySelector('[data-act="dict"]');
   b.setAttribute('aria-pressed',on?'true':'false');
   b.querySelector('.t').textContent=on?'Stop dictation':'Dictate';b.querySelector('.ic').textContent=on?'⏺':'🎤';
-  b.setAttribute('aria-label',(on?'Stop dictation for room ':'Dictate notes for room ')+room);
+  b.setAttribute('aria-label',(on?'Stop dictation for room ':'Dictate for room ')+room);
   tr.classList.toggle('recording',on);
 }
-function stopDictation(){
-  if(DICT.rec){try{DICT.rec.stop()}catch(e){}}
-}
-function appendNotes(room,text){
-  var r=state.rows[room],t=text.trim();if(!t)return;
-  var cur=r.notes;
-  r.notes=(cur&&!/\s$/.test(cur)?cur+' ':cur)+t;
-  r.notes=r.notes.slice(0,FIELD_MAX.notes);
-  F(rowEls[room],'notes').value=r.notes;
+function stopDictation(){if(DICT.rec){try{DICT.rec.stop()}catch(e){}}}
+function appendText(room,text){
+  var r=state.rows[room],t=text.trim(),k=tgt(room);if(!t)return;
+  var cur=r[k];
+  r[k]=((cur&&!/\s$/.test(cur)?cur+' ':cur)+t).slice(0,KT[k][1]);
+  F(rowEls[room],k).value=r[k];
   refreshRow(room);applyFilter();updateStats();scheduleSave();
 }
 var DICT_ERR={
@@ -597,12 +752,12 @@ function startDictation(room){
   rec.lang='en-GB';rec.continuous=true;rec.interimResults=true;rec.maxAlternatives=1;
   var token={};DICT.token=token;DICT.rec=rec;DICT.room=room;
   var failed=false;
-  rec.onstart=function(){setDictUI(room,true);rowMsg(room,'Listening… (audio is sent to the browser vendor’s cloud service)');};
+  rec.onstart=function(){setDictUI(room,true);rowMsg(room,'Listening… text goes into '+tgtName(room)+'. (Audio is sent to the browser vendor’s cloud service.)');};
   rec.onresult=function(ev){
     var interim='';
     for(var i=ev.resultIndex;i<ev.results.length;i++){
       var res=ev.results[i],tx=res[0].transcript;
-      if(res.isFinal)appendNotes(room,tx);else interim+=tx;
+      if(res.isFinal)appendText(room,tx);else interim+=tx;
     }
     var m=rowMsg(room,'');
     m.appendChild(document.createTextNode('Hearing: '));m.appendChild(el('span',{class:'interim',text:interim||'…'}));
@@ -615,13 +770,32 @@ function startDictation(room){
   rec.onend=function(){
     if(DICT.token===token){DICT.rec=null;DICT.room=null;}
     setDictUI(room,false);
-    var m=rowEls[room].querySelector('.msg');
-    if(!failed)rowMsg(room,'Dictation stopped. Check the text in Notes.');
+    if(!failed)rowMsg(room,'Dictation stopped. Check the text in '+tgtName(room)+'.');
   };
   try{rec.start();}catch(e){rowMsg(room,'Could not start dictation – try again.','bad');DICT.rec=null;DICT.room=null;}
 }
+function setTarget(room,t){
+  dictTarget[room]=t;
+  rowEls[room].querySelectorAll('[data-act="target"]').forEach(function(b){b.setAttribute('aria-pressed',b.getAttribute('data-t')===t?'true':'false');});
+}
 
-/* --- import / export / clear / print --- */
+/* --- actions: now / mark all / reset / import / export / clear / print --- */
+function setNow(room,k){
+  var r=state.rows[room];r[k]=nowHHMM();F(rowEls[room],k).value=r[k];
+  refreshRow(room);scheduleSave();
+}
+function markAll(){
+  if(!confirm('Mark ALL rooms 39–61 as handed over?'))return;
+  for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++){state.rows[rm].done=true;F(rowEls[rm],'done').checked=true;refreshRow(rm);}
+  applyFilter();updateStats();saveNow();toast('All rooms marked as handed over.');
+}
+function resetForNewShift(){
+  if(!confirm('Reset checklist for a new shift?\n\nThis clears for every room: food and fluid intake, ml totals, last-times, pain, bowels/personal care/medication/chart ticks, "new today", concerns, actions and handed-over ticks.\n\nIt KEEPS standing information: name/initials, DNACPR status, diet, assistance, mobility, falls risk, rails/sensor mat, repositioning and welfare frequency, pressure mattress, pressure area concern, infection precautions, continence and fluid target.\n\nTip: Export JSON first if you need a copy of this handover.'))return;
+  stopSpeech();stopDictation();
+  state=resetShift(state);applyAll();saveNow();
+  toast('Checklist reset for the new shift. Update the date, shift and staff details at the top.');
+  window.scrollTo({top:0});
+}
 function exportJSON(){
   saveNow();
   var o={app:'handover',exportedAt:new Date().toISOString()};for(var k in state)o[k]=state[k];
@@ -635,6 +809,7 @@ function importJSON(file){
   fr.onload=function(){
     var obj;try{obj=JSON.parse(fr.result);}catch(e){toast('That file is not valid JSON.');return;}
     if(!obj||typeof obj!=='object'||!obj.rows||typeof obj.rows!=='object'){toast('That file doesn’t look like a handover export.');return;}
+    if(obj.v!==2){toast('That file is from an older version and can’t be imported.');return;}
     if(!confirm('Replace everything on this page with the imported handover? Current entries will be overwritten.'))return;
     stopSpeech();stopDictation();
     state=sanitizeState(obj);applyAll();saveNow();toast('Imported.');
@@ -643,13 +818,13 @@ function importJSON(file){
   fr.readAsText(file);
 }
 function clearAll(){
-  if(!confirm('Clear ALL handover entries for rooms 39–61 and the header details?\n\nTip: use Export JSON first if you need a copy.'))return;
+  if(!confirm('Clear ALL handover entries for rooms 39–61, including standing information (DNACPR, diet, mobility etc.) and the header details?\n\nTip: use Export JSON first if you need a copy.'))return;
   if(!confirm('Are you sure? This permanently deletes everything on this page from this device and cannot be undone.'))return;
   stopSpeech();stopDictation();
-  var rate=state.settings.rate,pd=state.settings.printData;
-  state=sanitizeState(null);state.settings.rate=rate;state.settings.printData=pd;
+  var rt=state.settings.rate,pd=state.settings.printData;
+  state=sanitizeState(null);state.settings.rate=rt;state.settings.printData=pd;
   state.header.date=todayISO();
-  $('q').value='';$('onlyFlag').checked=false;
+  $('q').value='';$('onlyFlag').checked=false;$('hideDone').checked=false;
   applyAll();saveNow();toast('All entries cleared.');
 }
 function setPrinted(){$('pPrinted').textContent=new Date().toLocaleString('en-GB');}
@@ -662,37 +837,44 @@ function applyAll(){
 
 /* --- init --- */
 function init(){
-  var tb=$('tbody');
-  for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++){var tr=buildRow(rm);rowEls[rm]=tr;tb.appendChild(tr);}
+  var tb=$('tbody'),pb=$('ptbody');
+  for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++){var tr=buildRow(rm);rowEls[rm]=tr;tb.appendChild(tr);var pr=buildPrintRow(rm);prEls[rm]=pr;pb.appendChild(pr);}
   load();
   if(!state.header.date)state.header.date=todayISO();
-  applyAll();
+  applyAll();setPrinted();
   tb.addEventListener('input',onFieldInput);tb.addEventListener('change',onFieldInput);
   tb.addEventListener('click',function(e){
     var b=e.target.closest('button[data-act]');if(!b)return;
-    var room=+b.closest('tr').getAttribute('data-room');
-    if(b.getAttribute('data-act')==='listen')onListen(room);else startDictation(room);
+    var room=+b.closest('tr').getAttribute('data-room'),a=b.getAttribute('data-act');
+    if(a==='listen')onListen(room);else if(a==='dict')startDictation(room);
+    else if(a==='now')setNow(room,b.getAttribute('data-for'));
+    else if(a==='target')setTarget(room,b.getAttribute('data-t'));
   });
-  ['hDate','hShift','hFrom','hTo','hTime'].forEach(function(id){$(id).addEventListener('input',onHeader);$(id).addEventListener('change',onHeader);});
+  HDR_KEYS.forEach(function(k){var x=$(HID[k]);x.addEventListener('input',onHeader);x.addEventListener('change',onHeader);});
   $('q').addEventListener('input',function(){applyFilter();updateStats()});
   $('onlyFlag').addEventListener('change',function(){applyFilter();updateStats()});
+  $('hideDone').addEventListener('change',function(){applyFilter();updateStats()});
   $('rate').addEventListener('change',function(){state.settings.rate=$('rate').value;scheduleSave();if(TTS.key!==null)toast('New speed applies from the next room you play.');});
   $('printData').addEventListener('change',function(){state.settings.printData=$('printData').checked;for(var rm=ROOM_FIRST;rm<=ROOM_LAST;rm++)refreshRow(rm);scheduleSave();});
   $('btnAll').addEventListener('click',listenAll);
+  $('btnMarkAll').addEventListener('click',markAll);
+  $('btnReset').addEventListener('click',resetForNewShift);
   $('btnExport').addEventListener('click',exportJSON);
   $('btnImport').addEventListener('click',function(){$('fileImport').click()});
   $('fileImport').addEventListener('change',function(e){var f=e.target.files[0];if(f)importJSON(f);e.target.value='';});
   $('btnClear').addEventListener('click',clearAll);
   $('btnPrint').addEventListener('click',function(){saveNow();setPrinted();window.print();});
-  window.addEventListener('beforeprint',function(){setPrinted();syncHeader();});
+  window.addEventListener('beforeprint',function(){setPrinted();syncHeader2();});
   window.addEventListener('pagehide',function(){if(saveTimer)saveNow();});
   document.addEventListener('visibilitychange',function(){if(document.hidden&&saveTimer)saveNow();});
   if(synth){loadVoices();if(synth.addEventListener)synth.addEventListener('voiceschanged',loadVoices);else synth.onvoiceschanged=loadVoices;}
   var sn=$('supportNotice'),msgs=[];
-  if(!SR)msgs.push('Dictation isn’t available in this browser – it needs Chrome, Edge or Safari. You can still type notes, or use your phone keyboard’s microphone button.');
+  if(!SR)msgs.push('Dictation isn’t available in this browser – it needs Chrome, Edge or Safari. You can still type, or use your phone keyboard’s microphone button.');
   if(!hasSynth)msgs.push('Listening (read aloud) isn’t available in this browser.');
   if(msgs.length){sn.textContent=msgs.join(' ');sn.hidden=false;}
   if(!hasSynth)$('btnAll').disabled=true;
+  try{if(localStorage.getItem(KEY_V1)!==null)$('v1Notice').hidden=false;}catch(e){}
+  $('btnDelV1').addEventListener('click',function(){if(!confirm('Permanently delete the old handover data stored in this browser?'))return;try{localStorage.removeItem(KEY_V1);}catch(e){}$('v1Notice').hidden=true;toast('Old data deleted.');});
   saveNow();
 }
 init();
