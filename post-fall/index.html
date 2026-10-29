@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>72-Hour Post-Fall Monitoring</title>
+<style>
+:root{--bg:#f6f7f8;--card:#fff;--ink:#1f2933;--mut:#616e7c;--line:#d9dee3;--acc:#2f5d8a;--red:#b42318;--amb:#b54708;--yel:#a16207;--grn:#2e7d32}
+*{box-sizing:border-box}body{margin:0;font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:var(--ink)}
+header.top{background:var(--acc);color:#fff;padding:12px 14px;position:sticky;top:0;z-index:5}
+header.top h1{font-size:1.1rem;margin:0}header.top .sub{font-size:.8rem;opacity:.9}
+main{max-width:760px;margin:0 auto;padding:10px}
+section{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:12px;margin:10px 0}
+h2{font-size:1.05rem;margin:0 0 8px;color:var(--acc)}h3{font-size:.95rem;margin:10px 0 6px}
+label{display:block;font-size:.85rem;color:var(--mut);margin:8px 0 2px}
+input,select,textarea{width:100%;font:inherit;padding:8px;border:1px solid var(--line);border-radius:6px;background:#fff;color:var(--ink)}
+textarea{min-height:60px}.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}.row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+button{font:inherit;padding:9px 12px;border-radius:6px;border:1px solid var(--acc);background:#fff;color:var(--acc);cursor:pointer}
+button.pri{background:var(--acc);color:#fff}button.danger{border-color:var(--red);color:var(--red)}
+.bar{display:flex;flex-wrap:wrap;gap:6px}
+.disc{font-size:.85rem;background:#eef2f6;border-left:4px solid var(--acc);padding:8px;border-radius:4px}
+.warn{background:#fff4e5;border-left:4px solid var(--amb);padding:8px;border-radius:4px;font-size:.9rem;margin-top:6px}
+#flags{display:none;border:2px solid var(--red);background:#fdecea;border-radius:10px;padding:10px;margin:10px 0}
+#flags.show{display:block}#flags h2{color:var(--red)}#flags.emerg{background:var(--red);color:#fff}#flags.emerg h2{color:#fff}
+#flags ul{margin:4px 0 6px 18px;padding:0}
+.prog{height:8px;background:#e4e7eb;border-radius:4px;overflow:hidden}.prog>div{height:100%;background:var(--grn)}
+.chk{border:1px solid var(--line);border-radius:8px;margin:6px 0;background:#fff}
+.chk>summary{padding:10px;cursor:pointer;display:flex;justify-content:space-between;gap:6px;align-items:center;list-style:none}
+.chk>summary::-webkit-details-marker{display:none}.chk .body{padding:0 10px 10px}
+.tag{font-size:.75rem;padding:2px 7px;border-radius:10px;border:1px solid var(--line);white-space:nowrap}
+.t-done{background:#e8f5e9;border-color:#a5d6a7}.t-over{background:#fdecea;border-color:var(--red);color:var(--red);font-weight:600}.t-due{background:#fff}
+.n0{background:#e8f5e9}.n1{background:#fff8e1}.n3{background:#ffe0b2}.n5{background:#ffcc80}.n7{background:#ef9a9a}
+.score{font-weight:600;padding:6px;border-radius:6px;margin-top:8px}
+.muted{color:var(--mut);font-size:.85rem}
+
+*{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.b-none{background:#eceff1!important;color:#37474f!important;border-color:#b0bec5!important}
+.b-0{background:#c8e6c9!important;color:#1b3d1f!important;border-color:#66bb6a!important}
+.b-low{background:#fff59d!important;color:#3e3500!important;border-color:#d4b800!important}
+.b-urg{background:#ffcc80!important;color:#4a2500!important;border-color:#e68a00!important}
+.b-emerg{background:#ef9a9a!important;color:#4a0000!important;border-color:#c62828!important}
+.s1{background:#fff9c4!important}.s2{background:#ffcc80!important}.s3{background:#ef9a9a!important}
+.ab-a{background:#ffe0b2!important;border-color:#e68a00!important}.ab-r{background:#ffcdd2!important;border-color:#c62828!important}
+.t-done{background:#c8e6c9!important;border-color:#66bb6a!important;color:#1b3d1f!important}.t-due{background:#ffe0b2!important;border-color:#e68a00!important;color:#4a2500!important}.t-over{background:#ffcdd2!important;border-color:#c62828!important;color:#7f0000!important;font-weight:600}
+.legend{display:flex;flex-wrap:wrap;gap:4px;font-size:.75rem;margin:6px 0;align-items:center}.legend span{border:1px solid #999;border-radius:4px;padding:1px 6px;color:#1f2933}
+.printonly{display:none}
+@media print{
+ @page{size:A4 portrait;margin:12mm}
+ body{background:#fff;font-size:9pt}header.top,.noprint,#flags,.bar,button{display:none!important}
+ .entry{display:none!important}.printonly{display:block!important}main{max-width:none;padding:0}
+ table{width:100%;border-collapse:collapse}th,td{border:1px solid #555;padding:2px 3px;text-align:left;vertical-align:top}
+ thead{display:table-header-group}tr{page-break-inside:avoid;break-inside:avoid}
+ h1{font-size:13pt;margin:0 0 4px}h2{font-size:11pt;margin:8px 0 4px;color:#000}
+ .sig{margin-top:14px;display:flex;gap:30px}.sig div{flex:1;border-top:1px solid #000;padding-top:2px;margin-top:22px}
+ section.p{border:0;padding:0;margin:6px 0;break-inside:avoid}
+ .ck{break-inside:avoid;page-break-inside:avoid;margin:8px 0 10px}.ck h2{background:#eee;padding:3px 5px;border:1px solid #555;border-bottom:0;margin:0}.ck .meta{font-size:8.5pt;border:1px solid #555;border-bottom:0;padding:2px 5px}.ck th{width:17%;background:#f6f6f6}.ck td{width:33%}.ck .rf{background:#ffebee;border:1px solid #555;border-top:0;padding:2px 5px;font-size:8.5pt}.ck.extra h2{background:#fff;font-style:italic}
+}
+</style></head><body>
+<header class="top"><h1>72-Hour Post-Fall Monitoring</h1><div class="sub" id="hdrsub">Recording aid – follow local policy</div></header>
+<main>
+<div class="entry">
+<p class="disc">This is a recording aid only. Always follow your local falls / head-injury policy and clinical judgement. If in doubt, escalate (GP, NHS 111 or 999). Data is saved only on this device.</p>
+<div id="flags"><h2>Red flags – escalate now</h2><ul id="flaglist"></ul><div id="flagadv"></div></div>
+
+<section><h2>Completed by</h2>
+<div class="row"><div><label for="byName">Name</label><input id="byName" data-k="byName"></div><div><label for="byPos">Position</label><input id="byPos" data-k="byPos" placeholder="e.g. Senior carer"></div></div></section>
+
+<section><h2>1. Resident and fall details</h2>
+<div class="row"><div><label for="resName">Resident name</label><input id="resName" data-k="resName"></div><div><label for="room">Room</label><input id="room" data-k="room"></div></div>
+<div class="row"><div><label for="fallTime">Date/time of fall</label><input type="datetime-local" id="fallTime" data-k="fallTime"></div>
+<div><label for="witnessed">Found or witnessed</label><select id="witnessed" data-k="witnessed"><option></option><option>Witnessed</option><option>Found (unwitnessed)</option></select></div></div>
+<label for="location">Location</label><input id="location" data-k="location">
+<label for="position">How found / position</label><textarea id="position" data-k="position"></textarea>
+<div class="row"><div><label for="headInj">Suspected head injury</label><select id="headInj" data-k="headInj"><option></option><option>Yes</option><option>No</option><option>Unknown (unwitnessed)</option></select></div>
+<div><label for="anticoag">On anticoagulants / antiplatelets</label><select id="anticoag" data-k="anticoag"><option></option><option>Yes</option><option>No</option></select></div></div>
+<div id="anticoagWarn" class="warn" style="display:none">On anticoagulants/antiplatelets with a possible head injury: NICE head-injury guidance and most local policies advise hospital / NHS 111 review even if the resident seems well. Follow local policy.</div>
+<label for="injuries">Injuries observed</label><textarea id="injuries" data-k="injuries"></textarea>
+<label for="bodymap">Body map notes</label><textarea id="bodymap" data-k="bodymap" placeholder="Site, size, colour of any marks"></textarea>
+<label for="actions">Immediate actions</label><textarea id="actions" data-k="actions"></textarea>
+<h3>Who was informed</h3>
+<div class="row"><div><label for="infClin">Clinical (GP / 111 / 999)</label><select id="infClin" data-k="infClin"><option></option><option>GP</option><option>NHS 111</option><option>999</option><option>Not required</option></select></div><div><label for="infClinT">Time</label><input type="datetime-local" id="infClinT" data-k="infClinT"></div></div>
+<div class="row"><div><label for="infNok">Family / NOK</label><select id="infNok" data-k="infNok"><option></option><option>Yes</option><option>No</option><option>Not contactable</option></select></div><div><label for="infNokT">Time</label><input type="datetime-local" id="infNokT" data-k="infNokT"></div></div>
+<div class="row"><div><label for="infMgr">Manager / on-call</label><select id="infMgr" data-k="infMgr"><option></option><option>Yes</option><option>No</option></select></div><div><label for="infMgrT">Time</label><input type="datetime-local" id="infMgrT" data-k="infMgrT"></div></div>
+<h3>Baseline (before fall)</h3>
+<div class="row"><div><label for="baseGcs">Usual GCS</label><input type="number" min="3" max="15" id="baseGcs" data-k="baseGcs" placeholder="15"></div><div><label for="baseCog">Usual cognition / behaviour</label><input id="baseCog" data-k="baseCog"></div></div>
+</section>
+
+<section><h2>2. Observations</h2>
+<p class="muted" id="schedTxt"></p>
+<div class="bar" style="margin:8px 0"><button class="pri" id="genBtn">Generate schedule from fall time</button><button id="adhocBtn">Add extra check</button></div>
+<div id="oldSched" class="warn" style="display:none">This form was started with the old schedule. Tap "Generate schedule from fall time" to switch to the 12-hourly schedule; any checks already recorded are kept.</div>
+<div class="prog"><div id="progbar" style="width:0"></div></div><p class="muted" id="progtxt"></p>
+<div id="legend"></div><div id="checks"></div></section>
+
+<section><h2>3. 72-hour summary and outcome</h2>
+<label for="review">End-of-monitoring review</label><textarea id="review" data-k="review"></textarea>
+<label for="outcome">Outcome</label><select id="outcome" data-k="outcome"><option></option><option>No ongoing concerns – monitoring ended</option><option>Ongoing monitoring</option><option>GP review arranged</option><option>Transferred to hospital</option><option>Other (see review)</option></select>
+<div class="row"><div><label for="frra">Falls risk reassessment done</label><select id="frra" data-k="frra"><option></option><option>Yes</option><option>No</option></select></div><div><label for="cpu">Care plan updated</label><select id="cpu" data-k="cpu"><option></option><option>Yes</option><option>No</option></select></div></div>
+<label for="incNo">Incident report number</label><input id="incNo" data-k="incNo">
+<div class="row"><div><label for="sumBy">Completed by</label><input id="sumBy" data-k="sumBy"></div><div><label for="sumPos">Position</label><input id="sumPos" data-k="sumPos"></div></div>
+<label for="sumTime">Date/time</label><input type="datetime-local" id="sumTime" data-k="sumTime">
+</section>
+
+<section class="noprint"><h2>Save, backup, print</h2><p class="muted">Saves automatically on this device. <span id="saveState"></span></p>
+<div class="bar"><button class="pri" onclick="window.print()">Print</button><button id="expBtn">Export backup</button><button id="impBtn">Import backup</button><input type="file" id="impFile" accept=".json,application/json" hidden><button class="danger" id="clrBtn">Clear form</button></div></section>
+</div>
+<div class="printonly" id="printout"></div>
+</main>
+<script>
+"use strict";
+const KEY="post_fall_v1";let mem=null;
+function lsGet(){try{return localStorage.getItem(KEY)}catch(e){return mem}}
+function lsSet(v){try{localStorage.setItem(KEY,v);return true}catch(e){mem=v;return false}}
+let S={f:{},checks:[]};
+try{const r=lsGet();if(r)S=Object.assign(S,JSON.parse(r))}catch(e){}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const pad=n=>String(n).padStart(2,"0");
+function toLocal(d){return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate())+"T"+pad(d.getHours())+":"+pad(d.getMinutes())}
+function fmt(v){if(!v)return"";const d=new Date(v);if(isNaN(d))return v;return d.toLocaleString("en-GB",{day:"2-digit",month:"2-digit",year:"numeric",hour:"2-digit",minute:"2-digit"})}
+function fmtT(v){if(!v)return"";const d=new Date(v);return isNaN(d)?v:d.toLocaleString("en-GB",{weekday:"short",day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit"})}
+function save(){const ok=lsSet(JSON.stringify(S));$("saveState").textContent=ok?"Saved "+new Date().toLocaleTimeString("en-GB"):"Storage unavailable – export a backup before closing.";}
+
+/* NEWS2 – RCP 2017 */
+function news2(o){
+ const n=v=>v===""||v==null?null:Number(v);const p={};
+ const rr=n(o.rr),sp=n(o.spo2),sbp=n(o.sbp),hr=n(o.hr),t=n(o.temp);const ox=o.o2==="Oxygen";
+ if(rr!=null)p.rr=rr<=8?3:rr<=11?1:rr<=20?0:rr<=24?2:3;
+ if(sp!=null){if(o.scale==="2"){p.sp=sp<=83?3:sp<=85?2:sp<=87?1:sp<=92?0:!ox?0:sp<=94?1:sp<=96?2:3}else p.sp=sp<=91?3:sp<=93?2:sp<=95?1:0}
+ if(o.o2)p.o2=ox?2:0;
+ if(sbp!=null)p.sbp=sbp<=90?3:sbp<=100?2:sbp<=110?1:sbp<=219?0:3;
+ if(hr!=null)p.hr=hr<=40?3:hr<=50?1:hr<=90?0:hr<=110?1:hr<=130?2:3;
+ if(o.acvpu)p.c=o.acvpu==="A"?0:3;
+ if(t!=null)p.t=t<=35?3:t<=36?1:t<=38?0:t<=39?1:2;
+ const keys=Object.keys(p);const complete=["rr","sp","o2","sbp","hr","c","t"].every(k=>k in p);
+ if(!keys.length)return null;
+ const total=keys.reduce((a,k)=>a+p[k],0);const any3=keys.some(k=>p[k]===3);
+ let band,cls;if(total>=7){band="High – emergency response";cls="n7"}else if(total>=5){band="Medium – urgent review";cls="n5"}else if(any3){band="Low–medium (single 3) – urgent review";cls="n3"}else if(total>=1){band="Low";cls="n1"}else{band="Low (0)";cls="n0"}
+ return{total,any3,band,cls,complete,p,bc:{n0:"b-0",n1:"b-low",n3:"b-urg",n5:"b-urg",n7:"b-emerg"}[cls]};
+}
+function gcsTot(c){const e=+c.gE||0,v=+c.gV||0,m=+c.gM||0;return e&&v&&m?e+v+m:null}
+
+/* schedule */
+function offsets(){return [0,12,24,36,48,60,72].map(h=>h*60)}
+function schedText(){return "Schedule: one check at the time of the fall, then every 12 hours to 72 hours (+12, +24, +36, +48, +60, +72 h) – 7 checks. Add extra checks whenever needed."}
+function label(m){if(m===0)return"Baseline (time of fall)";return m<60?"+"+m+" min":"+"+(m%60?(m/60).toFixed(1):m/60)+" h"}
+function generate(){const ft=S.f.fallTime;if(!ft){alert("Enter the date/time of the fall first.");return}
+ const done=S.checks.some(c=>c.actual||c.rr||c.gE);if(done&&!confirm("Regenerate the schedule? Checks already recorded will be kept.")) return;
+ const b=new Date(ft);const keep=S.checks.filter(c=>c.adhoc||isDone(c)||c.rr||c.gE).map(c=>c.adhoc?c:Object.assign(c,{lab:c.lab+" (earlier schedule)"}));
+ S.checks=offsets().map(m=>({id:"c"+m+"_"+Date.now(),due:toLocal(new Date(b.getTime()+m*60000)),lab:label(m),scale:"1",o2:"Air"})).concat(keep);
+ sortChecks();save();renderChecks();}
+function sortChecks(){S.checks.sort((a,b)=>String(a.due).localeCompare(String(b.due)))}
+function isDone(c){return !!c.actual}
+const PM={rr:"rr",spo2:"sp",o2:"o2",sbp:"sbp",hr:"hr",acvpu:"c",temp:"t"};
+function pcls(c,k){const ns=news2(c);if(!ns||!(k in PM))return"";const v=ns.p[PM[k]];return v?"s"+v:""}
+function gcsBad(c){const g=gcsTot(c);if(g==null)return false;if(g<(+S.f.baseGcs||15))return true;const i=S.checks.indexOf(c);for(let j=i-1;j>=0;j--){const q=gcsTot(S.checks[j]);if(q!=null)return g<q}return false}
+function acls(c,k){const v=c[k];
+ if(k==="gE"||k==="gV"||k==="gM"||k==="gcs")return gcsBad(c)?"ab-r":"";
+ if(k==="pupE"||k==="pupL"||k==="pupR")return v==="No"?"ab-r":v==="Sluggish"?"ab-a":"";
+ if(k==="vomit")return v==="Vomited more than once"?"ab-r":(v==="Vomited once"||v==="Nausea")?"ab-a":"";
+ if(k==="seiz")return v==="Yes"?"ab-r":"";
+ if(k==="conf")return(v==="New confusion"||v==="More drowsy")?"ab-r":v==="Agitated"?"ab-a":"";
+ if(k==="head")return v==="Worsening"?"ab-r":v==="Mild"?"ab-a":"";
+ if(k==="limb")return(v==="New weakness"||v==="Deformity / shortening / rotation")?"ab-r":v==="Reduced movement"?"ab-a":"";
+ if(k==="swell")return v==="Yes"?"ab-a":"";
+ if(k==="pain"){if(v===""||v==null)return"";return +v>=7?"ab-r":+v>=4?"ab-a":""}
+ return pcls(c,k)}
+const LEGEND='<div class="legend"><b>NEWS2:</b><span class="b-0">0 Low</span><span class="b-low">1–4 Low</span><span class="b-urg">Single 3 or 5–6 Urgent</span><span class="b-emerg">7+ Emergency</span><span class="b-none">Not done</span></div><div class="legend"><b>Parameter:</b><span class="s1">scores 1</span><span class="s2">scores 2</span><span class="s3">scores 3</span><b>Findings:</b><span class="ab-a">Amber – report</span><span class="ab-r">Red – escalate</span></div>';
+const F=[["actual","Actual time","datetime-local"],["rr","Resp rate /min","number"],["spo2","SpO2 %","number"],["scale","SpO2 scale","sel",["1","2"]],["o2","Air / oxygen","sel",["Air","Oxygen"]],["sbp","BP systolic","number"],["dbp","BP diastolic","number"],["hr","Pulse /min","number"],["acvpu","Consciousness (ACVPU)","sel",["","A","C","V","P","U"]],["temp","Temp °C","number"],
+ ["gE","GCS Eyes","sel",["","4","3","2","1"]],["gV","GCS Verbal","sel",["","5","4","3","2","1"]],["gM","GCS Motor","sel",["","6","5","4","3","2","1"]],
+ ["pupE","Pupils equal","sel",["","Yes","No","Unable"]],["pupL","Left pupil reactive","sel",["","Yes","No","Sluggish","Unable"]],["pupR","Right pupil reactive","sel",["","Yes","No","Sluggish","Unable"]],
+ ["pain","Pain score 0–10","number"],["painTool","Pain tool / note (Abbey, PAINAD)","text"],["limb","Limb movement / strength","sel",["","No change","New weakness","Reduced movement","Deformity / shortening / rotation"]],
+ ["swell","New swelling / bruising","sel",["","No","Yes"]],["conf","Confusion / behaviour vs baseline","sel",["","As baseline","New confusion","More drowsy","Agitated"]],
+ ["vomit","Nausea / vomiting","sel",["","None","Nausea","Vomited once","Vomited more than once"]],["head","Headache","sel",["","None","Mild","Worsening"]],["seiz","Seizure","sel",["","No","Yes"]],["staff","Staff position","text"],["comm","Comments","textarea"]];
+function renderChecks(){const box=$("checks");const open=new Set([...box.querySelectorAll("details[open]")].map(d=>d.dataset.id));box.innerHTML="";const now=Date.now();
+ S.checks.forEach((c,i)=>{const d=document.createElement("details");d.className="chk";d.dataset.id=c.id;if(open.has(c.id))d.open=true;
+  const over=!isDone(c)&&c.due&&new Date(c.due).getTime()<now;const ns=news2(c);
+  d.innerHTML=`<summary><span><b>${esc(c.adhoc?"Ad hoc":c.lab)}</b><br><span class="muted">Due ${esc(fmtT(c.due))}</span></span><span style="display:flex;gap:4px;flex-wrap:wrap;justify-content:flex-end"><span class="tag ${ns?ns.bc:""}" data-badge ${ns&&isDone(c)?"":"hidden"}>NEWS2 ${ns?ns.total:""}</span><span class="tag ${isDone(c)?"t-done":over?"t-over":"t-due"}">${isDone(c)?"Done":over?"Overdue":"Due"}</span></span></summary><div class="body"></div>`;
+  const body=d.querySelector(".body");let h=`<label>Due time</label><input type="datetime-local" data-f="due" value="${esc(c.due)}">`;
+  h+='<div class="row">';F.forEach(([k,l,t,opts])=>{if(t==="textarea"){h+=`</div><label>${l}</label><textarea data-f="${k}">${esc(c[k])}</textarea><div class="row">`;return}
+   h+=`<div><label>${l}</label>`+(t==="sel"?`<select data-f="${k}">${opts.map(o=>`<option${c[k]===o?" selected":""}>${o}</option>`).join("")}</select>`:`<input type="${t}" ${t==="number"?'inputmode="decimal" step="any"':""} data-f="${k}" value="${esc(c[k])}">`)+"</div>"});
+  h+=`</div><div class="score" data-score></div><div class="bar" style="margin-top:8px"><button data-now>Set actual time to now</button><button class="danger" data-del>Delete check</button></div>`;
+  body.innerHTML=h;updScore(body,c);
+  body.addEventListener("input",e=>{const f=e.target.dataset.f;if(!f)return;c[f]=e.target.value;updScore(body,c);save();flags();progress()});
+  body.addEventListener("change",e=>{if(e.target.dataset.f==="actual"||e.target.dataset.f==="due"){if(e.target.dataset.f==="due")sortChecks();renderChecks()}});
+  body.querySelector("[data-now]").onclick=()=>{c.actual=toLocal(new Date());save();renderChecks();flags()};
+  body.querySelector("[data-del]").onclick=()=>{if(confirm("Delete this check?")){S.checks.splice(S.checks.indexOf(c),1);save();renderChecks();flags()}};
+  box.appendChild(d)});progress();}
+function updScore(body,c){const ns=news2(c),g=gcsTot(c);const el=body.querySelector("[data-score]");el.className="score "+(ns?ns.bc:"b-none");const bd=body.parentNode.querySelector("[data-badge]");if(bd){bd.hidden=!(ns&&isDone(c));if(ns){bd.className="tag "+ns.bc;bd.textContent="NEWS2 "+ns.total+(ns.complete?"":"*")}}body.querySelectorAll("[data-f]").forEach(x=>{x.classList.remove("s1","s2","s3","ab-a","ab-r");const k=acls(c,x.dataset.f);if(k)x.classList.add(k)});
+ el.textContent=(ns?"NEWS2 "+ns.total+" – "+ns.band+(ns.complete?"":" (incomplete set)"):"NEWS2 –")+" | GCS "+(g==null?"–":g+"/15");}
+function progress(){const offs=offsets().map(label);$("oldSched").style.display=S.checks.some(c=>!c.adhoc&&!/earlier schedule/.test(c.lab)&&!offs.includes(c.lab))?"block":"none";const n=S.checks.length,d=S.checks.filter(isDone).length,o=S.checks.filter(c=>!isDone(c)&&new Date(c.due).getTime()<Date.now()).length;
+ $("progbar").style.width=(n?d/n*100:0)+"%";$("progtxt").textContent=n?`${d} of ${n} checks completed`+(o?` · ${o} overdue`:""):"No checks yet – enter the fall time and generate the schedule.";}
+
+/* red flags */
+function computeFlags(){const L=[];let emerg=false;const base=+S.f.baseGcs||15;let prevG=null,vomits=0;
+ if(S.f.headInj==="Yes"&&S.f.anticoag==="Yes")L.push({w:"Fall details",t:"Head injury while on anticoagulants/antiplatelets – hospital / 111 review usually advised"});
+ S.checks.forEach(c=>{const w=(c.adhoc?"Ad hoc ":"")+(c.lab||"")+" ("+fmtT(c.actual||c.due)+")";const ns=news2(c),g=gcsTot(c);
+  if(ns){if(ns.total>=7){L.push({w,cid:c.id,t:"NEWS2 "+ns.total+" – emergency response"});emerg=true}else if(ns.total>=5)L.push({w,cid:c.id,t:"NEWS2 "+ns.total+" – urgent review"});else if(ns.any3)L.push({w,cid:c.id,t:"Single NEWS2 parameter scoring 3 – urgent review"})}
+  if(g!=null){if(g<base)L.push({w,cid:c.id,t:"GCS "+g+" below baseline "+base});else if(g<15&&!S.f.baseGcs)L.push({w,cid:c.id,t:"GCS "+g+" (<15)"});if(prevG!=null&&g<prevG)L.push({w,cid:c.id,t:"GCS dropped from "+prevG+" to "+g});prevG=g;if(g<=8)emerg=true}
+  if(c.pupE==="No"||c.pupL==="No"||c.pupR==="No"||c.pupL==="Sluggish"||c.pupR==="Sluggish")L.push({w,cid:c.id,t:"Unequal or non-reactive pupils"});
+  if(c.vomit==="Vomited more than once")L.push({w,cid:c.id,t:"Vomited more than once"});if(c.vomit==="Vomited once")vomits++;
+  if(c.seiz==="Yes"){L.push({w,cid:c.id,t:"Seizure"});emerg=true}
+  if(c.conf==="New confusion"||c.conf==="More drowsy")L.push({w,cid:c.id,t:"New confusion / drowsiness"});
+  if(c.head==="Worsening")L.push({w,cid:c.id,t:"Worsening headache"});
+  if(c.limb==="New weakness")L.push({w,cid:c.id,t:"New limb weakness"});
+  if(c.limb==="Deformity / shortening / rotation")L.push({w,cid:c.id,t:"Deformity / shortening / rotated leg – possible fracture"});});
+ if(vomits>1)L.push({w:"Across checks",t:"Vomited on more than one occasion"});
+ return{L,emerg};}
+function flags(){const {L,emerg}=computeFlags();const b=$("flags");b.classList.toggle("show",L.length>0);b.classList.toggle("emerg",emerg);
+ $("flaglist").innerHTML=L.map(x=>`<li><b>${esc(x.t)}</b> – ${esc(x.w)}</li>`).join("");
+ $("flagadv").innerHTML=emerg?"<b>Call 999 now</b> per local policy. Stay with the resident; do not move them if a fracture or spinal injury is suspected.":"<b>Escalate:</b> contact GP / NHS 111 (or 999 if deteriorating) per local policy, inform the senior on duty and record actions.";
+ $("anticoagWarn").style.display=S.f.anticoag==="Yes"&&S.f.headInj&&S.f.headInj!=="No"?"block":"none";
+ $("hdrsub").textContent=(S.f.resName?S.f.resName+(S.f.room?" · Room "+S.f.room:"")+" · ":"")+"Recording aid – follow local policy";}
+
+/* print */
+function buildPrint(){const f=S.f;const r=(a,b)=>`<tr><th>${a}</th><td>${esc(b)}</td></tr>`;const {L}=computeFlags();
+ let h=`<h1>72-Hour Post-Fall Monitoring</h1><section class="p"><table><tbody>${r("Resident",f.resName)}${r("Room",f.room)}${r("Date/time of fall",fmt(f.fallTime))}${r("Found / witnessed",f.witnessed)}${r("Location",f.location)}${r("How found / position",f.position)}${r("Suspected head injury",f.headInj)}${r("Anticoagulants / antiplatelets",f.anticoag)}${r("Injuries observed",f.injuries)}${r("Body map notes",f.bodymap)}${r("Immediate actions",f.actions)}${r("Informed – clinical",[f.infClin,fmt(f.infClinT)].filter(Boolean).join(" at "))}${r("Informed – family/NOK",[f.infNok,fmt(f.infNokT)].filter(Boolean).join(" at "))}${r("Informed – manager",[f.infMgr,fmt(f.infMgrT)].filter(Boolean).join(" at "))}${r("Baseline GCS / cognition",[f.baseGcs,f.baseCog].filter(Boolean).join(" / "))}${r("Completed by",[f.byName,f.byPos].filter(Boolean).join(", "))}</tbody></table></section>`;
+ h+=`<h2>Observations</h2>`+LEGEND;let n=0;
+ S.checks.forEach(c=>{const ns=news2(c),g=gcsTot(c);const ex=!!c.adhoc;if(!ex)n++;
+  const tm=c.actual||c.due;const hm=tm?new Date(tm).toLocaleTimeString("en-GB",{hour:"2-digit",minute:"2-digit"}):"";
+  const title=ex?"Extra check at "+hm+" ("+fmtT(tm)+")":"Check "+n+" – "+(c.lab==="Baseline (time of fall)"?"At time of fall":c.lab)+" – due "+new Date(c.due).toLocaleString("en-GB",{weekday:"short",day:"numeric",month:"short",year:"numeric",hour:"2-digit",minute:"2-digit"}).replace(",","");
+  const rows=[["Resp rate",c.rr,"rr"],["SpO2 (scale)",c.spo2?c.spo2+"% (scale "+c.scale+")":"","spo2"],["Air / oxygen",c.actual?c.o2:"","o2"],["BP",c.sbp?c.sbp+"/"+(c.dbp||""):"","sbp"],["Pulse",c.hr,"hr"],["ACVPU",c.acvpu,"acvpu"],["Temp °C",c.temp,"temp"],["NEWS2",ns&&c.actual?ns.total+" – "+ns.band:"Not done","n2"],["GCS E/V/M",g!=null?c.gE+"/"+c.gV+"/"+c.gM+" = "+g+"/15":"","gcs"],["Pupils eq / L / R",[c.pupE,c.pupL,c.pupR].some(Boolean)?[c.pupE,c.pupL,c.pupR].map(x=>x||"–").join(" / "):"","pup"],["Pain",[c.pain,c.painTool].filter(Boolean).join(" – "),"pain"],["Limbs",c.limb,"limb"],["Swelling / bruising",c.swell,"swell"],["Behaviour / confusion",c.conf,"conf"],["Nausea / vomiting",c.vomit,"vomit"],["Headache",c.head,"head"],["Seizure",c.seiz,"seiz"],["Staff position",c.staff]];
+  let tb="";for(let i=0;i<rows.length;i+=2){const q=rows[i+1]||["",""];const cc=r=>{if(!r[2]||!c.actual)return"";if(r[2]==="n2")return ns?ns.bc:"";if(r[2]==="pup")return[acls(c,"pupE"),acls(c,"pupL"),acls(c,"pupR")].find(Boolean)||"";return acls(c,r[2])};tb+=`<tr><th>${rows[i][0]}</th><td class="${cc(rows[i])}">${esc(rows[i][1])}</td><th>${q[0]}</th><td class="${cc(q)}">${esc(q[1])}</td></tr>`}
+  tb+=`<tr><th>Comments</th><td colspan="3">${esc(c.comm)}</td></tr>`;
+  const rf=L.filter(x=>x.cid===c.id);
+  const bc=ns&&c.actual?ns.bc:"b-none";h+=`<div class="ck${ex?" extra":""}" data-check data-band="${bc}"><h2 class="${bc}">${esc(title)}</h2><div class="meta">Actual time: ${esc(fmt(c.actual))||"not recorded"} &nbsp;·&nbsp; Completed by (position): ${esc(c.staff)||"________"}</div><table><tbody>${tb}</tbody></table>${rf.length?`<div class="rf"><b>Red flags:</b> ${rf.map(x=>esc(x.t)).join("; ")}</div>`:""}</div>`});
+ h+=`<section class="p"><h2>Red-flag events</h2>`+(L.length?`<table><thead><tr><th>When</th><th>Red flag</th></tr></thead><tbody>${L.map(x=>`<tr><td>${esc(x.w)}</td><td>${esc(x.t)}</td></tr>`).join("")}</tbody></table>`:"<p>None recorded.</p>")+`</section>`;
+ h+=`<section class="p"><h2>72-hour summary and outcome</h2><table><tbody>${r("End-of-monitoring review",f.review)}${r("Outcome",f.outcome)}${r("Falls risk reassessment done",f.frra)}${r("Care plan updated",f.cpu)}${r("Incident report number",f.incNo)}${r("Completed by",[f.sumBy,f.sumPos].filter(Boolean).join(", "))}${r("Date/time",fmt(f.sumTime))}</tbody></table>
+ <div class="sig"><div>Signature (completed by)</div><div>Signature (nurse / manager)</div><div>Date</div></div></section><p style="font-size:7.5pt">Recording aid only – follow local policy. Printed ${esc(fmt(toLocal(new Date())))}.</p>`;
+ $("printout").innerHTML=h;}
+window.addEventListener("beforeprint",buildPrint);
+if(window.matchMedia)matchMedia("print").addEventListener&&matchMedia("print").addEventListener("change",e=>{if(e.matches)buildPrint()});
+
+/* bind form */
+document.querySelectorAll("[data-k]").forEach(el=>{const k=el.dataset.k;if(el.type==="checkbox")el.checked=!!S.f[k];else if(S.f[k]!=null)el.value=S.f[k];
+ el.addEventListener(el.type==="checkbox"?"change":"input",()=>{S.f[k]=el.type==="checkbox"?el.checked:el.value;save();flags()})});
+$("schedTxt").textContent=schedText();delete S.f.opt30;
+$("genBtn").onclick=generate;
+$("adhocBtn").onclick=()=>{const c={id:"a"+Date.now(),adhoc:true,due:toLocal(new Date()),lab:"Ad hoc",scale:"1",o2:"Air"};S.checks.push(c);sortChecks();save();renderChecks();const d=document.querySelector(`[data-id="${c.id}"]`);if(d){d.open=true;d.scrollIntoView()}};
+$("expBtn").onclick=()=>{const b=new Blob([JSON.stringify({app:"post_fall_v1",exported:new Date().toISOString(),data:S},null,1)],{type:"application/json"});const a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="post-fall-"+(S.f.room||"backup")+"-"+toLocal(new Date()).slice(0,10)+".json";document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500)};
+$("impBtn").onclick=()=>$("impFile").click();
+$("impFile").onchange=e=>{const fl=e.target.files[0];if(!fl)return;fl.text().then(t=>{try{const j=JSON.parse(t);const d=j.data||j;if(!d.f||!Array.isArray(d.checks))throw 0;if(!confirm("Replace the current form with this backup?"))return;S=d;save();location.reload()}catch(x){alert("That file is not a valid post-fall backup.")}})};
+$("clrBtn").onclick=()=>{if(confirm("Clear the whole form? Export a backup first if you need it.")){S={f:{},checks:[]};save();location.reload()}};
+$("legend").innerHTML=LEGEND;renderChecks();flags();setInterval(progress,60000);
+window.__pf={news2,offsets,computeFlags,get S(){return S}};
+</script></body></html>
